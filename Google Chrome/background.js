@@ -44,6 +44,13 @@ function parsing(data) {
 		chrome.browserAction.setBadgeText({text:(notifications.length-1).toString()});
 	else
 		chrome.browserAction.setBadgeText({text:""});
+		
+	//action lorsqu'on click sur le bouton
+	if(grenier.getComportement() || (notifications.length <= 1)) { //soit on ouvre le SdZ
+		grenier.saveLastNotifs("Aucune notification");
+	} else { //sinon on ouvre une popup avec le contenu des notifs
+		grenier.saveLastNotifs(list_notif);
+	}
 }
 
 function cleaning(data) {

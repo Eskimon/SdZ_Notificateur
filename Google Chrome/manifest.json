@@ -2,7 +2,7 @@
     "name": "SdZ Notificateur",
     "version": "0.9.0",
     "manifest_version": 2,
-    "description": "Extensions pour le navigateur pour connaitre le nombre de notifications/MP SdZ sans ouvrir le site",
+    "description": "Extensions pour Google Chrome pour connaitre le nombre de notifications ou MP SdZ sans avoir besoin d'ouvrir le site",
     "offline_enabled": false,
     "icons": { 
     	"16": "icons/icone_16.png",
