@@ -1,6 +1,6 @@
 {
     "name": "SdZ Notificateur",
-    "version": "0.0.1",
+    "version": "0.9.0",
     "manifest_version": 2,
     "description": "Extensions pour le navigateur pour connaitre le nombre de notifications/MP SdZ sans ouvrir le site",
     "offline_enabled": false,
