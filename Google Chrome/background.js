@@ -10,34 +10,37 @@ chrome.alarms.onAlarm.addListener(function (alarm) { // le listener de l'alarme 
     }
 });
 
-var reference = { //quelques chaines utiles pour le parsing
-	nbNotifStringStart : "<span class=\"nbNotif\">",
-	nbNotifStringStop : "</span>"
-};
-
 function verifierNotif() { //récupère la page et parse
 	var xhr = new XMLHttpRequest(); 
 	// On défini ce qu'on va faire quand on aura la réponse
 	xhr.onreadystatechange = function(){
 		// On ne fait quelque chose que si on a tout reçu et que le serveur est ok
 		if(xhr.readyState == 4 && xhr.status == 200){
-			parserDonnees(xhr.responseText);
+			parsing(xhr.responseText);
 		}
 	}
 	xhr.open("GET","http://www.siteduzero.com/",true);
 	xhr.send(null);
 }
 
-function parserDonnees(data) { //parseur (à revoir)
-	var idxNotifDebut = data.indexOf(reference.nbNotifStringStart);
-	var idxNotifFin = data.indexOf(reference.nbNotifStringStop, idxNotifDebut+reference.nbNotifStringStart.length);
-
-	nbNotif = parseInt(data.substring(idxNotifDebut+reference.nbNotifStringStart.length, idxNotifFin));
+function parsing(data) {
+	//commence par nettoyer en virant toutes les balises qui ont un src
+	data = cleaning(data);
 	
-	if(isNaN(nbNotif))
-		chrome.browserAction.setBadgeText({text:"0"});
-	else
-		chrome.browserAction.setBadgeText({text:(nbNotif).toString()});
+	var list_notif = $(data).find("div#lastNotifications");
+	//console.log(list_notif);
+	
+	var notifications = $(list_notif).find("ul.list li.notification");
+	//console.log(notifications);
+	//console.log(notifications.length-1); //-1 pour virer le seeall
+	
+	chrome.browserAction.setBadgeText({text:(notifications.length-1).toString()});
+}
+
+function cleaning(data) {
+	data = data.replace(/<img[^>]*>/gi,""); //vire les images
+	//data.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,''); //vire le javascript
+	return data;
 }
 
 
