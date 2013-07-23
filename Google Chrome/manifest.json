@@ -3,6 +3,8 @@
     "version": "0.0.1",
     "manifest_version": 2,
     "description": "Extensions pour le navigateur pour connaitre le nombre de notifications/MP SdZ sans ouvrir le site",
+    "author": "Eskimon",
+    "offline_enabled": false,
     "icons": { 
     	"16": "icons/icone_16.png",
 		"48": "icons/icone_48.png",
