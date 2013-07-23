@@ -10,6 +10,12 @@ chrome.alarms.onAlarm.addListener(function (alarm) { // le listener de l'alarme 
     }
 });
 
+var checker = "http://www.siteduzero.com/";
+chrome.tabs.onUpdated.addListener(function(tabId, props) {
+	if((typeof props.url !== 'undefined') && (props.url.substring(0, checker.length) == checker))
+		verifierNotif();
+});
+
 function verifierNotif() { //récupère la page et parse
 	var xhr = new XMLHttpRequest(); 
 	// On défini ce qu'on va faire quand on aura la réponse
@@ -48,7 +54,6 @@ function cleaning(data) {
 
 
 //action lorsqu'on click sur le bouton
-console.log(grenier.getComportement());
 if(grenier.getComportement()) { //soit on ouvre le SdZ
 	chrome.browserAction.setPopup({popup:""})
 	chrome.browserAction.onClicked.addListener(function(activeTab) {
