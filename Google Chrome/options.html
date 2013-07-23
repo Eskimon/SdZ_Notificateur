@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="utf-8">
     <title>SdZ Notificateur options</title>
     <script src="storage.js"></script>
     <script src="options.js"></script>
@@ -8,8 +9,12 @@
  
 <body>
     <h1>Options de l'extension</h1>
-        <label for="interval">Interval de rafraichissement</label>
+        <label for="interval">Interval de rafraichissement (en minutes) </label>
         <input type="text" name="interval" id="interval"/>
+        <br />
+        <input type="checkbox" name="newTab" id="newTab"/>
+        <label for="newTab">Ouvrir le site du zéro lors d'un click sur l'extension ? (sinon ouvre une liste des notifications)</label>
+        <br />
         <input type="button" id="enregistrer" value="Enregistrer"/>
 </body>
 </html>

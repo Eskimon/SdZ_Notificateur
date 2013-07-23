@@ -8,8 +8,10 @@
 		"48": "icons/icone_48.png",
 		"128": "icons/icone_128.png"
 		},
-	"permission": [
-		"http://www.siteduzero.com/"
+	"permissions": [
+		"http://www.siteduzero.com/",
+		"tabs",
+		"alarms"
 	],
 	"options_page":"options.html",
     "browser_action": {
@@ -18,7 +20,7 @@
     	"default_popup": "popup.html"
 	},
     "background": {
-    	"scripts": ["background.js"],
+    	"scripts": ["storage.js","background.js"],
     	"persistent": false
 	}
 }
