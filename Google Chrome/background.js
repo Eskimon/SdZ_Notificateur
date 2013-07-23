@@ -34,7 +34,10 @@ function parsing(data) {
 	//console.log(notifications);
 	//console.log(notifications.length-1); //-1 pour virer le seeall
 	
-	chrome.browserAction.setBadgeText({text:(notifications.length-1).toString()});
+	if(notifications.length > 1)
+		chrome.browserAction.setBadgeText({text:(notifications.length-1).toString()});
+	else
+		chrome.browserAction.setBadgeText({text:""});
 }
 
 function cleaning(data) {
