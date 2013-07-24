@@ -24,10 +24,19 @@ var grenier = {
 	},
 	//------------------------------------------------------------------------------------
 	getLastNotifs : function() {
+	    var outObj = [];
 		if (!localStorage['lastNotifs']) { //l'interval de rafraichissement du widget n'existe pas
 			localStorage['lastNotifs'] = "";
 		}
-		return JSON.parse(localStorage['lastNotifs']);
+		
+		try { // Histoire de pas planter quand les données sont mal formées
+    		var outObj = JSON.parse(localStorage['lastNotifs']);
+		}
+		catch(e) {
+    		outObj = [];
+    		localStorage['lastNotifs'] = "";
+		}
+		return outObj;
 	},
 	
 	saveLastNotifs : function(data) {

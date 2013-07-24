@@ -84,6 +84,7 @@ function parsing(data) {
 	} else { //sinon on ouvre une popup avec le contenu des notifs
 		sauverNotifs(notifications);
 	}
+	console.log(notifications);
 }
 
 function cleaning(data) {
@@ -93,8 +94,9 @@ function cleaning(data) {
 }
 
 function sauverNotifs(data) {
-	var tab = [];
-	var len = data.length;
+	var tab = [],
+	    len = data.length,
+	    oldNotifs = grenier.getLastNotifs();
 	for (var i = 0; i < len; i++) {
     	var obj = {
         	titre: $(data[i]).find("li.title").text(),
@@ -102,8 +104,42 @@ function sauverNotifs(data) {
         	lien: $(data[i]).find("a.link").attr('href'),
         	archive: $(data[i]).find("a.delete").attr('href')
     	};
-    	tab.push(obj);    	
+    	tab.push(obj);
+    	
+        var notifOptions = { // Options de la notification
+            type: "basic",
+            title: obj.titre,
+            message: obj.temps,
+            iconUrl: "icons/icone_48.png",
+            buttons: [{ title: "Voir"}/*,
+                      { title: "Archiver (not working)"}*/]
+        }, id = obj.archive.substr(obj.archive.lastIndexOf('/') + 1);
+        
+        chrome.notifications.create("sdz_" + id, notifOptions, function() { // Etant donné que l'ID est unique, la notif ne s'affiche pas 2 fois
+            console.log("Callback");
+        });
 	}
 	grenier.saveLastNotifs(tab);
 }
 
+// Notifications chrome
+chrome.notifications.onButtonClicked.addListener(function(notif, button) {
+    var notifId = notif.substr(4),
+        notifs = grenier.getLastNotifs(),
+        notifObj = false;
+    
+    for(var i = 0; i < notifs.length; i++) {
+        if(notifs[i].archive == "/notifications/archiver/" + notifId) {
+            notifObj = notifs[i];
+        }
+    }
+    
+    if(notifObj) {
+        if(button == 0) {
+            chrome.tabs.create({'url': "http://www.siteduzero.com" + notifObj.lien});
+        }
+        else if(button == 1) {
+            console.log("lol");
+        }
+    }
+});
