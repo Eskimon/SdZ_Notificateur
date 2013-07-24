@@ -1,0 +1,55 @@
+*{
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	font-family : 'Source Sans Pro', sans-serif;
+	min-width: 240px;
+	background: #002d40;
+}
+
+div.element {
+	padding: 8px 8px 8px 30px;
+	margin: 0px 1px 1px 1px;
+	/*border: 1px solid rgba(255, 255, 255, 0.5);*/
+	/*border-radius: 2px;*/
+	background: url('icons/bulle.png') no-repeat 7px 16px;
+}
+
+div.allNotifs {
+	padding: 8px 8px 8px 30px;
+	margin: 0px 1px 1px 1px;
+	text-align: center;
+}
+
+a {
+	color: white;
+	text-decoration: none;
+	font-size: 12px;
+}
+
+p.titre {
+	width: 234px;
+	height: 57;
+	padding: 2px 3px;
+}
+
+p.temps {
+	font-size: 10px;
+	color: rgba(255, 255, 255, 0.5);
+	text-align: right;
+}
+
+hr {
+	border: 0;
+	width: 90%;
+	margin-left: 5%;
+	color: rgba(255, 255, 255, 0.5);
+	/*background-color: rgba(255, 255, 255, 0.5);*/
+	height: 1px;
+	background-image: -webkit-linear-gradient(left, rgba(255,255,255,0), rgba(255,255,255,0.75), rgba(255,255,255,0)); 
+    background-image:    -moz-linear-gradient(left, rgba(255,255,255,0), rgba(255,255,255,0.75), rgba(255,255,255,0)); 
+    background-image:     -ms-linear-gradient(left, rgba(255,255,255,0), rgba(255,255,255,0.75), rgba(255,255,255,0)); 
+    background-image:      -o-linear-gradient(left, rgba(255,255,255,0), rgba(255,255,255,0.75), rgba(255,255,255,0)); 
+}

@@ -16,6 +16,16 @@ chrome.tabs.onUpdated.addListener(function(tabId, props) {
 		verifierNotif();
 });
 
+//action lorsqu'on click sur le bouton
+if(grenier.getComportement()) { //soit on ouvre le SdZ
+	chrome.browserAction.setPopup({popup:""})
+	chrome.browserAction.onClicked.addListener(function(activeTab) {
+		chrome.tabs.create({'url': "http://www.siteduzero.com/"});
+	});
+} else { //sinon on ouvre une popup avec le contenu des notifs
+	chrome.browserAction.setPopup({popup:"popup.html"})
+}
+
 function verifierNotif() { //récupère la page et parse
 	var xhr = new XMLHttpRequest(); 
 	// On défini ce qu'on va faire quand on aura la réponse
@@ -33,23 +43,26 @@ function parsing(data) {
 	//commence par nettoyer en virant toutes les balises qui ont un src
 	data = cleaning(data);
 	
-	var list_notif = $(data).find("div#lastNotifications");
+	//DEBUG !!!
+	data = grenier.fakeData;
+	//DEBUG !!!
+	
+	//var list_notif = $(data).find("div#scrollMe");
 	//console.log(list_notif);
 	
-	var notifications = $(list_notif).find("ul.list li.notification");
-	//console.log(notifications);
-	//console.log(notifications.length-1); //-1 pour virer le seeall
+	var notifications = $(data).find("div#scrollMe ul.list li.notification");
+	console.log(notifications);
 	
 	if(notifications.length > 1)
-		chrome.browserAction.setBadgeText({text:(notifications.length-1).toString()});
+		chrome.browserAction.setBadgeText({text:(notifications.length).toString()});
 	else
 		chrome.browserAction.setBadgeText({text:""});
 		
 	//action lorsqu'on click sur le bouton
-	if(grenier.getComportement() || (notifications.length <= 1)) { //soit on ouvre le SdZ
+	if(grenier.getComportement() || (notifications.length < 1)) { //soit on ouvre le SdZ
 		grenier.saveLastNotifs("Aucune notification");
 	} else { //sinon on ouvre une popup avec le contenu des notifs
-		grenier.saveLastNotifs(list_notif);
+		sauverNotifs(notifications);
 	}
 }
 
@@ -59,14 +72,17 @@ function cleaning(data) {
 	return data;
 }
 
-
-//action lorsqu'on click sur le bouton
-if(grenier.getComportement()) { //soit on ouvre le SdZ
-	chrome.browserAction.setPopup({popup:""})
-	chrome.browserAction.onClicked.addListener(function(activeTab) {
-		chrome.tabs.create({'url': "http://www.siteduzero.com/"});
-	});
-} else { //sinon on ouvre une popup avec le contenu des notifs
-	chrome.browserAction.setPopup({popup:"popup.html"})
+function sauverNotifs(data) {
+	var tab = [];
+	var len = data.length;
+	for (var i = 0; i < len; i++) {
+    	var obj = {
+        	titre: $(data[i]).find("li.title").text(),
+        	temps: $(data[i]).find("li.date").text(),
+        	lien: $(data[i]).find("a.link").attr('href')
+    	};
+    	tab.push(obj);    	
+	}
+	grenier.saveLastNotifs(tab);
 }
 
