@@ -15,6 +15,10 @@ chrome.tabs.onUpdated.addListener(function(tabId, props) {
 	if((typeof props.url !== 'undefined') && (props.url.substring(0, checker.length) == checker))
 		verifierNotif();
 });
+chrome.tabs.onCreated.addListener(function(tab) {
+	if((typeof tab.url !== 'undefined') && (tab.url.substring(0, checker.length) == checker))
+		verifierNotif();
+});
 
 //action lorsqu'on click sur le bouton
 if(grenier.getComportement()) { //soit on ouvre le SdZ
@@ -43,20 +47,13 @@ function parsing(data) {
 	//commence par nettoyer en virant toutes les balises qui ont un src
 	data = cleaning(data);
 	
-	//DEBUG !!!
-	data = grenier.fakeData;
-	//DEBUG !!!
-	
-	//var list_notif = $(data).find("div#scrollMe");
-	//console.log(list_notif);
-	
 	var notifications = $(data).find("div#scrollMe ul.list li.notification");
 	console.log(notifications);
 	
-	if(notifications.length > 1)
-		chrome.browserAction.setBadgeText({text:(notifications.length).toString()});
-	else
+	if(notifications.length < 1)
 		chrome.browserAction.setBadgeText({text:""});
+	else
+		chrome.browserAction.setBadgeText({text:(notifications.length).toString()});
 		
 	//action lorsqu'on click sur le bouton
 	if(grenier.getComportement() || (notifications.length < 1)) { //soit on ouvre le SdZ

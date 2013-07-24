@@ -22,5 +22,16 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 	
 	document.getElementById('content').innerHTML = content;
+	
+	//enregistre les liens pour détecter les clicks et les renvoyer vers la page correspondante
+	var liens = document.getElementsByTagName("a");
+	var len = liens.length;
+	for (var i=0; i < len; i++) {
+    liens[i].addEventListener("click", function (event) {
+            event.preventDefault();
+			//ouvre nouveau tab
+			chrome.tabs.create({'url':this.href})
+        }, false);
+	}
 });
 
