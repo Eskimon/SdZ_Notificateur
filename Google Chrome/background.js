@@ -11,13 +11,37 @@ chrome.alarms.onAlarm.addListener(function (alarm) { // le listener de l'alarme 
 });
 
 var checker = "http://www.siteduzero.com/";
-chrome.tabs.onUpdated.addListener(function(tabId, props) {
-	if((typeof props.url !== 'undefined') && (props.url.substring(0, checker.length) == checker))
-		verifierNotif();
+
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+	if((typeof tab.url !== 'undefined') && (tab.url.substring(0, checker.length) == checker) && (changeInfo.status == "complete")) {
+		//on vire la notif sur le SdZ
+		chrome.tabs.executeScript(tabId, {
+            code: '\
+var url = document.URL; \
+url = url.slice(0,url.indexOf("?")) + "/" + url.slice(url.lastIndexOf("-")+1); \
+var els = document.getElementsByTagName("a"); \
+var len = els.length; \
+var target = ""; \
+for (var i = 0; i < len; i++) { \
+    var el = els[i]; \
+    if (el.href === url) { \
+        target = els[i+1]; \
+        break; \
+    } \
+} \
+target.click();\
+'
+        });
+		
+		verifierNotif(); //on relance la vérification des notifications
+	}
 });
+
 chrome.tabs.onCreated.addListener(function(tab) {
-	if((typeof tab.url !== 'undefined') && (tab.url.substring(0, checker.length) == checker))
+//	console.log(tab);
+	if((typeof tab.url !== 'undefined') && (tab.url.substring(0, checker.length) == checker)) {
 		verifierNotif();
+	}
 });
 
 //action lorsqu'on click sur le bouton
@@ -48,7 +72,6 @@ function parsing(data) {
 	data = cleaning(data);
 	
 	var notifications = $(data).find("div#scrollMe ul.list li.notification");
-	console.log(notifications);
 	
 	if(notifications.length < 1)
 		chrome.browserAction.setBadgeText({text:""});
@@ -57,7 +80,7 @@ function parsing(data) {
 		
 	//action lorsqu'on click sur le bouton
 	if(grenier.getComportement() || (notifications.length < 1)) { //soit on ouvre le SdZ
-		grenier.saveLastNotifs("Aucune notification");
+		sauverNotifs("");
 	} else { //sinon on ouvre une popup avec le contenu des notifs
 		sauverNotifs(notifications);
 	}
@@ -76,7 +99,8 @@ function sauverNotifs(data) {
     	var obj = {
         	titre: $(data[i]).find("li.title").text(),
         	temps: $(data[i]).find("li.date").text(),
-        	lien: $(data[i]).find("a.link").attr('href')
+        	lien: $(data[i]).find("a.link").attr('href'),
+        	archive: $(data[i]).find("a.delete").attr('href')
     	};
     	tab.push(obj);    	
 	}
