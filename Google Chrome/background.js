@@ -84,7 +84,6 @@ function parsing(data) {
 	} else { //sinon on ouvre une popup avec le contenu des notifs
 		sauverNotifs(notifications);
 	}
-	console.log(notifications);
 }
 
 function cleaning(data) {
@@ -116,7 +115,7 @@ function sauverNotifs(data) {
         }, id = obj.archive.substr(obj.archive.lastIndexOf('/') + 1);
         
         chrome.notifications.create("sdz_" + id, notifOptions, function() { // Etant donné que l'ID est unique, la notif ne s'affiche pas 2 fois
-            console.log("Callback");
+            //console.log("Callback");
         });
 	}
 	grenier.saveLastNotifs(tab);
@@ -139,7 +138,7 @@ chrome.notifications.onButtonClicked.addListener(function(notif, button) {
             chrome.tabs.create({'url': "http://www.siteduzero.com" + notifObj.lien});
         }
         else if(button == 1) {
-            console.log("lol");
+            //console.log("lol");
         }
     }
 });
