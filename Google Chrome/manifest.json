@@ -22,7 +22,7 @@
     	"default_popup": "popup.html"
 	},
     "background": {
-    	"scripts": ["jquery.js","storage.js","background.js"],
+    	"scripts": ["jquery.js","storage.js","background2.js"],
     	"persistent": false
 	}
 }
