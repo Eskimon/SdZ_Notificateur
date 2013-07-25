@@ -135,10 +135,12 @@ chrome.notifications.onButtonClicked.addListener(function(notif, button) {
     for(var i = 0; i < notifs.length; i++) {
         if(notifs[i].archive == "/notifications/archiver/" + notifId) {
             notifObj = notifs[i];
+            break; //gagne du temps dans la boucle
         }
     }
     
     if(notifObj) {
+        chrome.notifications.clear(notif,function(wasCleared){};);
         if(button == 0) { //bouton "voir"
             chrome.tabs.create({'url': "http://www.siteduzero.com" + notifObj.lien});
         }
