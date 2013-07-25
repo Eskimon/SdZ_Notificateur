@@ -134,11 +134,14 @@ chrome.notifications.onButtonClicked.addListener(function(notif, button) {
     }
     
     if(notifObj) {
-        if(button == 0) {
+        if(button == 0) { //bouton "voir"
             chrome.tabs.create({'url': "http://www.siteduzero.com" + notifObj.lien});
         }
-        else if(button == 1) {
+        /*
+        else if(button == 1) { //bouton "archiver"
             //console.log("lol");
         }
+        */
     }
 });
+
