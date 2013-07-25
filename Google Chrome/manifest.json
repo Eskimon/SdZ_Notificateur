@@ -12,7 +12,8 @@
 	"permissions": [
 		"http://www.siteduzero.com/",
 		"tabs",
-		"alarms"
+		"alarms",
+		"notifications"
 	],
 	"options_page":"options.html",
     "browser_action": {
