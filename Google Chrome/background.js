@@ -118,48 +118,49 @@ function sauverNotifs(data) {
     	};
     	tab.push(obj);
     	
-        var notifOptions = { // Options de la notification
-            type: "basic",
-            title: obj.titre,
-            message: obj.temps,
-            iconUrl: "icons/icone_48.png",
-            buttons: [{ title: "Voir"}/*,
-                      { title: "Archiver (not working)"}*/]
-        }, id = obj.archive.substr(obj.archive.lastIndexOf('/') + 1);
-        
-        if(grenier.isNotifNativeSet()) {
-		    chrome.notifications.create("sdz_" + id, notifOptions, function() { // Etant donné que l'ID est unique, la notif ne s'affiche pas 2 fois
-		        //console.log("Callback");
-		    });
+    	if(typeof chrome.notifications !== 'undefined') { //test pour savoir si les notifs chrome sont dispos sur la platform
+		    var notifOptions = { // Options de la notification
+		        type: "basic",
+		        title: obj.titre,
+		        message: obj.temps,
+		        iconUrl: "icons/icone_48.png",
+		        buttons: [{ title: "Voir"}/*,
+		                  { title: "Archiver (not working)"}*/]
+		    }, id = obj.archive.substr(obj.archive.lastIndexOf('/') + 1);
+		    if(grenier.isNotifNativeSet()) {
+				chrome.notifications.create("sdz_" + id, notifOptions, function() { // Etant donné que l'ID est unique, la notif ne s'affiche pas 2 fois
+				    //console.log("Callback");
+				});
+		    }
         }
 	}
 	grenier.saveLastNotifs(tab);
 }
 
-/*
 // Notifications chrome
-chrome.notifications.onButtonClicked.addListener(function(notif, button) {
-    var notifId = notif.substr(4),
-        notifs = grenier.getLastNotifs(),
-        notifObj = false;
-    
-    for(var i = 0; i < notifs.length; i++) {
-        if(notifs[i].archive == "/notifications/archiver/" + notifId) {
-            notifObj = notifs[i];
-            break; //gagne du temps dans la boucle
-        }
-    }
-    
-    if(notifObj) {
-        chrome.notifications.clear(notif,function(wasCleared){});
-        if(button == 0) { //bouton "voir"
-            chrome.tabs.create({'url': "http://www.siteduzero.com" + notifObj.lien});
-        }
-        
-        //else if(button == 1) { //bouton "archiver"
-            //console.log("lol");
-        //}
-    }
-});
-*/
+if(typeof chrome.notifications !== 'undefined') { //test pour savoir si les notifs chrome sont dispos sur la platform
+	chrome.notifications.onButtonClicked.addListener(function(notif, button) {
+		var notifId = notif.substr(4),
+		    notifs = grenier.getLastNotifs(),
+		    notifObj = false;
+		
+		for(var i = 0; i < notifs.length; i++) {
+		    if(notifs[i].archive == "/notifications/archiver/" + notifId) {
+		        notifObj = notifs[i];
+		        break; //gagne du temps dans la boucle
+		    }
+		}
+		
+		if(notifObj) {
+		    chrome.notifications.clear(notif,function(wasCleared){});
+		    if(button == 0) { //bouton "voir"
+		        chrome.tabs.create({'url': "http://www.siteduzero.com" + notifObj.lien});
+		    }
+		    
+		    //else if(button == 1) { //bouton "archiver"
+		        //console.log("lol");
+		    //}
+		}
+	});
+}
 

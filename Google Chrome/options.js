@@ -16,6 +16,11 @@ function sauverOptions() { //enregistrer les options, fonction appelée par le c
 }
     
 document.addEventListener('DOMContentLoaded', function () {
+	if(typeof chrome.notifications === 'undefined') { //test pour savoir si les notifs chrome sont dispos sur la platform
+		//on cache le span d'options
+		var mySpan = document.getElementById('notifSpan');
+		mySpan.style.display = "none";
+	}
 	var button = document.getElementById("enregistrer");
 	button.addEventListener("click", function() { sauverOptions();});
 	
