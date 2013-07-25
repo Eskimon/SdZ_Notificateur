@@ -65,7 +65,7 @@ function verifierNotif() { //récupère la page et parse
 			parsing(xhr.responseText);
 		}
 	}
-	xhr.open("GET","http://www.siteduzero.com/zozor-4-ever",true); //charge expres une 404 pour diminuer le tps de chargement
+	xhr.open("GET","http://www.siteduzero.com/p/roadmap-du-site-du-zero",true); //charge la roadmap quiest plus légère que le reste
 	xhr.send(null);
 }
 
