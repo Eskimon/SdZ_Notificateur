@@ -52,6 +52,17 @@ var grenier = {
 	
 	setAllNotifs : function(data) {
 		localStorage['allNotifs'] = data.toString();
+	},
+	//------------------------------------------------------------------------------------
+	isNotifNativeSet : function() {
+		if (!localStorage['notifNative']) { //l'interval de rafraichissement du widget n'existe pas
+			localStorage['notifNative'] = true;
+		}
+		return (localStorage['notifNative'].toLowerCase() == 'true');
+	},
+	
+	setNotifNative : function(data) {
+		localStorage['notifNative'] = data.toString();
 	}
 };
 

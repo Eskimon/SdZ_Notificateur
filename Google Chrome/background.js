@@ -114,9 +114,11 @@ function sauverNotifs(data) {
                       { title: "Archiver (not working)"}*/]
         }, id = obj.archive.substr(obj.archive.lastIndexOf('/') + 1);
         
-        chrome.notifications.create("sdz_" + id, notifOptions, function() { // Etant donné que l'ID est unique, la notif ne s'affiche pas 2 fois
-            //console.log("Callback");
-        });
+        if(grenier.isNotifNativeSet()) {
+		    chrome.notifications.create("sdz_" + id, notifOptions, function() { // Etant donné que l'ID est unique, la notif ne s'affiche pas 2 fois
+		        //console.log("Callback");
+		    });
+        }
 	}
 	grenier.saveLastNotifs(tab);
 }

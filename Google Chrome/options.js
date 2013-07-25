@@ -3,12 +3,14 @@ function restaurerOptions() //resélectionner les options déja choisies
 	document.getElementById('interval').value = grenier.getRefreshInterval();
 	document.getElementById("newTab").checked = grenier.getComportement();
 	document.getElementById("allNotifs").checked = grenier.isAllNotifsSet();
+	document.getElementById("notifNative").checked = grenier.isNotifNativeSet();
 }
 
 function sauverOptions() { //enregistrer les options, fonction appelée par le click sur le bouton
     grenier.setRefreshInterval(parseInt(document.getElementById('interval').value));
     grenier.setComportement(document.getElementById("newTab").checked);
     grenier.setAllNotifs(document.getElementById("allNotifs").checked);
+    grenier.setNotifNative(document.getElementById("notifNative").checked);
     
     window.close();
 }
