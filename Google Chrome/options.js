@@ -12,6 +12,9 @@ function sauverOptions() { //enregistrer les options, fonction appelée par le c
     grenier.setAllNotifs(document.getElementById("allNotifs").checked);
     grenier.setNotifNative(document.getElementById("notifNative").checked);
     
+    //mise à jour du timer du background
+    chrome.runtime.sendMessage({temps: document.getElementById('interval').value});
+    
     window.close();
 }
     

@@ -35,7 +35,10 @@ document.addEventListener('DOMContentLoaded', function () {
     	liens[i].addEventListener("click", function (event) {
             event.preventDefault();
 			//ouvre nouveau tab
-			chrome.tabs.create({'url':this.href});
+			chrome.tabs.create({
+				'url':this.href,
+				'active': false
+			});
         }, false);
 	}
 	

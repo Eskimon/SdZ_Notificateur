@@ -49,8 +49,7 @@ if(grenier.getComportement()) { //soit on ouvre le SdZ
 	chrome.browserAction.setPopup({popup:""})
 	chrome.browserAction.onClicked.addListener(function(activeTab) {
 		chrome.tabs.create({
-			'url': "http://www.siteduzero.com/",
-			'active': false
+			'url': "http://www.siteduzero.com/"
 		});
 	});
 } else { //sinon on ouvre une popup avec le contenu des notifs
@@ -58,7 +57,7 @@ if(grenier.getComportement()) { //soit on ouvre le SdZ
 }
 
 function verifierNotif() { //récupère la page et parse
-	var xhr = new XMLHttpRequest(); 
+	var xhr = new XMLHttpRequest();
 	// On défini ce qu'on va faire quand on aura la réponse
 	xhr.onreadystatechange = function(){
 		// On ne fait quelque chose que si on a tout reçu et que le serveur est ok
@@ -66,7 +65,7 @@ function verifierNotif() { //récupère la page et parse
 			parsing(xhr.responseText);
 		}
 	}
-	xhr.open("GET","http://www.siteduzero.com/",true);
+	xhr.open("GET","http://www.siteduzero.com/zozor-4-ever",true); //charge expres une 404 pour diminuer le tps de chargement
 	xhr.send(null);
 }
 
@@ -163,4 +162,9 @@ if(typeof chrome.notifications !== 'undefined') { //test pour savoir si les noti
 		}
 	});
 }
+
+//mise à jour de l'alarm depuis options.js
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+	chrome.alarms.create('refresh', {periodInMinutes: parseInt(request.temps)})
+});
 
