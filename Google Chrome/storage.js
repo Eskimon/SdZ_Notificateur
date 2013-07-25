@@ -47,7 +47,7 @@ var grenier = {
 		if (!localStorage['allNotifs']) { //l'interval de rafraichissement du widget n'existe pas
 			localStorage['allNotifs'] = true;
 		}
-		return (JSON.parse(localStorage['allNotifs'].toLowerCase() == 'true'));
+		return (localStorage['allNotifs'].toLowerCase() == 'true');
 	},
 	
 	setAllNotifs : function(data) {
