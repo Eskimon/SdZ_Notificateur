@@ -44,7 +44,7 @@ var grenier = {
 	},
 	//------------------------------------------------------------------------------------
 	isAllNotifsSet : function() {
-		if (!localStorage['allNotifs']) { //l'interval de rafraichissement du widget n'existe pas
+		if (!localStorage['allNotifs']) {
 			localStorage['allNotifs'] = true;
 		}
 		return (localStorage['allNotifs'].toLowerCase() == 'true');
@@ -52,6 +52,18 @@ var grenier = {
 	
 	setAllNotifs : function(data) {
 		localStorage['allNotifs'] = data.toString();
+	},
+	//------------------------------------------------------------------------------------
+	isNotifNativeSet : function() {
+		if (!localStorage['notifNative']) {
+			localStorage['notifNative'] = true; //activer par défaut
+		}
+		return false; //PAS ENCORE PRET A ETRE PUBLIE
+		return (localStorage['notifNative'].toLowerCase() == 'true');
+	},
+	
+	setNotifNative : function(data) {
+		localStorage['notifNative'] = data.toString();
 	}
 };
 
