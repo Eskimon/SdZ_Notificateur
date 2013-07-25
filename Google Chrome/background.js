@@ -6,7 +6,7 @@ verifierNotif(); //lance de suite une vérification des notifs
 
 chrome.alarms.onAlarm.addListener(function (alarm) { // le listener de l'alarme de check
     if (alarm.name == 'refresh') {
-        verifierNotif();
+    	verifierNotif();
     }
 });
 
@@ -74,6 +74,16 @@ function parsing(data) {
 	//commence par nettoyer en virant toutes les balises qui ont un src
 	data = cleaning(data);
 	
+	//avant de parser pour un truc peut etre vide, on vérifie que l'user est connecté
+	var loginBox = $(data).find("div#login");
+	//on est pas connecté !
+	if(loginBox.length != 0) {
+		chrome.browserAction.setIcon({"path":"icons/icone_38_logout.png"});
+		return;
+	} else {
+		chrome.browserAction.setIcon({"path":"icons/icone_38.png"});
+	}
+	
 	var notifications = $(data).find("div#scrollMe ul.list li.notification");
 	
 	if(notifications.length < 1)
@@ -126,6 +136,7 @@ function sauverNotifs(data) {
 	grenier.saveLastNotifs(tab);
 }
 
+/*
 // Notifications chrome
 chrome.notifications.onButtonClicked.addListener(function(notif, button) {
     var notifId = notif.substr(4),
@@ -140,15 +151,15 @@ chrome.notifications.onButtonClicked.addListener(function(notif, button) {
     }
     
     if(notifObj) {
-        chrome.notifications.clear(notif,function(wasCleared){};);
+        chrome.notifications.clear(notif,function(wasCleared){});
         if(button == 0) { //bouton "voir"
             chrome.tabs.create({'url': "http://www.siteduzero.com" + notifObj.lien});
         }
-        /*
-        else if(button == 1) { //bouton "archiver"
+        
+        //else if(button == 1) { //bouton "archiver"
             //console.log("lol");
-        }
-        */
+        //}
     }
 });
+*/
 
