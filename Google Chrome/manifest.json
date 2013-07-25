@@ -13,7 +13,8 @@
 		"http://www.siteduzero.com/",
 		"tabs",
 		"alarms",
-		"notifications"
+		"notifications",
+		"storage"
 	],
 	"options_page":"options.html",
     "browser_action": {

@@ -4,12 +4,23 @@ var Notificateur = function() {
 
 Notificateur.prototype = {
     url: "http://www.siteduzero.com",
+    
+    options: {
+        updateInterval: 5,
+        openInNewTab: true,
+        showAllNotifButton: true,
+        showDesktopNotif: true
+    },
+    
+    storage: chrome.storage.sync,
+    
     init: function() {
         this.notifications = [];
         this.initListeners();
+        this.loadOptions();
         this.check();
         
-        chrome.alarms.create('refresh', {periodInMinutes: 1});
+        chrome.alarms.create('refresh', {periodInMinutes: this.options.updateInterval});
     },
     
     initListeners: function() {
@@ -27,6 +38,9 @@ Notificateur.prototype = {
             chrome.notifications.onClicked.addListener(this.listeners.notifClick.bind(this));
             chrome.notifications.onClosed.addListener(this.listeners.notifClose.bind(this));
         }
+        
+        chrome.storage.onChanged.addListener(this.listeners.storageChanged.bind(this));
+        
     },
     
     listeners: {
@@ -58,10 +72,19 @@ Notificateur.prototype = {
         },
         
         notifButtonClick: function(notifId, button) {
-            if(button == 0) {
-                var notif = this.getNotification(parseInt(notifId));
+            var notif = this.getNotification(parseInt(notifId));
+            if(button == 0) { // Open last message
                 if(notif) {
                     this.openSdZ("/forum/sujet/" + notif.thread + "/" + notif.messageId);
+                }
+                
+                chrome.notifications.clear(notifId, function() {
+                    
+                });
+            }
+            else if(button == 1) { // Open thread
+                if(notif) {
+                    this.openSdZ("/forum/sujet/" + notif.thread);
                 }
                 
                 chrome.notifications.clear(notifId, function() {
@@ -83,16 +106,22 @@ Notificateur.prototype = {
         
         notifClose: function(notifId) {
             // A la fermeture de la notif
+        },
+        
+        storageChanged: function(changes, areaName) {
+            console.log(this.options);
+            for(var key in changes) {
+                if(this.options[key]) {
+                    this.options[key] = changes[key].newValue;
+                }
+            }
+            console.log(this.options);
+            this.updateOptions();
         }
     },
     
     check: function() {
-        var self = this;
-        $.get(this.url, function(data) {
-            self.loadCallback(data);
-        }, "text");
-        
-        console.log("Checking");
+        $.get(this.url, this.loadCallback.bind(this), "text");
     },
     
     getNotification: function(id) {
@@ -161,6 +190,7 @@ Notificateur.prototype = {
         });
         
         this.showDesktopNotifs(newNotifs);
+        this.clearDesktopNotifs(removedNotifs);
         
         chrome.browserAction.setBadgeText({
             text: (this.notifications.length > 0) ? this.notifications.length.toString() : ""
@@ -168,19 +198,54 @@ Notificateur.prototype = {
     },
     
     showDesktopNotifs: function(notifs) {
-        var notifOptions = { // Options de la notification
+        var notifOptions = { // Options des notifications
             type: "basic",
             iconUrl: "icons/icone_48.png",
             buttons: [{ title: "Voir le message" }, { title: "Voir le début du thread"}]
         };
         
-        if(chrome.notifications) {
+        if(chrome.notifications && this.options.showDesktopNotif) {
             for(var i = 0; i < notifs.length; i++) {
                 notifOptions.title = notifs[i].title;
                 notifOptions.message = notifs[i].date;
                 chrome.notifications.create(notifs[i].id, notifOptions, function() {});
             }
         }
+    },
+    
+    clearDesktopNotifs: function(notifs) {
+        if(chrome.notifications) {
+            for(var i = 0; i < notifs.length; i++) {
+                chrome.notifications.clear(notifs[i].id, function() {});
+            }
+        }
+    },
+    
+    getOptions: function(key) {
+        if(key) {
+            return this.options[key];
+        }
+        else {
+            return this.options;
+        }
+    },
+    
+    loadOptions: function() { // Charge les options depuis le chrome.storage
+        var self = this,
+            keys = Object.keys(this.options);
+        this.storage.get(keys, function(items) {
+            for(var key in items) {
+                if(self.options[key]) {
+                    self.options[key] = items[key];
+                }
+            }
+        });
+    },
+    
+    updateOptions: function() {
+        // Update interval
+        chrome.alarms.clear('refresh');
+        chrome.alarms.create('refresh', { periodInMinutes: this.options.updateInterval });
     },
     
     openSdZ: function(url) {

@@ -1,8 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
-	var notifs = grenier.getLastNotifs();
-	
 	chrome.runtime.getBackgroundPage(function(bgWindow) { // Recuperer le background
-        var notifs = bgWindow.theNotificator.getNotification();
+        var notificator = bgWindow.theNotificator,
+            notifs = notificator.getNotification();
         
         var len = notifs.length;
     	var content = "";
@@ -23,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
     		}
     	}
     	
-    	if(grenier.isAllNotifsSet()) {
+    	if(notificator.getOptions("showAllNotifButton")) {
     		content += '<hr />';
     		content += '<a href="http://www.siteduzero.com/notifications">\
     			<div class="allNotifs">Toutes mes notifications</div></a>';
@@ -33,15 +32,16 @@ document.addEventListener('DOMContentLoaded', function () {
     	
     	//enregistre les liens pour détecter les clicks et les renvoyer vers la page correspondante
     	var liens = document.getElementsByTagName("a");
-    	var len = liens.length;
-    	for (var i=0; i < len; i++) {
+    	for (var i = 0; i < liens.length; i++) {
         	liens[i].addEventListener("click", function (event) {
-                event.preventDefault();
-    			//ouvre nouveau tab
-    			chrome.tabs.create({
-    				'url':this.href,
-    				'active': false
-    			});
+        	    if(notificator.getOptions("openInNewTab")) {
+                    event.preventDefault();
+        			//ouvre nouveau tab
+        			chrome.tabs.create({
+        				'url':this.href,
+        				'active': false
+        			});
+    			}
             }, false);
     	}
     });
