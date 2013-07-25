@@ -48,7 +48,10 @@ chrome.tabs.onCreated.addListener(function(tab) {
 if(grenier.getComportement()) { //soit on ouvre le SdZ
 	chrome.browserAction.setPopup({popup:""})
 	chrome.browserAction.onClicked.addListener(function(activeTab) {
-		chrome.tabs.create({'url': "http://www.siteduzero.com/"});
+		chrome.tabs.create({
+			'url': "http://www.siteduzero.com/",
+			'active': false
+		});
 	});
 } else { //sinon on ouvre une popup avec le contenu des notifs
 	chrome.browserAction.setPopup({popup:"popup.html"})
