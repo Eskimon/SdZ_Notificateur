@@ -42,6 +42,7 @@ var notificatorOptions = {
             var val = this.elems[key].type == "checkbox" ? this.elems[key].checked : this.elems[key].value;
             obj[key] = val;
         }
+        return obj;
     }
 };
 

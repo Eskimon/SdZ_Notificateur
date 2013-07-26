@@ -245,10 +245,11 @@ Notificateur.prototype = {
     },
     
     setOptions: function(changes, callback) {
+        console.log(changes, this.options);
         callback = callback || function() { console.log("Options saved"); };
         for(var key in changes) {
             if(this.options[key] !== undefined) {
-                this.options[key] = changes[key].newValue;
+                this.options[key] = changes[key];
             }
         }
         
