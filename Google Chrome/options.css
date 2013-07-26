@@ -5,16 +5,53 @@
 
 body {
 	background: url('http://www.siteduzero.com/bundles/common/images/background.png');
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-h1 {
+header {
 	background: #002d40;
 	border-bottom: 4px solid #03638b;
 	color: white;
-	padding: 10px;
-	margin-bottom: 20px;
+	padding: 20px 0;
+}
+
+.container {
+    margin: auto;
+    width: 600px;
 }
 
 p.champ {
-	margin: 10px 20px;
+	margin: 10px 0;
+}
+
+.options {
+    background-color: white;
+    padding: 20px;
+}
+
+input[type="button"] {
+    border: solid 1px #CCC;
+    color: #fff;
+    border: 1px solid #00293a;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -webkit-box-shadow: inset 0 1px 1px 0 #478caa;
+    box-shadow: inset 0 1px 1px 0 #478caa;
+    background-color: #024967;
+    background-image: -webkit-linear-gradient(top,#036289 0,#195b77 49%,#024967 50%,#002e41 100%);
+    background-image: linear-gradient(top,#036289 0,#195b77 49%,#024967 50%,#002e41 100%);
+    text-shadow: 0 -1px 0 #1c181b;
+    padding: 10px;
+    font-size: 14px;
+}
+
+input[type="button"]:hover {
+    -webkit-box-shadow:inset 0 0 10px 0 #00b4ff;
+    box-shadow:inset 0 0 10px 0 #00b4ff;
+}
+
+input[type="button"]:active {
+    -webkit-box-shadow:inset 0 -1px 0 0 #4288a5;
+    box-shadow:inset 0 -1px 0 0 #4288a5;
+    background-image:linear-gradient(top,#001a25 0,#036188 100%);
 }

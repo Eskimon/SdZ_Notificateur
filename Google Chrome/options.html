@@ -1,33 +1,36 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<meta charset="utf-8">
-    <title>SdZ Notificateur options</title>
-    <link rel="stylesheet" href="options.css">
-    <script src="storage.js"></script>
-    <script src="options.js"></script>
-</head>
- 
-<body>
-    <h1>Options de l'extension</h1>
-    <div>
-		<p class="champ">
-			<label for="interval">Interval de rafraichissement (en minutes) </label>
-			<input type="text" name="interval" id="interval"/>
-		</p>
-		<p class="champ">
-			<input type="checkbox" name="newTab" id="newTab"/>
-			<label for="newTab">Ouvrir les liens dans un nouvel onglet ?</label>
-		</p>
-		<p class="champ">
-			<input type="checkbox" name="allNotifs" id="allNotifs"/>
-			<label for="allNotifs" id="allNotifsLabel">Afficher une ligne "Toutes mes notifications" ?</label>
-		</p>
-		<p id="notifSpan" class="champ">
-			<input type="checkbox" name="notifNative" id="notifNative"/>
-			<label for="notifNative">Afficher les notification du bureau ?</label>
-		</p>
-		<input type="button" id="enregistrer" value="Enregistrer"/>
-    </div>
-</body>
+    <head>
+        <meta charset="utf-8">
+        <title>SdZ Notificateur options</title>
+        <link rel="stylesheet" href="options.css">
+        <script src="storage.js"></script>
+        <script src="options.js"></script>
+    </head>
+     
+    <body>
+        <header>
+            <div class="container">
+                <h1>Options de l'extension</h1>
+            </div>
+        </header>
+        <div class="container">
+            <div class="options">
+                <p class="champ">
+                    <label for="interval">Interval de rafraichissement (en minutes) </label>
+                    <input type="text" name="interval" id="interval"/>
+                </p>
+                <p class="champ">
+                    <label for="newTab"><input type="checkbox" name="newTab" id="newTab" /> Ouvrir les liens dans un nouvel onglet ?</label>
+                </p>
+                <p class="champ">
+                    <label for="allNotifs" id="allNotifsLabel"><input type="checkbox" name="allNotifs" id="allNotifs"/> Afficher une ligne "Toutes mes notifications" ?</label>
+                </p>
+                <p id="notifSpan" class="champ">
+                    <label for="notifNative"><input type="checkbox" name="notifNative" id="notifNative" /> Afficher les notification du bureau ?</label>
+                </p>
+                <input type="button" id="enregistrer" value="Enregistrer"/>
+            </div>
+        </div>
+    </body>
 </html>
