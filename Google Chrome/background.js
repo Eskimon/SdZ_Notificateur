@@ -44,7 +44,7 @@ Notificateur.prototype = {
     
     listeners: {
         tabUpdate: function(tabId, changeInfo, tab) {
-            if((typeof tab.url !== 'undefined') && (tab.url.substring(0, this.url.length) == this.url) && (changeInfo.status == "complete")) {
+            if(tab.url !== undefined && tab.url.indexOf("siteduzero.com") != -1 && tab.url.indexOf("siteduzero.com") < 14 && changeInfo.status == "complete") {
                 //on vire la notif sur le SdZ
                 chrome.tabs.executeScript(tabId, {
                     file: "injected.js"
@@ -55,7 +55,7 @@ Notificateur.prototype = {
         },
         
         tabCreate: function(tab) {
-            if((typeof tab.url !== 'undefined') && (tab.url.substring(0, this.url.length) == this.url)) {
+            if(tab.url !== undefined && tab.url.indexOf("siteduzero.com") != -1 && tab.url.indexOf("siteduzero.com") < 14) {
                 this.check();
             }
         },

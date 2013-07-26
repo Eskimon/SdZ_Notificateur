@@ -10,7 +10,7 @@
 		"128": "icons/icone_128.png"
 		},
 	"permissions": [
-		"http://www.siteduzero.com/",
+		"*://*.siteduzero.com/*",
 		"tabs",
 		"alarms",
 		"notifications",
