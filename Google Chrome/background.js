@@ -110,7 +110,7 @@ Notificateur.prototype = {
         storageChanged: function(changes, areaName) {
             console.log(this.options);
             for(var key in changes) {
-                if(this.options[key]) {
+                if(this.options[key] !== undefined) {
                     this.options[key] = changes[key].newValue;
                 }
             }
