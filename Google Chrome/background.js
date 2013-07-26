@@ -276,7 +276,8 @@ Notificateur.prototype = {
     },
     
     openSdZ: function(_url) {
-        var url = this.url + _url;
+        var url = this.url + _url,
+            self = this;
         
         chrome.windows.getCurrent({ populate:true }, function(currentWindow) {
 	        var tab = false;
@@ -287,7 +288,7 @@ Notificateur.prototype = {
     	        }
 	        }
 	        
-    	    if(!notificator.getOptions("openInNewTab") && tab && tab.url !== undefined && tab.url.indexOf("siteduzero.com") != -1 && tab.url.indexOf("siteduzero.com") < 14) {
+    	    if(!self.getOptions("openInNewTab") && tab && tab.url !== undefined && tab.url.indexOf("siteduzero.com") != -1 && tab.url.indexOf("siteduzero.com") < 14) {
     			chrome.tabs.update(tab.id, { url: url });
 			}
 			else {
