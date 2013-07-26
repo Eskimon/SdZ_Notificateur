@@ -39,13 +39,12 @@ Notificateur.prototype = {
             chrome.notifications.onClosed.addListener(this.listeners.notifClose.bind(this));
         }
         
-        chrome.storage.onChanged.addListener(this.listeners.storageChanged.bind(this));
+        //chrome.storage.onChanged.addListener(this.listeners.storageChanged.bind(this)); Inutile
     },
     
     listeners: {
         tabUpdate: function(tabId, changeInfo, tab) {
             if(tab.url !== undefined && tab.url.indexOf("siteduzero.com") != -1 && tab.url.indexOf("siteduzero.com") < 14 && changeInfo.status == "complete") {
-                //on vire la notif sur le SdZ
                 chrome.tabs.executeScript(tabId, {
                     file: "injected.js"
                 });
@@ -105,7 +104,7 @@ Notificateur.prototype = {
         
         notifClose: function(notifId) {
             // A la fermeture de la notif
-        },
+        }/*,
         
         storageChanged: function(changes, areaName) {
             console.log(this.options);
@@ -116,7 +115,7 @@ Notificateur.prototype = {
             }
             console.log(this.options);
             this.updateOptions();
-        }
+        }*/ // Plus utile
     },
     
     check: function() {
@@ -245,6 +244,18 @@ Notificateur.prototype = {
         }
     },
     
+    setOptions: function(changes, callback) {
+        callback = callback || function() { console.log("Options saved"); };
+        for(var key in changes) {
+            if(this.options[key] !== undefined) {
+                this.options[key] = changes[key].newValue;
+            }
+        }
+        
+        this.storage.set(this.options, callback);
+        this.updateOptions();
+    },
+    
     loadOptions: function() { // Charge les options depuis le chrome.storage
         var self = this,
             keys = Object.keys(this.options);
@@ -263,8 +274,28 @@ Notificateur.prototype = {
         chrome.alarms.create('refresh', { periodInMinutes: this.options.updateInterval });
     },
     
-    openSdZ: function(url) {
-        chrome.tabs.create({ 'url': this.url + url });
+    openSdZ: function(_url) {
+        var url = this.url + _url;
+        
+        chrome.windows.getCurrent({ populate:true }, function(currentWindow) {
+	        var tab = false;
+	        for(var i in currentWindow.tabs) {
+    	        if(currentWindow.tabs[i].active) {
+        	        tab = currentWindow.tabs[i];
+        	        break;
+    	        }
+	        }
+	        
+    	    if(!notificator.getOptions("openInNewTab") && tab && tab.url !== undefined && tab.url.indexOf("siteduzero.com") != -1 && tab.url.indexOf("siteduzero.com") < 14) {
+    			chrome.tabs.update(tab.id, { url: url });
+			}
+			else {
+			    chrome.tabs.create({
+    				'url': url,
+    				'active': false
+    			});
+			}
+	    });
     }
 };
 

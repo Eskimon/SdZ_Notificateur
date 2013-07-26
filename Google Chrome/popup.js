@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-	chrome.runtime.getBackgroundPage(function(bgWindow) { // Recuperer le background
+	chrome.runtime.getBackgroundPage(function(bgWindow) {
         var notificator = bgWindow.theNotificator,
             notifs = notificator.getNotification();
         
@@ -30,7 +30,6 @@ document.addEventListener('DOMContentLoaded', function () {
     	
     	document.getElementById('content').innerHTML = content;
     	
-    	//enregistre les liens pour détecter les clicks et les renvoyer vers la page correspondante
     	var liens = document.getElementsByTagName("a");
     	for (var i = 0; i < liens.length; i++) {
         	liens[i].addEventListener("click", function (event) {
