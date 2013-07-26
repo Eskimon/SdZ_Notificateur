@@ -143,7 +143,7 @@ Notificateur.prototype = {
 
         var xmlDoc = new DOMParser().parseFromString(data, "text/xml"),
             $data = $(xmlDoc),
-            loginBox = $(data).find("div#login");
+            loginBox = $($data).find("div#login");
             
 		//on est pas connecté !
 		if(loginBox.length != 0) {
