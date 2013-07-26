@@ -165,6 +165,13 @@ if(typeof chrome.notifications !== 'undefined') { //test pour savoir si les noti
 
 //mise à jour de l'alarm depuis options.js
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-	chrome.alarms.create('refresh', {periodInMinutes: parseInt(request.temps)})
+	switch(request.id) {
+		case(1):
+			chrome.alarms.create('refresh', {periodInMinutes: parseInt(request.temps)})
+			break;
+		case(2):
+		
+			break;
+	}
 });
 

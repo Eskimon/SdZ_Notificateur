@@ -1,0 +1,20 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	background: url('http://www.siteduzero.com/bundles/common/images/background.png');
+}
+
+h1 {
+	background: #002d40;
+	border-bottom: 4px solid #03638b;
+	color: white;
+	padding: 10px;
+	margin-bottom: 20px;
+}
+
+p.champ {
+	margin: 10px 20px;
+}
