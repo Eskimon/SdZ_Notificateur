@@ -1,6 +1,6 @@
 {
     "name": "SdZ Notificateur",
-    "version": "1.2.4",
+    "version": "1.3.4",
     "manifest_version": 2,
     "description": "Extensions pour Google Chrome pour connaitre le nombre de notifications ou MP SdZ sans avoir besoin d'ouvrir le site",
     "offline_enabled": false,
@@ -13,7 +13,8 @@
 		"http://www.siteduzero.com/",
 		"tabs",
 		"alarms",
-		"notifications"
+		"notifications",
+		"storage"
 	],
 	"options_page":"options.html",
     "browser_action": {

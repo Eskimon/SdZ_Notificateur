@@ -1,177 +1,257 @@
-chrome.alarms.create('refresh', {periodInMinutes: grenier.getRefreshInterval()}); //alarm pour aller vérifier les news
+var Notificateur = function() {
+    this.init.apply(this, arguments);
+};
 
-verifierNotif(); //lance de suite une vérification des notifs
-
-//----- les déclarations ----
-
-chrome.alarms.onAlarm.addListener(function (alarm) { // le listener de l'alarme de check
-    if (alarm.name == 'refresh') {
-    	verifierNotif();
-    }
-});
-
-var checker = "http://www.siteduzero.com/";
-
-chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-	if((typeof tab.url !== 'undefined') && (tab.url.substring(0, checker.length) == checker) && (changeInfo.status == "complete")) {
-		//on vire la notif sur le SdZ
-		chrome.tabs.executeScript(tabId, {
-            code: '\
-var url = document.URL; \
-url = url.slice(0,url.indexOf("?")) + "/" + url.slice(url.lastIndexOf("-")+1); \
-var els = document.getElementsByTagName("a"); \
-var len = els.length; \
-var target = ""; \
-for (var i = 0; i < len; i++) { \
-    var el = els[i]; \
-    if (el.href === url) { \
-        target = els[i+1]; \
-        break; \
-    } \
-} \
-target.click();\
-'
-        });
-		
-		verifierNotif(); //on relance la vérification des notifications
-	}
-});
-
-chrome.tabs.onCreated.addListener(function(tab) {
-//	console.log(tab);
-	if((typeof tab.url !== 'undefined') && (tab.url.substring(0, checker.length) == checker)) {
-		verifierNotif();
-	}
-});
-
-//action lorsqu'on click sur le bouton
-if(grenier.getComportement()) { //soit on ouvre le SdZ
-	chrome.browserAction.setPopup({popup:""})
-	chrome.browserAction.onClicked.addListener(function(activeTab) {
-		chrome.tabs.create({
-			'url': "http://www.siteduzero.com/"
-		});
-	});
-} else { //sinon on ouvre une popup avec le contenu des notifs
-	chrome.browserAction.setPopup({popup:"popup.html"})
-}
-
-function verifierNotif() { //récupère la page et parse
-	var xhr = new XMLHttpRequest();
-	// On défini ce qu'on va faire quand on aura la réponse
-	xhr.onreadystatechange = function(){
-		// On ne fait quelque chose que si on a tout reçu et que le serveur est ok
-		if(xhr.readyState == 4 && xhr.status == 200){
-			parsing(xhr.responseText);
-		}
-	}
-	xhr.open("GET","http://www.siteduzero.com/p/roadmap-du-site-du-zero",true); //charge la roadmap quiest plus légère que le reste
-	xhr.send(null);
-}
-
-function parsing(data) {
-	//commence par nettoyer en virant toutes les balises qui ont un src
-	data = cleaning(data);
-	
-	//avant de parser pour un truc peut etre vide, on vérifie que l'user est connecté
-	var loginBox = $(data).find("div#login");
-	//on est pas connecté !
-	if(loginBox.length != 0) {
-		chrome.browserAction.setIcon({"path":"icons/icone_38_logout.png"});
-		return;
-	} else {
-		chrome.browserAction.setIcon({"path":"icons/icone_38.png"});
-	}
-	
-	var notifications = $(data).find("div#scrollMe ul.list li.notification");
-	
-	if(notifications.length < 1)
-		chrome.browserAction.setBadgeText({text:""});
-	else
-		chrome.browserAction.setBadgeText({text:(notifications.length).toString()});
-		
-	//action lorsqu'on click sur le bouton
-	if(grenier.getComportement() || (notifications.length < 1)) { //soit on ouvre le SdZ
-		sauverNotifs("");
-	} else { //sinon on ouvre une popup avec le contenu des notifs
-		sauverNotifs(notifications);
-	}
-}
-
-function cleaning(data) {
-	data = data.replace(/<img[^>]*>/gi,""); //vire les images
-	//data.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,''); //vire le javascript
-	return data;
-}
-
-function sauverNotifs(data) {
-	var tab = [],
-	    len = data.length,
-	    oldNotifs = grenier.getLastNotifs();
-	for (var i = 0; i < len; i++) {
-    	var obj = {
-        	titre: $(data[i]).find("li.title").text(),
-        	temps: $(data[i]).find("li.date").text(),
-        	lien: $(data[i]).find("a.link").attr('href'),
-        	archive: $(data[i]).find("a.delete").attr('href')
-    	};
-    	tab.push(obj);
-    	
-    	if(typeof chrome.notifications !== 'undefined') { //test pour savoir si les notifs chrome sont dispos sur la platform
-		    var notifOptions = { // Options de la notification
-		        type: "basic",
-		        title: obj.titre,
-		        message: obj.temps,
-		        iconUrl: "icons/icone_48.png",
-		        buttons: [{ title: "Voir"}/*,
-		                  { title: "Archiver (not working)"}*/]
-		    }, id = obj.archive.substr(obj.archive.lastIndexOf('/') + 1);
-		    if(grenier.isNotifNativeSet()) {
-				chrome.notifications.create("sdz_" + id, notifOptions, function() { // Etant donné que l'ID est unique, la notif ne s'affiche pas 2 fois
-				    //console.log("Callback");
-				});
-		    }
+Notificateur.prototype = {
+    url: "http://www.siteduzero.com",
+    
+    options: {
+        updateInterval: 5,
+        openInNewTab: true,
+        showAllNotifButton: true,
+        showDesktopNotif: true
+    },
+    
+    storage: chrome.storage.sync,
+    
+    init: function() {
+        this.notifications = [];
+        this.initListeners();
+        this.loadOptions();
+        this.check();
+        
+        chrome.alarms.create('refresh', {periodInMinutes: this.options.updateInterval});
+    },
+    
+    initListeners: function() {
+        if(chrome.tabs) {
+            chrome.tabs.onUpdated.addListener(this.listeners.tabUpdate.bind(this));
+            chrome.tabs.onCreated.addListener(this.listeners.tabCreate.bind(this));
         }
-	}
-	grenier.saveLastNotifs(tab);
-}
+        
+        if(chrome.alarms) {
+            chrome.alarms.onAlarm.addListener(this.listeners.alarm.bind(this));
+        }
+        
+        if(chrome.notifications) {
+            chrome.notifications.onButtonClicked.addListener(this.listeners.notifButtonClick.bind(this));
+            chrome.notifications.onClicked.addListener(this.listeners.notifClick.bind(this));
+            chrome.notifications.onClosed.addListener(this.listeners.notifClose.bind(this));
+        }
+        
+        chrome.storage.onChanged.addListener(this.listeners.storageChanged.bind(this));
+        
+    },
+    
+    listeners: {
+        tabUpdate: function(tabId, changeInfo, tab) {
+            if((typeof tab.url !== 'undefined') && (tab.url.substring(0, this.url.length) == this.url) && (changeInfo.status == "complete")) {
+                //on vire la notif sur le SdZ
+                chrome.tabs.executeScript(tabId, {
+                    file: "injected.js"
+                });
+                
+                this.check();
+            }
+        },
+        
+        tabCreate: function(tab) {
+            if((typeof tab.url !== 'undefined') && (tab.url.substring(0, this.url.length) == this.url)) {
+                this.check();
+            }
+        },
+        
+        toolbarClick: function() {
+            this.openSdZ();
+        },
+        
+        alarm: function(alarm) {
+            if (alarm.name == 'refresh') {
+                this.check();
+            }
+        },
+        
+        notifButtonClick: function(notifId, button) {
+            var notif = this.getNotification(parseInt(notifId));
+            if(button == 0) { // Open last message
+                if(notif) {
+                    this.openSdZ("/forum/sujet/" + notif.thread + "/" + notif.messageId);
+                }
+                
+                chrome.notifications.clear(notifId, function() {
+                    
+                });
+            }
+            else if(button == 1) { // Open thread
+                if(notif) {
+                    this.openSdZ("/forum/sujet/" + notif.thread);
+                }
+                
+                chrome.notifications.clear(notifId, function() {
+                    
+                });
+            }
+        },
+        
+        notifClick: function(notifId) {
+            var notif = this.getNotification(parseInt(notifId));
+            if(notif) {
+                this.openSdZ("/forum/sujet/" + notif.thread + "/" + notif.messageId);
+            }
+            
+            chrome.notifications.clear(notifId, function() {
+                
+            });
+        },
+        
+        notifClose: function(notifId) {
+            // A la fermeture de la notif
+        },
+        
+        storageChanged: function(changes, areaName) {
+            console.log(this.options);
+            for(var key in changes) {
+                if(this.options[key]) {
+                    this.options[key] = changes[key].newValue;
+                }
+            }
+            console.log(this.options);
+            this.updateOptions();
+        }
+    },
+    
+    check: function() {
+        $.get(this.url, this.loadCallback.bind(this), "text");
+    },
+    
+    getNotification: function(id) {
+        if(id) {
+            for(var i = 0; i < this.notifications.length; i++) {
+                if(this.notifications[i].id == id) {
+                    return this.notifications[i];
+                }
+            }
+            
+            return false;
+        }
+        else {
+            return this.notifications;
+        }
+    },
+    
+    //ancien "verifNotif()"
+    loadCallback: function(data) {
+        var xmlDoc = new DOMParser().parseFromString(data, "text/xml"),
+            $data = $(xmlDoc),
+            notifications = $data.find("div#scrollMe ul.list li.notification"),
+            newNotifs = [], // Liste des nouvelles notifications
+            oldNotifs = this.notifications, // Ancienne liste
+            removedNotifs = [], // Notifs enlevées
+            notifsList = []; // Nouvelle liste
+        
+        for(var i = 0; i < notifications.length; i++) {
+            var notif = $(notifications[i]),
+                notifLink = notif.find("a.link").attr('href'),
+                archiveLink = notif.find("a.delete").attr('href');
+            
+            var notifObj = {
+                id: archiveLink.substr(archiveLink.lastIndexOf("/") + 1),
+                title: notif.find("li.title").text(),
+                date: notif.find("li.date").text(),
+                messageId: notifLink.substr(notifLink.lastIndexOf("/") + 1),
+                thread: notifLink.substr(13, notifLink.lastIndexOf("/") - 13)
+            };
+            
+            if(this.getNotification(notifObj.id) == false) {
+                newNotifs.push(notifObj);
+            }
+            
+            notifsList.push(notifObj);
+        }
+        
+        this.notifications = notifsList;
+        
+        for(var i = 0; i < oldNotifs.length; i++) { // Faire la liste des notifs enlevées
+            var exists = false;
+            for(var j = 0; j < this.notifications.length; j++) {
+                if(oldNotifs[i].id == this.notifications[j].id) {
+                    exists = true;
+                    break;
+                }
+            }
+            if(!exists) {
+                removedNotifs.push(oldNotifs[i]);
+            }
+        }
+        
+        console.log("Update", {
+            newNotifs: newNotifs,
+            removedNotifs: removedNotifs,
+            notifs: this.notifications
+        });
+        
+        this.showDesktopNotifs(newNotifs);
+        this.clearDesktopNotifs(removedNotifs);
+        
+        chrome.browserAction.setBadgeText({
+            text: (this.notifications.length > 0) ? this.notifications.length.toString() : ""
+        });
+    },
+    
+    showDesktopNotifs: function(notifs) {
+        var notifOptions = { // Options des notifications
+            type: "basic",
+            iconUrl: "icons/icone_48.png",
+            buttons: [{ title: "Voir le message" }, { title: "Voir le début du thread"}]
+        };
+        
+        if(chrome.notifications && this.options.showDesktopNotif) {
+            for(var i = 0; i < notifs.length; i++) {
+                notifOptions.title = notifs[i].title;
+                notifOptions.message = notifs[i].date;
+                chrome.notifications.create(notifs[i].id, notifOptions, function() {});
+            }
+        }
+    },
+    
+    clearDesktopNotifs: function(notifs) {
+        if(chrome.notifications) {
+            for(var i = 0; i < notifs.length; i++) {
+                chrome.notifications.clear(notifs[i].id, function() {});
+            }
+        }
+    },
+    
+    getOptions: function(key) {
+        if(key) {
+            return this.options[key];
+        }
+        else {
+            return this.options;
+        }
+    },
+    
+    loadOptions: function() { // Charge les options depuis le chrome.storage
+        var self = this,
+            keys = Object.keys(this.options);
+        this.storage.get(keys, function(items) {
+            for(var key in items) {
+                if(self.options[key]) {
+                    self.options[key] = items[key];
+                }
+            }
+        });
+    },
+    
+    updateOptions: function() {
+        // Update interval
+        chrome.alarms.clear('refresh');
+        chrome.alarms.create('refresh', { periodInMinutes: this.options.updateInterval });
+    },
+    
+    openSdZ: function(url) {
+        chrome.tabs.create({ 'url': this.url + url });
+    }
+};
 
-// Notifications chrome
-if(typeof chrome.notifications !== 'undefined') { //test pour savoir si les notifs chrome sont dispos sur la platform
-	chrome.notifications.onButtonClicked.addListener(function(notif, button) {
-		var notifId = notif.substr(4),
-		    notifs = grenier.getLastNotifs(),
-		    notifObj = false;
-		
-		for(var i = 0; i < notifs.length; i++) {
-		    if(notifs[i].archive == "/notifications/archiver/" + notifId) {
-		        notifObj = notifs[i];
-		        break; //gagne du temps dans la boucle
-		    }
-		}
-		
-		if(notifObj) {
-		    chrome.notifications.clear(notif,function(wasCleared){});
-		    if(button == 0) { //bouton "voir"
-		        chrome.tabs.create({'url': "http://www.siteduzero.com" + notifObj.lien});
-		    }
-		    
-		    //else if(button == 1) { //bouton "archiver"
-		        //console.log("lol");
-		    //}
-		}
-	});
-}
-
-//mise à jour de l'alarm depuis options.js
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-	switch(request.id) {
-		case(1):
-			chrome.alarms.create('refresh', {periodInMinutes: parseInt(request.temps)})
-			break;
-		case(2):
-		
-			break;
-	}
-});
-
+var theNotificator = new Notificateur();
