@@ -16,8 +16,8 @@ Notificateur.prototype = {
     
     init: function() {
         this.notifications = [];
-        this.initListeners();
         this.loadOptions();
+        this.initListeners();
         this.check();
         
         chrome.alarms.create('refresh', {periodInMinutes: this.options.updateInterval});
@@ -40,7 +40,6 @@ Notificateur.prototype = {
         }
         
         chrome.storage.onChanged.addListener(this.listeners.storageChanged.bind(this));
-        
     },
     
     listeners: {
@@ -141,9 +140,24 @@ Notificateur.prototype = {
     
     //ancien "verifNotif()"
     loadCallback: function(data) {
+
         var xmlDoc = new DOMParser().parseFromString(data, "text/xml"),
             $data = $(xmlDoc),
-            notifications = $data.find("div#scrollMe ul.list li.notification"),
+            loginBox = $(data).find("div#login");
+            
+		//on est pas connecté !
+		if(loginBox.length != 0) {
+			chrome.browserAction.disable();
+			chrome.browserAction.setBadgeText({text: ""});
+			chrome.browserAction.setIcon({"path":"icons/icone_38_logout.png"});
+			
+			return;
+		} else {
+			chrome.browserAction.enable();
+			chrome.browserAction.setIcon({"path":"icons/icone_38.png"});
+		}
+            
+        var notifications = $data.find("div#scrollMe ul.list li.notification"),
             newNotifs = [], // Liste des nouvelles notifications
             oldNotifs = this.notifications, // Ancienne liste
             removedNotifs = [], // Notifs enlevées
