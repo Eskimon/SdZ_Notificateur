@@ -6,7 +6,8 @@ var notificatorOptions = {
             updateInterval: document.getElementById('interval'),
             openInNewTab: document.getElementById("newTab"),
             showAllNotifButton: document.getElementById("allNotifs"),
-            showDesktopNotif: document.getElementById("notifNative")
+            showDesktopNotif: document.getElementById("notifNative"),
+            useDetailedNotifs: document.getElementById("detailedNotifs")
         };
         
         document.getElementById("enregistrer").addEventListener("click", this.save.bind(this));

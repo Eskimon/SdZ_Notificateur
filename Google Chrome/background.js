@@ -9,7 +9,8 @@ Notificateur.prototype = {
         updateInterval: 5,
         openInNewTab: true,
         showAllNotifButton: true,
-        showDesktopNotif: true
+        showDesktopNotif: true,
+        useDetailedNotifs: true
     },
     
     storage: chrome.storage.sync,
@@ -140,7 +141,8 @@ Notificateur.prototype = {
     //ancien "verifNotif()"
     loadCallback: function(data) {
 
-        var xmlDoc = new DOMParser().parseFromString(data, "text/xml"),
+        var self = this,
+            xmlDoc = new DOMParser().parseFromString(data, "text/xml"),
             $data = $(xmlDoc),
             loginBox = $($data).find("div#login");
             
@@ -175,8 +177,23 @@ Notificateur.prototype = {
                 thread: notifLink.substr(13, notifLink.lastIndexOf("/") - 13)
             };
             
-            if(this.getNotification(notifObj.id) == false) {
+            var existingNotif = this.getNotification(notifObj.id);
+            if(existingNotif) {
+                $.extend(notifObj, existingNotif);
+            }
+            else {
                 newNotifs.push(notifObj);
+            }
+            
+            if(this.options.useDetailedNotifs && !notifObj.detailed) {
+                this.fetchNotificationDetails(notifObj, function(newNotif) {
+                    $.extend(notifObj, newNotif);
+                    console.log("Detail fectched", newNotif);
+                    self.showDesktopNotif(notifObj);
+                });
+            }
+            else if(!existingNotif) {
+                this.showDesktopNotif(notifObj);
             }
             
             notifsList.push(notifObj);
@@ -203,7 +220,6 @@ Notificateur.prototype = {
             notifs: this.notifications
         });
         
-        this.showDesktopNotifs(newNotifs);
         this.clearDesktopNotifs(removedNotifs);
         
         chrome.browserAction.setBadgeText({
@@ -211,18 +227,36 @@ Notificateur.prototype = {
         });
     },
     
-    showDesktopNotifs: function(notifs) {
-        var notifOptions = { // Options des notifications
-            type: "basic",
-            iconUrl: "icons/icone_48.png",
-            buttons: [{ title: "Voir le message" }, { title: "Voir le début du thread"}]
-        };
+    showDesktopNotif: function(notif) {
+        if(typeof notif == "Array") {
+            for(var i = 0; i < notif.length; i++) {
+                this.showDesktopNotif(notif[i]);
+            }
+            return;
+        }
         
         if(chrome.notifications && this.options.showDesktopNotif) {
-            for(var i = 0; i < notifs.length; i++) {
-                notifOptions.title = notifs[i].title;
-                notifOptions.message = notifs[i].date;
-                chrome.notifications.create(notifs[i].id, notifOptions, function() {});
+            if(this.options.useDetailedNotifs) {
+                var notifOptions = {};
+                
+                chrome.notifications.create(notif.id, {
+                    type: "basic",
+                    iconUrl: notif.avatarUrl,
+                    title: notif.author + " a répondu dans " + notif.threadTitle,
+                    message: notif.postContent.replace(/<br \/>/ig, "\n").replace(/(<([^>]+)>)/ig, "").substr(0, 140) + "...\n" + notif.date,
+                    buttons: [{ title: "Voir le message" }, { title: "Voir le début du thread"}]
+                }, function() {});
+            }
+            else {
+                var notifOptions = { // Options des notifications
+                    type: "basic",
+                    iconUrl: "icons/icone_48.png",
+                    title: notif.title,
+                    message: notif.date,
+                    buttons: [{ title: "Voir le message" }, { title: "Voir le début du thread"}]
+                };
+                
+                chrome.notifications.create(notif.id, notifOptions, function() {});
             }
         }
     },
@@ -233,6 +267,41 @@ Notificateur.prototype = {
                 chrome.notifications.clear(notifs[i].id, function() {});
             }
         }
+    },
+    
+    fetchNotificationDetails: function(notif, callback) {
+        if(typeof notif == "Array") {
+            for(var i = 0; i < notif.length; i++) {
+                this.fetchNotificationDetails(notif[i], function(newNotif) {
+                    callback && callback(newNotif, i);
+                });
+            }
+            
+            return;
+        }
+        
+        $.get(this.url + "/forum/sujet/" + notif.thread + "/" + notif.messageId, function(_data) {
+            data = _data.replace(/src="/ig, "data-src=\"").replace(/href="/ig, "data-href=\""); // <-- pas forcement la meilleur methode... marche pas si qqn a un nom/avatar avec src="/href=" dans le nom
+            //data = data.replace(/<img\b[^>]*>(.*?)<\/img>/ig,'');
+            //data = data.replace(/<head\b[^>]*>(.*?)<\/head>/ig,'');
+            //var xmlDoc = new DOMParser().parseFromString(data, "text/xml"); <-- Le parser bug...
+            var $data = $(data);
+            var post = $data.find("#message-" + notif.messageId).parent();
+            var authorElem = post.find(".avatar .author a");
+            var author = $.trim(authorElem.text());
+            var authorUrl = authorElem.attr("data-href"); // URL de l'auteur sans le /membres/
+            var avatarUrl = post.find(".avatar img[alt=\"avatar\"]").attr("data-src");
+            var postContent = post.find(".content .markdown").text();
+            var threadTitle = post.find("title").text();
+            notif.author = author;
+            notif.avatarUrl = avatarUrl;
+            notif.authorUrl = authorUrl;
+            notif.postContent = postContent;
+            notif.threadTitle = threadTitle;
+            notif.detailed = true;
+            
+            callback && callback(notif);
+        }, "text");
     },
     
     getOptions: function(key) {
