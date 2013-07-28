@@ -1,18 +1,18 @@
 * {
-	padding: 0;
-	margin: 0;
+    padding: 0;
+    margin: 0;
 }
 
 body {
-	background: url('http://www.siteduzero.com/bundles/common/images/background.png');
+    background: url('http://www.siteduzero.com/bundles/common/images/background.png');
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 header {
-	background: #002d40;
-	border-bottom: 4px solid #03638b;
-	color: white;
-	padding: 20px 0;
+    background: #002d40;
+    border-bottom: 4px solid #03638b;
+    color: white;
+    padding: 20px 0;
 }
 
 .container {
@@ -20,8 +20,8 @@ header {
     width: 600px;
 }
 
-p.champ {
-	margin: 10px 0;
+.champ {
+    margin: 10px 0;
 }
 
 .options {

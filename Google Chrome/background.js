@@ -146,17 +146,17 @@ Notificateur.prototype = {
             $data = $(xmlDoc),
             loginBox = $($data).find("div#login");
             
-		//on est pas connecté !
-		if(loginBox.length != 0) {
-			chrome.browserAction.disable();
-			chrome.browserAction.setBadgeText({text: ""});
-			chrome.browserAction.setIcon({"path":"icons/icone_38_logout.png"});
-			
-			return;
-		} else {
-			chrome.browserAction.enable();
-			chrome.browserAction.setIcon({"path":"icons/icone_38.png"});
-		}
+        //on est pas connecté !
+        if(loginBox.length != 0) {
+            chrome.browserAction.disable();
+            chrome.browserAction.setBadgeText({text: ""});
+            chrome.browserAction.setIcon({"path":"icons/icone_38_logout.png"});
+            
+            return;
+        } else {
+            chrome.browserAction.enable();
+            chrome.browserAction.setIcon({"path":"icons/icone_38.png"});
+        }
             
         var notifications = $data.find("div#scrollMe ul.list li.notification"),
             newNotifs = [], // Liste des nouvelles notifications
@@ -378,24 +378,24 @@ Notificateur.prototype = {
             self = this;
         
         chrome.windows.getCurrent({ populate:true }, function(currentWindow) {
-	        var tab = false;
-	        for(var i in currentWindow.tabs) {
-    	        if(currentWindow.tabs[i].active) {
-        	        tab = currentWindow.tabs[i];
-        	        break;
-    	        }
-	        }
-	        
-    	    if(!self.getOptions("openInNewTab") && tab && tab.url !== undefined && tab.url.indexOf("siteduzero.com") != -1 && tab.url.indexOf("siteduzero.com") < 14) {
-    			chrome.tabs.update(tab.id, { url: url });
-			}
-			else {
-			    chrome.tabs.create({
-    				'url': url,
-    				'active': false
-    			});
-			}
-	    });
+            var tab = false;
+            for(var i in currentWindow.tabs) {
+                if(currentWindow.tabs[i].active) {
+                    tab = currentWindow.tabs[i];
+                    break;
+                }
+            }
+            
+            if(!self.getOptions("openInNewTab") && tab && tab.url !== undefined && tab.url.indexOf("siteduzero.com") != -1 && tab.url.indexOf("siteduzero.com") < 14) {
+                chrome.tabs.update(tab.id, { url: url });
+            }
+            else {
+                chrome.tabs.create({
+                    'url': url,
+                    'active': false
+                });
+            }
+        });
     }
 };
 
