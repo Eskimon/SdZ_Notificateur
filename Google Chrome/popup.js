@@ -6,11 +6,12 @@ document.addEventListener('DOMContentLoaded', function () {
         var len = notifs.length;
         var content = $("#content");
         
+        var notifList = $("<div>", { class: "notifList" });
+        
         if(len == 0) {
             $("<div>", { class: "noNotifs" }).text("Aucune nouvelle notifications").appendTo(content);
         } else {
-            var notifList = $("<div>", { class: "notifList" }).appendTo(content);
-            for(var i=0; i<len; i++) {
+            for(var i = 0; i < len; i++) {
                 var elem = $("<div>", { class: "element", id: "notif-" + notifs[i].id }).appendTo(notifList),
                     notifLink = $("<a>", { href: 'http://www.siteduzero.com/forum/sujet/' + notifs[i]["thread"] + '/' + notifs[i]["messageId"] }).appendTo(elem);
                 
@@ -18,9 +19,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 $("<div>", { class: "date" }).text(notifs[i]["date"]).appendTo(notifLink);
                 
                 if(i<len-1)
-                    $("<hr>").appendTo(content);
+                    $("<hr>").appendTo(notifList);
             }
         }
+        
+        notifList.appendTo(content);
         
         if(notificator.getOptions("showAllNotifButton")) {
             $("<hr>").appendTo(content);
@@ -34,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
             liens[i].addEventListener("click", function (event) {
                 event.preventDefault();
                 var url = this.href;
-                chrome.windows.getCurrent({ populate:true }, function(currentWindow) {
+                chrome.windows.getCurrent({ populate: true }, function(currentWindow) {
                     var tab = false;
                     for(var i in currentWindow.tabs) {
                         if(currentWindow.tabs[i].active) {
@@ -55,5 +58,25 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             }, false);
         }
+        
+        notificator.setNewNotifCallback(function(notif) {
+            $(".noNotifs").hide();
+            if(notifList.children().length > 0) {
+                $("<hr>").appendTo(notifList);
+            }
+            
+            var elem = $("<div>", { class: "element", id: "notif-" + notif.id }).appendTo(notifList),
+                notifLink = $("<a>", { href: 'http://www.siteduzero.com/forum/sujet/' + notif["thread"] + '/' + notif["messageId"] }).appendTo(elem);
+            
+            $("<div>", { class: "titre" }).text(notif["title"]).appendTo(notifLink);
+            $("<div>", { class: "date" }).text(notif["date"]).appendTo(notifLink);
+        });
+        
+        notificator.setRemoveNotifCallback(function(notif) {
+            var n = notifList.find("#notif-" + notif.id);
+            if(n.length == 1) {
+                n.remove();
+            }
+        });
     });
 });

@@ -183,6 +183,7 @@ Notificateur.prototype = {
             }
             else {
                 newNotifs.push(notifObj);
+                this.newNotifCallback && this.newNotifCallback(notifObj);
             }
             
             if(this.options.useDetailedNotifs && !notifObj.detailed) {
@@ -211,6 +212,7 @@ Notificateur.prototype = {
             }
             if(!exists) {
                 removedNotifs.push(oldNotifs[i]);
+                this.removeNotifCallback && this.removeNotifCallback(oldNotifs[i]);
             }
         }
         
@@ -351,6 +353,24 @@ Notificateur.prototype = {
         // Update interval
         chrome.alarms.clear('refresh');
         chrome.alarms.create('refresh', { periodInMinutes: this.options.updateInterval });
+    },
+    
+    setNewNotifCallback: function(callback) {
+        if(typeof callback == "function") {
+            this.newNotifCallback = callback;
+        }
+        else {
+            this.newNotifCallback = undefined;
+        }
+    },
+    
+    setRemoveNotifCallback: function(callback) {
+        if(typeof callback == "function") {
+            this.removeNotifCallback = callback;
+        }
+        else {
+            this.removeNotifCallback = undefined;
+        }
     },
     
     openSdZ: function(_url) {
