@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
     		content += '<div class="allNotifs">Aucune nouvelle notifications</div>';
     	} else {
     		for(var i=0; i<len; i++) {
-    			content += '<a href="http://www.siteduzero.com/forum/sujet/' + notifs[i]["thread"] + '/' + notifs[i]["messageId"] + '" data-archive="http://www.siteduzero.com'+ notifs[i]["archive"] + '"><div class="element">';
+    			content += '<a href="http://www.siteduzero.com/forum/sujet/' + notifs[i]["thread"] + '/' + notifs[i]["messageId"] + '"><div class="element">';
     			content += '<p class="titre">';
     			content += notifs[i]["title"];
     			content += "</p>";
