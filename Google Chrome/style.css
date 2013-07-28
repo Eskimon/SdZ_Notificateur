@@ -11,7 +11,7 @@ body {
 	font-size: 12px;
 }
 
-div.element {
+.element {
 	padding: 8px 8px 8px 30px;
 	margin: 0px 1px 1px 1px;
 	/*border: 1px solid rgba(255, 255, 255, 0.5);*/
@@ -19,7 +19,7 @@ div.element {
 	background: url('icons/bulle.png') no-repeat 7px 16px;
 }
 
-div.allNotifs {
+.allNotifs, .noNotifs {
 	padding: 8px 8px 8px 30px;
 	margin: 0px 1px 1px 1px;
 	text-align: center;
@@ -31,13 +31,13 @@ a {
 	font-size: 12px;
 }
 
-p.titre {
+.titre {
 	width: 234px;
 	/*height: 57px;*/
 	padding: 2px 3px;
 }
 
-p.temps {
+.temps {
 	font-size: 10px;
 	color: rgba(255, 255, 255, 0.5);
 	text-align: right;
