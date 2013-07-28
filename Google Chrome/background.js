@@ -236,13 +236,13 @@ Notificateur.prototype = {
         }
         
         if(chrome.notifications && this.options.showDesktopNotif) {
-            if(this.options.useDetailedNotifs) {
+            if(this.options.useDetailedNotifs && notif.detailed) {
                 var notifOptions = {};
                 
                 chrome.notifications.create(notif.id, {
                     type: "basic",
                     iconUrl: notif.avatarUrl,
-                    title: notif.author + " a répondu dans " + notif.threadTitle,
+                    title: notif.author + " - " + notif.threadTitle,
                     message: notif.postContent.replace(/<br \/>/ig, "\n").replace(/(<([^>]+)>)/ig, "").substr(0, 140) + "...\n" + notif.date,
                     buttons: [{ title: "Voir le message" }, { title: "Voir le début du thread"}]
                 }, function() {});
@@ -281,24 +281,33 @@ Notificateur.prototype = {
         }
         
         $.get(this.url + "/forum/sujet/" + notif.thread + "/" + notif.messageId, function(_data) {
-            data = _data.replace(/src="/ig, "data-src=\"").replace(/href="/ig, "data-href=\""); // <-- pas forcement la meilleur methode... marche pas si qqn a un nom/avatar avec src="/href=" dans le nom
+            data = _data.replace(/src=/ig, "data-src=").replace(/href=/ig, "data-href="); // <-- pas forcement la meilleur methode... marche pas si qqn a un nom/avatar avec src=/href= dans le nom
             //data = data.replace(/<img\b[^>]*>(.*?)<\/img>/ig,'');
             //data = data.replace(/<head\b[^>]*>(.*?)<\/head>/ig,'');
             //var xmlDoc = new DOMParser().parseFromString(data, "text/xml"); <-- Le parser bug...
             var $data = $(data);
             var post = $data.find("#message-" + notif.messageId).parent();
-            var authorElem = post.find(".avatar .author a");
-            var author = $.trim(authorElem.text());
-            var authorUrl = authorElem.attr("data-href"); // URL de l'auteur sans le /membres/
-            var avatarUrl = post.find(".avatar img[alt=\"avatar\"]").attr("data-src");
-            var postContent = post.find(".content .markdown").text();
-            var threadTitle = post.find("title").text();
-            notif.author = author;
-            notif.avatarUrl = avatarUrl;
-            notif.authorUrl = authorUrl;
-            notif.postContent = postContent;
-            notif.threadTitle = threadTitle;
-            notif.detailed = true;
+            if(post.length == 1) {
+                var authorElem = post.find(".avatar .author a");
+                var author = $.trim(authorElem.text());
+                var authorUrl = authorElem.attr("data-href"); // URL de l'auteur sans le /membres/
+                var avatarUrl = post.find(".avatar img[alt=\"avatar\"]").attr("data-src");
+                var postContent = post.find(".content .markdown").text();
+                var threadTitle = $(data.match(/<title>[\n\r\s]*(.*)[\n\r\s]*<\/title>/gmi)[0]).text() // <-- Un peu hard, je sais ^^
+                notif.author = author;
+                notif.avatarUrl = avatarUrl;
+                notif.authorUrl = authorUrl;
+                notif.postContent = postContent;
+                notif.threadTitle = threadTitle;
+                notif.detailed = true;
+                
+                if(!notif.avatarUrl.indexOf("http") == 0) { // <-- URL relative
+                    notif.avatarUrl = "http://siteduzero.com" + notif.avatarUrl;
+                }
+            }
+            else {
+                notif.detailed = false;
+            }
             
             callback && callback(notif);
         }, "text");
