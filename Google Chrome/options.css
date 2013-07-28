@@ -43,6 +43,7 @@ input[type="button"] {
     text-shadow: 0 -1px 0 #1c181b;
     padding: 10px;
     font-size: 14px;
+	margin-top: 10px;
 }
 
 input[type="button"]:hover {
@@ -54,4 +55,10 @@ input[type="button"]:active {
     -webkit-box-shadow:inset 0 -1px 0 0 #4288a5;
     box-shadow:inset 0 -1px 0 0 #4288a5;
     background-image:linear-gradient(top,#001a25 0,#036188 100%);
+}
+
+span.complement {
+	color: #999;
+	font-size: 10px;
+	display: block;
 }

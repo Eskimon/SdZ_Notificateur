@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>SdZ Notificateur options</title>
         <link rel="stylesheet" href="options.css">
         <script src="options.js"></script>
@@ -21,14 +21,17 @@
                 </p>
                 <p class="champ">
                     <label for="newTab"><input type="checkbox" name="newTab" id="newTab" /> Ouvrir les liens dans un nouvel onglet ?</label>
+					<span class="complement">Ouvrira les notifications dans un nouvel onglet si la page courante n'est pas une page du SdZ</span>
                 </p>
                 <p class="champ">
                     <label for="allNotifs" id="allNotifsLabel"><input type="checkbox" name="allNotifs" id="allNotifs"/> Afficher une ligne "Toutes mes notifications" ?</label>
                 </p>
                 <p id="notifSpan" class="champ">
                     <label for="notifNative"><input type="checkbox" name="notifNative" id="notifNative" /> Afficher les notification du bureau ?</label>
+					<span class="complement">Attention, cette option à un comportement incomplet sur Linux et Mac (limitation de Chrome)</span>
                 </p>
-                <input type="button" id="enregistrer" value="Enregistrer"/>
+				<hr />
+				<input type="button" id="enregistrer" value="Enregistrer"/>
             </div>
         </div>
     </body>
