@@ -13,6 +13,10 @@ header {
 	border-bottom: 4px solid #03638b;
 	color: white;
 	padding: 20px 0;
+	/* La belle ombre :D */
+	box-shadow: -1px 2px 5px 1px rgba(0, 0, 0, 0.7); 
+	position:relative;
+	z-index:1;
 }
 
 .container {
@@ -21,7 +25,15 @@ header {
 }
 
 p.champ {
-	margin: 10px 0;
+	margin-top: 20px;
+}
+
+p.champ:first-of-type {
+	margin-top: 10px;
+}
+
+p.champ:last-of-type {
+	margin-bottom: 10px;
 }
 
 .options {
@@ -61,4 +73,14 @@ span.complement {
 	color: #999;
 	font-size: 10px;
 	display: block;
+}
+
+div.sub {
+	border-left: solid 4px #ddd;
+	padding-top: 5px;
+	padding-left: 10px;
+}
+
+.hidden {
+	display: none;
 }
