@@ -31,10 +31,6 @@ p.champ:first-of-type {
 	margin-top: 10px;
 }
 
-p.champ:last-of-type {
-	margin-bottom: 10px;
-}
-
 .options {
     background-color: white;
     padding: 20px;
@@ -97,15 +93,13 @@ div.sub {
 }
 
 footer {
-    position: absolute;
-	bottom: 0px;
-    width: 100%;
     background-color: #f8f8f4;
     padding: 15px 0;
     font-weight: bold;
     color: #454545;
     font-size: 12px;
     text-align: right;
+    margin-top: 20px;
 }
 
 footer a {
