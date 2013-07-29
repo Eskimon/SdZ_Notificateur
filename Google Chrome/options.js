@@ -50,14 +50,10 @@ var notificatorOptions = {
     },
     
     toggle: function() {
-        var tabLabel = document.getElementById("newTabLabel");
-        var listeLabel = document.getElementById("allNotifsLabel");
         var etat = !this.elems['openListe'].checked;
         
         this.elems['openInNewTab'].disabled = etat;
         this.elems['showAllNotifButton'].disabled = etat;
-        tabLabel.disabled = etat;
-        listeLabel.disabled = etat;
     }
 };
 
