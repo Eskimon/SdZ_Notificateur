@@ -18,19 +18,21 @@ Notificateur.prototype = {
     
     init: function() {
         this.notifications = [];
-        this.loadOptions();
-        this.initListeners();
-        this.check();
+        this.loadOptions(function() {
+    		//action lorsqu'on click sur le bouton (affichage liste ou chargement SdZ
+    		if(!this.options.openListe) { //soit on ouvre le SdZ
+    			chrome.browserAction.setPopup({popup:""});
+    			chrome.browserAction.onClicked.addListener(this.listeners.toolbarClick.bind(this));
+    		} else { //sinon on ouvre une popup avec le contenu des notifs
+    			chrome.browserAction.setPopup({popup:"popup.html"});
+    		}
+    		
+            chrome.alarms.create('refresh', {periodInMinutes: parseInt(this.options.updateInterval)});
+            
+            this.check();
+        }.bind(this));
         
-		//action lorsqu'on click sur le bouton (affichage liste ou chargement SdZ
-		if(!this.options.openListe) { //soit on ouvre le SdZ
-			chrome.browserAction.setPopup({popup:""});
-			chrome.browserAction.onClicked.addListener(this.listeners.toolbarClick.bind(this));
-		} else { //sinon on ouvre une popup avec le contenu des notifs
-			chrome.browserAction.setPopup({popup:"popup.html"});
-		}
-		
-        chrome.alarms.create('refresh', {periodInMinutes: parseInt(this.options.updateInterval)});
+        this.initListeners();
     },
     
     initListeners: function() {
@@ -335,7 +337,7 @@ Notificateur.prototype = {
         this.updateOptions();
     },
     
-    loadOptions: function() { // Charge les options depuis le chrome.storage
+    loadOptions: function(callback) { // Charge les options depuis le chrome.storage
         var self = this,
             keys = Object.keys(this.options);
         this.storage.get(keys, function(items) {
@@ -344,8 +346,9 @@ Notificateur.prototype = {
                     self.options[key] = items[key];
                 }
             }
+            
+            (typeof callback == "function") && callback();
         });
-		console.log(this.options);
     },
     
     updateOptions: function() {
