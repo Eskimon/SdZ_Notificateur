@@ -17,7 +17,8 @@ Notificateur.prototype = {
     storage: chrome.storage.sync,
     
     init: function() {
-        this.notifications = [];
+        this.notifications = []; //tableau stockant les notifs
+        this.MPs = []; //tableau stockant les MPs
         this.loadOptions(function() {
     		//action lorsqu'on click sur le bouton (affichage liste ou chargement SdZ
     		if(!this.options.openListe) { //soit on ouvre le SdZ
@@ -86,7 +87,10 @@ Notificateur.prototype = {
             var notif = this.getNotification(parseInt(notifId));
             if(button == 0) { // Open last message
                 if(notif) {
-                    this.openSdZ("/forum/sujet/" + notif.thread + "/" + notif.messageId);
+                    if(notif.isBadge)
+                        this.openSdZ("/membres/" + notif.messageId);
+                    else
+                        this.openSdZ("/forum/sujet/" + notif.thread + "/" + notif.messageId);
                 }
                 
                 chrome.notifications.clear(notifId, function() {
@@ -107,7 +111,10 @@ Notificateur.prototype = {
         notifClick: function(notifId) {
             var notif = this.getNotification(parseInt(notifId));
             if(notif) {
-                this.openSdZ("/forum/sujet/" + notif.thread + "/" + notif.messageId);
+                if(notif.isBadge)
+                    this.openSdZ("/membres/" + notif.messageId);
+                else
+                    this.openSdZ("/forum/sujet/" + notif.thread + "/" + notif.messageId);
             }
             
             chrome.notifications.clear(notifId, function() {
@@ -143,7 +150,7 @@ Notificateur.prototype = {
     loadCallback: function(data) {
 
         var self = this,
-            xmlDoc = new DOMParser().parseFromString(data, "text/xml"),
+            xmlDoc = new DOMParser().parseFromString(data, "text/xml"), 
             $data = $(xmlDoc),
             loginBox = $($data).find("div#login");
             
@@ -158,7 +165,21 @@ Notificateur.prototype = {
             chrome.browserAction.enable();
             chrome.browserAction.setIcon({"path":"icons/icone_38.png"});
         }
+        
+        // Check les MPs
+        var MPs = $data.find("ul.privateMessagesList"),
+            newMPs = [], // Liste des nouvelles notifications
+            oldMPs = this.notifications, // Ancienne liste
+            removedMPs = [], // Notifs enlevées
+            MPsList = []; // Nouvelle liste
             
+         //a remplir, besoin de plus de donnée concernant les MPs
+            
+            
+            
+            
+        
+        // Check les notifications
         var notifications = $data.find("div#scrollMe ul.list li.notification"),
             newNotifs = [], // Liste des nouvelles notifications
             oldNotifs = this.notifications, // Ancienne liste
@@ -175,9 +196,10 @@ Notificateur.prototype = {
                 title: notif.find("li.title").text(),
                 date: notif.find("li.date").text(),
                 messageId: notifLink.substr(notifLink.lastIndexOf("/") + 1),
-                thread: notifLink.substr(13, notifLink.lastIndexOf("/") - 13)
+                thread: notifLink.substr(13, notifLink.lastIndexOf("/") - 13),
+                isBadge: notif.find("a.badgeSdz").text().length==0 ? false : true //si c'est un badge
             };
-            
+                        
             var existingNotif = this.getNotification(notifObj.id);
             if(existingNotif) {
                 $.extend(notifObj, existingNotif);
@@ -187,7 +209,7 @@ Notificateur.prototype = {
                 this.newNotifCallback && this.newNotifCallback(notifObj);
             }
             
-            if(this.options.useDetailedNotifs && !notifObj.detailed) {
+            if(this.options.useDetailedNotifs && !notifObj.detailed && !notifObj.isBadge) {
                 this.fetchNotificationDetails(notifObj, function(newNotif) {
                     $.extend(notifObj, newNotif);
                     console.log("Detail fectched", newNotif);
@@ -225,9 +247,10 @@ Notificateur.prototype = {
         
         this.clearDesktopNotifs(removedNotifs);
         
-        chrome.browserAction.setBadgeText({
-            text: (this.notifications.length > 0) ? this.notifications.length.toString() : ""
-        });
+        //set le texte du badge
+        var badgeTexte = this.MPs.length > 0 ? this.MPs.length.toString() + " - " : "";
+            badgeTexte += (this.notifications.length > 0) ? this.notifications.length.toString() : "";
+        chrome.browserAction.setBadgeText({text: badgeTexte});
     },
     
     showDesktopNotif: function(notif) {
@@ -239,7 +262,7 @@ Notificateur.prototype = {
         }
         
         if(chrome.notifications && this.options.showDesktopNotif) {
-            if(this.options.useDetailedNotifs && notif.detailed) {
+            if(this.options.useDetailedNotifs && notif.detailed && !notif.isBadge) {
                 var notifOptions = {};
                 
                 chrome.notifications.create(notif.id, {
@@ -251,12 +274,21 @@ Notificateur.prototype = {
                 }, function() {});
             }
             else {
+                var boutons = new Array();
+                var icone = "";
+                boutons[0] = { title: "Voir le message" };
+                if(!notif.isBadge) {
+                    boutons[1] = { title: "Voir le début du thread" };
+                    icone = "icons/big_message.png";
+                } else {
+                    icone = "icons/big_badge.png";
+                }
                 var notifOptions = { // Options des notifications
                     type: "basic",
-                    iconUrl: "icons/icone_48.png",
+                    iconUrl: icone,
                     title: notif.title,
                     message: notif.date,
-                    buttons: [{ title: "Voir le message" }, { title: "Voir le début du thread"}]
+                    buttons: boutons
                 };
                 
                 chrome.notifications.create(notif.id, notifOptions, function() {});

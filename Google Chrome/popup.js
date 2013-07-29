@@ -12,9 +12,17 @@ document.addEventListener('DOMContentLoaded', function () {
             $("<div>", { class: "noNotifs" }).text("Aucune nouvelle notifications").appendTo(content);
         } else {
             for(var i = 0; i < len; i++) {
-                var elem = $("<div>", { class: "element", id: "notif-" + notifs[i].id }).appendTo(notifList),
-                    notifLink = $("<a>", { href: 'http://www.siteduzero.com/forum/sujet/' + notifs[i]["thread"] + '/' + notifs[i]["messageId"] }).appendTo(elem);
+                var elem, notifLink;
                 
+                if(notifs[i]["isBadge"]) {
+                    elem = $("<div>", { class: "element badge", id: "notif-" + notifs[i].id }).appendTo(notifList);
+                    notifLink = $("<a>", { href: 'http://www.siteduzero.com/membres/' + notifs[i]["messageId"]}).appendTo(elem);
+                }
+                else {
+                    elem = $("<div>", { class: "element message", id: "notif-" + notifs[i].id }).appendTo(notifList);
+                    notifLink = $("<a>", { href: 'http://www.siteduzero.com/forum/sujet/' + notifs[i]["thread"] + '/' + notifs[i]["messageId"] }).appendTo(elem);
+                }
+                    
                 $("<div>", { class: "titre" }).text(notifs[i]["title"]).appendTo(notifLink);
                 $("<div>", { class: "date" }).text(notifs[i]["date"]).appendTo(notifLink);
                 

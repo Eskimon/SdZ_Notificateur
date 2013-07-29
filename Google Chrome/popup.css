@@ -14,7 +14,14 @@ body {
 .element {
     padding: 8px 8px 8px 30px;
     margin: 0px 1px 1px 1px;
+}
+
+.element.message {
     background: url('icons/bulle.png') no-repeat 7px 16px;
+}
+
+.element.badge {
+    background: url('icons/badge.png') no-repeat 7px 14px;
 }
 
 .allNotifs, .noNotifs {
