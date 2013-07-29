@@ -16,19 +16,19 @@ L'extension est disponible sur le [Chrome WebStore](https://chrome.google.com/we
 
 ## A quoi ça ressemble ?
 
-![Popup](https://dl.dropboxusercontent.com/u/9125817/SdZ/Notificateur/popup.png)
+![Popup](https://github.com/Eskimon/SdZ_Notificateur/blob/master/images/popup.png?raw=true)
 
 *L'icone dans la barre d'addresse, et une popup avec la liste des notifications*
 
 ---
 
-![Notification de Bureau](https://dl.dropboxusercontent.com/u/9125817/SdZ/Notificateur/notification.png)
+![Notification de Bureau](https://github.com/Eskimon/SdZ_Notificateur/blob/master/images/notification.png?raw=true)
 
 *Une notification de bureau*
 
 ---
 
-![Page des options](https://dl.dropboxusercontent.com/u/9125817/SdZ/Notificateur/options.png)
+![Page des options](https://github.com/Eskimon/SdZ_Notificateur/blob/master/images/options.png?raw=true)
 
 *La page des options*
 
