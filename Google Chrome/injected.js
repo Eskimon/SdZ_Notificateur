@@ -11,3 +11,8 @@ for (var i = 0; i < len; i++) {
     }
 }
 target && target.click();
+
+// Update du nombre de notifs
+var elem = document.getElementById("#notifucations");
+elem.click();
+elem.click();
