@@ -7,13 +7,14 @@ body {
     background: url('http://www.siteduzero.com/bundles/common/images/background.png');
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+
 header {
     background: #002d40;
     border-bottom: 4px solid #03638b;
     color: white;
     padding: 20px 0;
 	/* La belle ombre :D */
-	box-shadow: -1px 2px 5px 1px rgba(0, 0, 0, 0.7); 
+	box-shadow: 0 0 14px rgba(0, 0, 0, 0.7); 
 	position:relative;
 	z-index:1;
 }
@@ -23,21 +24,14 @@ header {
     width: 600px;
 }
 
-p.champ {
-	margin-top: 20px;
-}
-
-p.champ:first-of-type {
-	margin-top: 10px;
-}
-
-p.champ:last-of-type {
-	margin-bottom: 10px;
+.champ {
+    padding: 5px 0;
 }
 
 .options {
     background-color: white;
     padding: 20px;
+    box-shadow: 0 3px 2px rgba(0, 0, 0, 0.1);
 }
 
 .clear {
@@ -74,16 +68,31 @@ input[type="button"]:active {
     background-image:linear-gradient(top,#001a25 0,#036188 100%);
 }
 
-span.complement {
+input[type="text"] {
+    border: solid 1px #CCC;
+    background-color: white;
+    display: block;
+    padding: 2px 5px;
+    margin: 2px 0;
+    border-radius: 3px;
+    box-shadow: inset 0 1px 2px #EEE;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: #6bb4bf;
+}
+
+.complement {
 	color: #999;
 	font-size: 10px;
 	display: block;
 }
 
-div.sub {
+.sub {
 	border-left: solid 4px #ddd;
-	padding-top: 5px;
-	padding-left: 10px;
+	padding: 1px 10px;
+	margin-bottom: 10px;
 }
 
 .hidden {
@@ -93,7 +102,6 @@ div.sub {
 .experimental {
     color: #df3716; 
     font-weight: bold;
-    font-size: 12px;
 }
 
 footer {
@@ -106,6 +114,7 @@ footer {
     color: #454545;
     font-size: 12px;
     text-align: right;
+    border-top: solid 1px #CCC;
 }
 
 footer a {
