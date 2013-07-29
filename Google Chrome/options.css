@@ -7,7 +7,6 @@ body {
     background: url('http://www.siteduzero.com/bundles/common/images/background.png');
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-
 header {
     background: #002d40;
     border-bottom: 4px solid #03638b;
@@ -34,6 +33,7 @@ p.champ:first-of-type {
 
 p.champ:last-of-type {
 	margin-bottom: 10px;
+}
 
 .options {
     background-color: white;
