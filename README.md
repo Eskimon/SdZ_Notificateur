@@ -1,5 +1,5 @@
-# SdZ Notificateur
-===
+SdZ Notificateur
+================
 
  1. [Keskecé ?](#keskec%C3%A9-)
  2. [A quoi ça ressemble ?](#a-quoi-%C3%A7a-ressemble-)
@@ -40,7 +40,8 @@ Pour tester l'extension depuis les sources, téléchargez les sources [ici](https:
 
 ## C'est qui qu'a fait ça ?
 
-Eskimon, zéro d'honneur est à l'origine de l'idée, et Sandhose, horifié par le code, mais séduit par l'idée, l'a rejoint par après
+Eskimon, zéro d'honneur est à l'origine de l'idée, et Sandhose, horifié par le code, mais séduit par l'idée, l'a rejoint par après.
+(Pour sa défense, Eskimon déclare avoir fait cette extension pour justement apprendre le javascript. Il remercie Sandhose de sa patience :D )
 
 ## License
 
