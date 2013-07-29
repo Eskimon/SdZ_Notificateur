@@ -12,6 +12,7 @@ var notificatorOptions = {
         };
         
         document.getElementById("enregistrer").addEventListener("click", this.save.bind(this));
+        document.getElementById("openListe").addEventListener("click", this.toggle.bind(this));
         
         this.load();
     },
@@ -36,6 +37,7 @@ var notificatorOptions = {
                 }
             }
         }
+        this.toggle();
     },
     
     getValues: function() {
@@ -45,6 +47,17 @@ var notificatorOptions = {
             obj[key] = val;
         }
         return obj;
+    },
+    
+    toggle: function() {
+        var tabLabel = document.getElementById("newTabLabel");
+        var listeLabel = document.getElementById("allNotifsLabel");
+        var etat = !this.elems['openListe'].checked;
+        
+        this.elems['openInNewTab'].disabled = etat;
+        this.elems['showAllNotifButton'].disabled = etat;
+        tabLabel.disabled = etat;
+        listeLabel.disabled = etat;
     }
 };
 
