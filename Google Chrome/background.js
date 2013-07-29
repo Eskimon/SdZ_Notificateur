@@ -22,14 +22,6 @@ Notificateur.prototype = {
         this.initListeners();
         this.check();
         
-		//action lorsqu'on click sur le bouton (affichage liste ou chargement SdZ
-		if(!this.options.openListe) { //soit on ouvre le SdZ
-			chrome.browserAction.setPopup({popup:""});
-			chrome.browserAction.onClicked.addListener(this.listeners.toolbarClick.bind(this));
-		} else { //sinon on ouvre une popup avec le contenu des notifs
-			chrome.browserAction.setPopup({popup:"popup.html"});
-		}
-		
         chrome.alarms.create('refresh', {periodInMinutes: parseInt(this.options.updateInterval)});
     },
     
@@ -48,6 +40,15 @@ Notificateur.prototype = {
             chrome.notifications.onClicked.addListener(this.listeners.notifClick.bind(this));
             chrome.notifications.onClosed.addListener(this.listeners.notifClose.bind(this));
         }
+        
+        console.log(this.options.updateInterval);
+        //action lorsqu'on click sur le bouton (affichage liste ou chargement SdZ
+		if(!this.options.openListe) { //soit on ouvre le SdZ
+			chrome.browserAction.setPopup({popup:""});
+			chrome.browserAction.onClicked.addListener(this.listeners.toolbarClick.bind(this));
+		} else { //sinon on ouvre une popup avec le contenu des notifs
+			chrome.browserAction.setPopup({popup:"popup.html"});
+		}
     },
     
     listeners: {
