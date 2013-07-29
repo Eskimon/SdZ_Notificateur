@@ -105,9 +105,6 @@ input[type="text"]:focus {
 }
 
 footer {
-    position: absolute;
-	bottom: 0px;
-    width: 100%;
     background-color: #f8f8f4;
     padding: 15px 0;
     font-weight: bold;
@@ -115,6 +112,10 @@ footer {
     font-size: 12px;
     text-align: right;
     border-top: solid 1px #CCC;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
 footer a {

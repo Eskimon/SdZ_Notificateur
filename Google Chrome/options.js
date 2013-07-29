@@ -12,7 +12,8 @@ var notificatorOptions = {
         };
         
         document.getElementById("enregistrer").addEventListener("click", this.save.bind(this));
-        document.getElementById("openListe").addEventListener("click", this.toggle.bind(this));
+        this.elems["openListe"].addEventListener("click", this.toggle.bind(this));
+        this.elems["showDesktopNotif"].addEventListener("click", this.toggle.bind(this));
         
         this.load();
     },
@@ -51,9 +52,10 @@ var notificatorOptions = {
     
     toggle: function() {
         var etat = !this.elems['openListe'].checked;
-        
         this.elems['openInNewTab'].disabled = etat;
         this.elems['showAllNotifButton'].disabled = etat;
+        
+        this.elems['useDetailedNotifs'].disabled = !this.elems['showDesktopNotif'].checked;
     }
 };
 

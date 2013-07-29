@@ -1,47 +1,46 @@
-SdZ Notificateur
+﻿SdZ Notificateur
 ================
 
  1. [Keskecé ?](#keskec%C3%A9-)
  2. [A quoi ça ressemble ?](#a-quoi-%C3%A7a-ressemble-)
  3. [J'peux vous aider ?](#jpeux-vous-aider-)
  4. [C'est qui qu'a fait ça ?](#cest-qui-qua-fait-%C3%A7a-)
- 5. [Licence](#license)
+ 5. [Licence]()
 
 ## Keskecé ?
 
-C'est une extension pour Google Chrome, qui vous avertit des nouvelles notifications sur [le Site du Zéro](http://siteduzero.com).
-Elle récupère à intervalle régulier (réglable) vos dernières notifications, et vous les affiche directement sur votre bureau.
+C'est une extension pour Google Chrome, qui vous averti des nouvelles notifications sur [le Site du Zéro](http://siteduzero.com).
+Elle récupère à interval régulier (réglable) vos dernières notifications, et vous les affichent directement sur votre bureau.
 
 L'extension est disponible sur le [Chrome WebStore](https://chrome.google.com/webstore/detail/sdz-notificateur/hghlodnimpknlipghodjcfadfipbcmoh)
 
 ## A quoi ça ressemble ?
 
-![Popup](https://dl.dropboxusercontent.com/u/9125817/SdZ/Notificateur/popup.png)
+![Popup](https://github.com/Eskimon/SdZ_Notificateur/blob/master/images/popup.png?raw=true)
 
-*L'icône dans la barre d'adresse, et une popup avec la liste des notifications*
+*L'icone dans la barre d'addresse, et une popup avec la liste des notifications*
 
 ---
 
-![Notification de Bureau](https://dl.dropboxusercontent.com/u/9125817/SdZ/Notificateur/notification.png)
+![Notification de Bureau](https://github.com/Eskimon/SdZ_Notificateur/blob/master/images/notification.png?raw=true)
 
 *Une notification de bureau*
 
 ---
 
-![Page des options](https://dl.dropboxusercontent.com/u/9125817/SdZ/Notificateur/options.png)
+![Page des options](https://github.com/Eskimon/SdZ_Notificateur/blob/master/images/options.png?raw=true)
 
 *La page des options*
 
 ## J'peux vous aider ?
 
-Toute aide est la bienvenue! Pour cela, faites un fork du repo, et une fois que vous avez rajouté ce que vous voulez, on prendera en compte tout *Pull request* ;)
+Toute aide est la bienvenue! Pour cela, faites un fork du repo, et une fois que vous avez rajouté ce que vous voulez, on prenderas en compte tout *Pull request* ;)
 
-Pour tester l'extension depuis les sources, téléchargez les sources [ici](https://github.com/Eskimon/SdZ_Notificateur/archive/master.zip), et glissez/déposez le dossier "Google Chrome" du zip dans la page [chrome://extensions](chrome://extension) (nécessite d'avoir coché le *mode développeur*
+Pour tester l'extension depuis les sources, téléchargez les sources [ici](https://github.com/Eskimon/SdZ_Notificateur/archive/master.zip), et glissez/déposez le dossier "Google Chrome" du zip dans la page [chrome://extensions](chrome://extension) (nécessite d'avoir cohé le *mode développeur*
 
 ## C'est qui qu'a fait ça ?
 
-Eskimon, zéro d'honneur est à l'origine de l'idée, et Sandhose, horrifié par le code, mais séduit par l'idée, l'a rejoint par après
-
+Eskimon, zéro d'honneur est à l'origine de l'idée, et Sandhose, horifié par le code, mais séduit par l'idée, l'a rejoint par après.
 (Pour sa défense, Eskimon déclare avoir fait cette extension pour justement apprendre le javascript. Il remercie Sandhose de sa patience :D )
 
 ## License
