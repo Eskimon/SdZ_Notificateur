@@ -39,6 +39,8 @@ var notificatorOptions = {
             }
         }
         this.toggle();
+        
+        this.checkAvatar();
     },
     
     getValues: function() {
@@ -56,6 +58,25 @@ var notificatorOptions = {
         this.elems['showAllNotifButton'].disabled = etat;
         
         this.elems['useDetailedNotifs'].disabled = !this.elems['showDesktopNotif'].checked;
+    },
+    
+    checkAvatar: function() {
+        $.get("http://www.siteduzero.com", this.loadCallback.bind(this), "text");
+    },
+    
+    loadCallback: function(data) {
+        var self = this,
+            xmlDoc = new DOMParser().parseFromString(data, "text/xml"), 
+            $data = $(xmlDoc),
+            avatarImgSrc = $($data).find("img.memberAvatar").attr('src'),
+            profil = $($data).find("div#memberLinks a.nickname"),
+            profilName = profil.text(),
+            profilLink = profil.attr('href');
+        
+        var leDiv = $("div#connecteComme");
+        $(leDiv).find("a").attr("href","http://www.siteduzero.com" + profilLink);
+        $(leDiv).find("strong").text(profilName);
+        $(leDiv).find("img").attr("src",avatarImgSrc);
     }
 };
 
