@@ -5,6 +5,10 @@ var Notificateur = function() {
 Notificateur.prototype = {
     url: "http://www.siteduzero.com",
     
+    logged: true, //savoir si le dernier statut est connecté ou déconnecté
+    
+    isLogged: function() {return this.logged;},
+    
     options: {
         updateInterval: 5,
 		openListe: true,
@@ -30,10 +34,10 @@ Notificateur.prototype = {
     		
             chrome.alarms.create('refresh', {periodInMinutes: parseInt(this.options.updateInterval)});
             
+            this.initListeners();
+            
             this.check();
         }.bind(this));
-        
-        this.initListeners();
     },
     
     initListeners: function() {
@@ -156,14 +160,22 @@ Notificateur.prototype = {
             
         //on est pas connecté !
         if(loginBox.length != 0) {
-            chrome.browserAction.disable();
-            chrome.browserAction.setBadgeText({text: ""});
-            chrome.browserAction.setIcon({"path":"icons/icone_38_logout.png"});
-            
+            if(this.logged) {
+                chrome.browserAction.disable();
+                chrome.browserAction.setBadgeText({text: ""});
+                chrome.browserAction.setIcon({"path":"icons/icone_38_logout.png"});
+                chrome.alarms.clear('refresh');
+                this.logged = false;
+            }
             return;
         } else {
-            chrome.browserAction.enable();
-            chrome.browserAction.setIcon({"path":"icons/icone_38.png"});
+            if(!this.logged) {
+                chrome.browserAction.enable();
+                chrome.browserAction.setIcon({"path":"icons/icone_38.png"});
+                chrome.alarms.create('refresh', {periodInMinutes: parseInt(this.options.updateInterval)});
+                chrome.alarms.onAlarm.addListener(this.listeners.alarm.bind(this));
+                this.logged = true;
+            }
         }
         
         // Check les MPs

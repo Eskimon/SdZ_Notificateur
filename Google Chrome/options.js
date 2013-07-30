@@ -1,4 +1,4 @@
-var notificatorOptions = {
+﻿var notificatorOptions = {
     init: function(_notificator) {
         this.notificator = _notificator;
         
@@ -67,16 +67,24 @@ var notificatorOptions = {
     loadCallback: function(data) {
         var self = this,
             xmlDoc = new DOMParser().parseFromString(data, "text/xml"), 
-            $data = $(xmlDoc),
-            avatarImgSrc = $($data).find("img.memberAvatar").attr('src'),
+            $data = $(xmlDoc);
+
+        var leDiv = $("div#connecteComme");
+        
+        //on est pas connecté !
+        if(!this.notificator.isLogged()) {
+            $(leDiv).find("a").attr("href","http://www.siteduzero.com/login");
+            $(leDiv).find("strong").text("Non connecté !");          
+        } else {
+            var avatarImgSrc = $($data).find("img.memberAvatar").attr('src'),
             profil = $($data).find("div#memberLinks a.nickname"),
             profilName = profil.text(),
             profilLink = profil.attr('href');
-        
-        var leDiv = $("div#connecteComme");
-        $(leDiv).find("a").attr("href","http://www.siteduzero.com" + profilLink);
-        $(leDiv).find("strong").text(profilName);
-        $(leDiv).find("img").attr("src",avatarImgSrc);
+            
+            $(leDiv).find("a").attr("href","http://www.siteduzero.com" + profilLink);
+            $(leDiv).find("strong").text(profilName);
+            $(leDiv).find("img").attr("src",avatarImgSrc);
+        }
     }
 };
 
