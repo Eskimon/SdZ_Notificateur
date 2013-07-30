@@ -76,8 +76,8 @@
             $(leDiv).find("a").attr("href","http://www.siteduzero.com/login");
             $(leDiv).find("strong").text("Non connecté !");          
         } else {
-            var avatarImgSrc = $($data).find("img.memberAvatar").attr('src'),
-            profil = $($data).find("div#memberLinks a.nickname"),
+            var avatarImgSrc = $data.find("img.memberAvatar").attr('src'),
+            profil = $data.find("div#memberLinks a.nickname"),
             profilName = profil.text(),
             profilLink = profil.attr('href');
             
