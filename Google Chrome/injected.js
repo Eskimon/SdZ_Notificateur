@@ -13,6 +13,6 @@ for (var i = 0; i < len; i++) {
 target && target.click();
 
 // Update du nombre de notifs
-var elem = document.getElementById("#notifications");
+var elem = document.getElementById("notifications");
 elem.click();
 elem.click();
