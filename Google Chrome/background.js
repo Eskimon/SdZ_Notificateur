@@ -36,6 +36,10 @@ Notificateur.prototype = {
             
             this.initListeners();
             
+            this.loadSounds(function() {
+                this.loadSoundpack(this.soundpack);
+            }.bind(this));
+            
             this.check();
         }.bind(this));
     },
@@ -413,6 +417,60 @@ Notificateur.prototype = {
 			chrome.browserAction.onClicked.removeListener(this.listeners.toolbarClick);
 			chrome.browserAction.setPopup({popup:"popup.html"});
 		}
+    },
+    
+    loadSounds: function(callback) {
+        $.getJSON(chrome.extension.getURL("/sounds/packs.json"), function(data) {
+            this.soundpacks = data;
+            if(this.soundpacks.sounds[this.options.soundpack]) {
+                this.soundpack = this.soundpacks.sounds[this.options.soundpack];
+            }
+            else {
+                this.soundpack = this.soundpacks.sounds[this.soundpacks.default_soundpack];
+            }
+            
+            callback && callback();
+        }.bind(this));
+    },
+    
+    loadSoundpack: function(soundpack) {
+        var soundsList = document.getElementById("sound_list") || document.createElement("div");
+        soundsList.id = "sound_list";
+        document.body.appendChild(soundsList);
+        soundsList.innerHTML = "";
+        
+        ["notif_mp_new", "notif_new", "mp_new"].forEach(function(element) {
+            debugger;
+            var exists = document.getElementById("audio_" + element) !== null,
+                sound = exists ? document.getElementById("audio_" + element) : new Audio();
+            sound.src = chrome.extension.getURL("/sounds/" + soundpack.folder + "/" + soundpack.sounds[element]);
+            sound.id = "audio_" + element;
+            sound.autoplay = false;
+            sound.load();
+            !exists && soundsList.appendChild(sound);
+        }, this);
+    },
+    
+    playSound: function(options) {
+        var sound;
+        if(options.notification && options.mp) {
+            sound = document.getElementById("audio_notif_mp_new");
+        }
+        else if(options.notification) {
+            sound = document.getElementById("audio_notif_new");
+        }
+        else if(options.mp) {
+            sound = document.getElementById("audio_mp_new");
+        }
+        else {
+            return;
+        }
+        
+        if(sound) {
+            sound.pause();
+            sound.currentTime = 0;
+            sound.play();
+        }
     },
     
     setNewNotifCallback: function(callback) {
