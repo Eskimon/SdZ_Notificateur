@@ -5,6 +5,8 @@ var Notificateur = function() {
 Notificateur.prototype = {
     url: "http://www.siteduzero.com",
     
+    roadmap: "http://www.siteduzero.com/p/roadmap-du-site-du-zero",
+    
     logged: true, //savoir si le dernier statut est connecté ou déconnecté
     
     isLogged: function() {return this.logged;},
@@ -15,7 +17,8 @@ Notificateur.prototype = {
         openInNewTab: true,
         showAllNotifButton: true,
         showDesktopNotif: true,
-        useDetailedNotifs: false
+        useDetailedNotifs: false,
+        lastEdit: "Edit du 24/07/2013 à 10h13"
     },
     
     storage: chrome.storage.sync,
@@ -37,6 +40,9 @@ Notificateur.prototype = {
             this.initListeners();
             
             this.check();
+            
+            this.checkRoadmap();
+            
         }.bind(this));
     },
     
@@ -454,6 +460,19 @@ Notificateur.prototype = {
                     'url': url,
                     'active': false
                 });
+            }
+        });
+    },
+    
+    checkRoadmap: function() {
+        var self = this;        
+        $.get(this.roadmap, function(data) {
+            //on passe direct par jQuery car le parsage en XML bug
+            var dateEdit = $(data).find("section#mainSection article h1 strong span").text();
+
+            if(dateEdit != self.options.lastEdit) { //si il y a du nouveau, alors on agit !
+                //on fait une notif de plus
+                
             }
         });
     }
