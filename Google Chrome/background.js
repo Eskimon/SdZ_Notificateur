@@ -132,7 +132,14 @@ Notificateur.prototype = {
     },
     
     check: function() {
-        $.get(this.url, this.loadCallback.bind(this), "text");
+        var self = this;
+        $.get(this.url, this.loadCallback.bind(this), "text").error(function() {
+            //si jamais la requete plante (pas d'internet, 404 ou autre 500...)
+            chrome.browserAction.setBadgeText({text: "err"});
+            chrome.browserAction.setIcon({"path":"icons/icone_38_logout.png"});
+            chrome.browserAction.disable();
+            self.logged = false;
+        });
     },
     
     getNotification: function(id) {
@@ -161,9 +168,9 @@ Notificateur.prototype = {
         //on est pas connecté !
         if(loginBox.length != 0) {
             if(this.logged) {
-                chrome.browserAction.disable();
                 chrome.browserAction.setBadgeText({text: ""});
                 chrome.browserAction.setIcon({"path":"icons/icone_38_logout.png"});
+                chrome.browserAction.disable();
                 chrome.alarms.clear('refresh');
                 this.logged = false;
             }
