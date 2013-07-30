@@ -8,19 +8,28 @@ document.addEventListener('DOMContentLoaded', function () {
         
         var notifList = $("<div>", { class: "notifList" });
         
-        if(len == 0) {
+        if(len == 0 && !notificator.newRoadmap) {
             $("<div>", { class: "noNotifs" }).text("Aucune nouvelle notifications").appendTo(content);
         } else {
             for(var i = 0; i < len; i++) {
                 var elem, notifLink;
                 
-                if(notifs[i]["isBadge"]) {
-                    elem = $("<div>", { class: "element badge", id: "notif-" + notifs[i].id }).appendTo(notifList);
-                    notifLink = $("<a>", { href: 'http://www.siteduzero.com/membres/' + notifs[i]["messageId"]}).appendTo(elem);
-                }
-                else {
-                    elem = $("<div>", { class: "element message", id: "notif-" + notifs[i].id }).appendTo(notifList);
-                    notifLink = $("<a>", { href: 'http://www.siteduzero.com/forum/sujet/' + notifs[i]["thread"] + '/' + notifs[i]["messageId"] }).appendTo(elem);
+                switch(notifs[i].type) {
+                    case(0): //message
+                        elem = $("<div>", { class: "element message", id: "notif-" + notifs[i].id }).appendTo(notifList);
+                        notifLink = $("<a>", { href: 'http://www.siteduzero.com/forum/sujet/' + notifs[i]["thread"] + '/' + notifs[i]["messageId"] }).appendTo(elem);
+                        break;
+                    case(1): //badge
+                        elem = $("<div>", { class: "element badge", id: "notif-" + notifs[i].id }).appendTo(notifList);
+                        notifLink = $("<a>", { href: 'http://www.siteduzero.com/membres/' + notifs[i]["messageId"]}).appendTo(elem);
+                        break;
+                    case(2): //MP
+                    
+                        break;
+                    case(3): //roadmap
+                        elem = $("<div>", { class: "element roadmap", id: "notif-" + notifs[i].id }).appendTo(notifList);
+                        notifLink = $("<a>", { href: 'http://www.siteduzero.com/p/roadmap-du-site-du-zero' }).appendTo(elem);
+                        break;
                 }
                     
                 $("<div>", { class: "titre" }).text(notifs[i]["title"]).appendTo(notifLink);

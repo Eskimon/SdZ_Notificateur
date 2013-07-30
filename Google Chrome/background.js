@@ -8,9 +8,7 @@ Notificateur.prototype = {
     roadmap: "http://www.siteduzero.com/p/roadmap-du-site-du-zero",
     
     logged: true, //savoir si le dernier statut est connecté ou déconnecté
-    
-    isLogged: function() {return this.logged;},
-    
+        
     options: {
         updateInterval: 5,
 		openListe: true,
@@ -18,7 +16,7 @@ Notificateur.prototype = {
         showAllNotifButton: true,
         showDesktopNotif: true,
         useDetailedNotifs: false,
-        lastEdit: "Edit du 24/07/2013 à 10h13"
+        lastEdit: "Edit du 24/07/2012 à 10h12"
     },
     
     storage: chrome.storage.sync,
@@ -97,10 +95,19 @@ Notificateur.prototype = {
             var notif = this.getNotification(parseInt(notifId));
             if(button == 0) { // Open last message
                 if(notif) {
-                    if(notif.isBadge)
-                        this.openSdZ("/membres/" + notif.messageId);
-                    else
-                        this.openSdZ("/forum/sujet/" + notif.thread + "/" + notif.messageId);
+                    switch(notif.type) {
+                        case(0): //normal
+                            this.openSdZ("/forum/sujet/" + notif.thread + "/" + notif.messageId);
+                            break;
+                        case(1): //badge
+                            this.openSdZ("/membres/" + notif.messageId);
+                            break;
+                        case(2): //MP
+                            break;
+                        case(3): //roadmap
+                            this.openSdZ("/p/roadmap-du-site-du-zero");
+                            break;
+                    }
                 }
                 
                 chrome.notifications.clear(notifId, function() {
@@ -121,10 +128,19 @@ Notificateur.prototype = {
         notifClick: function(notifId) {
             var notif = this.getNotification(parseInt(notifId));
             if(notif) {
-                if(notif.isBadge)
-                    this.openSdZ("/membres/" + notif.messageId);
-                else
-                    this.openSdZ("/forum/sujet/" + notif.thread + "/" + notif.messageId);
+                switch(notif.type) {
+                    case(0): //normal
+                        this.openSdZ("/forum/sujet/" + notif.thread + "/" + notif.messageId);
+                        break;
+                    case(1): //badge
+                        this.openSdZ("/membres/" + notif.messageId);
+                        break;
+                    case(2): //MP
+                        break;
+                    case(3): //roadmap
+                        this.openSdZ("/p/roadmap-du-site-du-zero");
+                        break;
+                }
             }
             
             chrome.notifications.clear(notifId, function() {
@@ -155,7 +171,6 @@ Notificateur.prototype = {
                     return this.notifications[i];
                 }
             }
-            
             return false;
         }
         else {
@@ -222,7 +237,13 @@ Notificateur.prototype = {
                 date: notif.find("li.date").text(),
                 messageId: notifLink.substr(notifLink.lastIndexOf("/") + 1),
                 thread: notifLink.substr(13, notifLink.lastIndexOf("/") - 13),
-                isBadge: notif.find("a.badgeSdz").text().length==0 ? false : true //si c'est un badge
+                type: notif.find("a.badgeSdz").text().length==0 ? 0 : 1 //si c'est un badge
+                /* type de notif :
+                                                   0 - normal
+                                                   1 - badge
+                                                   2 - MP
+                                                   3 - roadmap
+                                            */
             };
                         
             var existingNotif = this.getNotification(notifObj.id);
@@ -234,7 +255,7 @@ Notificateur.prototype = {
                 this.newNotifCallback && this.newNotifCallback(notifObj);
             }
             
-            if(this.options.useDetailedNotifs && !notifObj.detailed && !notifObj.isBadge) {
+            if(this.options.useDetailedNotifs && !notifObj.detailed && (notifObj.type == 0)) {
                 this.fetchNotificationDetails(notifObj, function(newNotif) {
                     $.extend(notifObj, newNotif);
                     console.log("Detail fectched", newNotif);
@@ -273,9 +294,7 @@ Notificateur.prototype = {
         this.clearDesktopNotifs(removedNotifs);
         
         //set le texte du badge
-        var badgeTexte = this.MPs.length > 0 ? this.MPs.length.toString() + " - " : "";
-            badgeTexte += (this.notifications.length > 0) ? this.notifications.length.toString() : "";
-        chrome.browserAction.setBadgeText({text: badgeTexte});
+        this.updateBadge();
     },
     
     showDesktopNotif: function(notif) {
@@ -287,7 +306,7 @@ Notificateur.prototype = {
         }
         
         if(chrome.notifications && this.options.showDesktopNotif) {
-            if(this.options.useDetailedNotifs && notif.detailed && !notif.isBadge) {
+            if(this.options.useDetailedNotifs && notif.detailed && (notif.type == 0)) {
                 var notifOptions = {};
                 
                 chrome.notifications.create(notif.id, {
@@ -301,12 +320,24 @@ Notificateur.prototype = {
             else {
                 var boutons = new Array();
                 var icone = "";
-                boutons[0] = { title: "Voir le message" };
-                if(!notif.isBadge) {
-                    boutons[1] = { title: "Voir le début du thread" };
-                    icone = "icons/big_message.png";
-                } else {
-                    icone = "icons/big_badge.png";
+                switch(notif.type) {
+                    case(0):
+                        boutons[0] = { title: "Voir le message" };
+                        boutons[1] = { title: "Voir le début du thread" };
+                        icone = "icons/big_message.png";
+                        break;
+                    case(1):
+                        boutons[0] = { title: "Voir les badges" };
+                        icone = "icons/big_badge.png";
+                        break;
+                    case(2):
+                        boutons[0] = { title: "Voir le MP" };
+                        icone = "icons/big_mp.png";
+                        break;
+                    case(3):
+                        boutons[0] = { title: "Voir la roadmap" };
+                        icone = "icons/big_roadmap.png";
+                        break;
                 }
                 var notifOptions = { // Options des notifications
                     type: "basic",
@@ -472,9 +503,36 @@ Notificateur.prototype = {
 
             if(dateEdit != self.options.lastEdit) { //si il y a du nouveau, alors on agit !
                 //on fait une notif de plus
+                var notifObj = {
+                    id: "roadmap",
+                    title: "Mise à jour de la roadmap paru",
+                    date: dateEdit,
+                    messageId: "",
+                    thread: "",
+                    type: 3 //type roadmap
+                };
                 
+                self.newNotifCallback && self.newNotifCallback(notifObj);
+                self.notifications.push(notifObj); //on l'ajoute à la liste des notifications
+                self.updateBadge(); //met à jour le badge
+                self.showDesktopNotif(notifObj); //on montre la notif de bureau
+                //mise à jour du storage pour cette info (pas encore actif pour moins d'emmerdes lors des tests)
+                //this.storage.set({lastEdit: dateEdit});
             }
         });
+    },
+    
+    updateBadge: function() {
+        var notifs = this.notifications,
+            len = notifs.length,
+            totMP = 0;
+        for(var i=0; i<len; i++)
+            if(notifs[i].type == 2)
+                totMP++;
+                
+        var badgeTexte = (totMP > 0) ? totMP.toString() + " - " : "";
+        badgeTexte += (len-totMP > 0) ? (len-totMP).toString() : ((totMP > 0) ? "0" : "");
+        chrome.browserAction.setBadgeText({text: badgeTexte});
     }
 };
 

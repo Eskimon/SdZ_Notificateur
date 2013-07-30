@@ -72,7 +72,7 @@
         var leDiv = $("div#connecteComme");
         
         //on est pas connecté !
-        if(!this.notificator.isLogged()) {
+        if(!this.notificator.logged) {
             leDiv.find("a").attr("href","http://www.siteduzero.com/login");
             leDiv.find("strong").text("Non connecté !");          
         } else {
