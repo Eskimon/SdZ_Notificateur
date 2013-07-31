@@ -1,6 +1,7 @@
-var linkListener = function(event) {
+var linkListener = function(notificator, event) {
     event.preventDefault();
-    var url = $(this).attr("href");
+    var url = $(event.currentTarget).attr("href");
+    console.log(url);
     chrome.windows.getCurrent({ populate: true }, function(currentWindow) {
         var tab = false;
         for(var i in currentWindow.tabs) {
@@ -82,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function () {
         
         var liens = document.getElementsByTagName("a");
         for (var i = 0; i < liens.length; i++) {
-            $(liens[i]).on("click", linkListener);
+            $(liens[i]).on("click", linkListener.bind(this, notificator));
         }
         
         notificator.setNewNotifCallback(function(notif) {
@@ -96,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function () {
             
             $("<div>", { class: "titre" }).text(notif["title"]).appendTo(notifLink);
             $("<div>", { class: "date" }).text(notif["date"]).appendTo(notifLink);
-            notifLink.on("click", notifLink);
+            notifLink.on("click", notifLink.bind(this, notificator));
         });
         
         notificator.setRemoveNotifCallback(function(notif) {
