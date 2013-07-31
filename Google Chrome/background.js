@@ -16,7 +16,7 @@ Notificateur.prototype = {
         showAllNotifButton: true,
         showDesktopNotif: true,
         useDetailedNotifs: false,
-        lastEdit: "Edit du 24/07/2012 à 10h12"
+        lastEdit: ""
     },
     
     storage: chrome.storage.sync,
@@ -67,11 +67,17 @@ Notificateur.prototype = {
     
     listeners: {
         tabUpdate: function(tabId, changeInfo, tab) {
-            if(tab.url !== undefined && tab.url.indexOf("siteduzero.com") != -1 && tab.url.indexOf("siteduzero.com") < 14 && changeInfo.status == "complete") {
+            if(tab.url !== undefined && tab.url.indexOf("siteduzero.com") != -1 && tab.url.indexOf("siteduzero.com") < 14 && changeInfo.status == "complete" && tab.url.indexOf("roadmap") == -1) {
+                //si on est sur le SdZ mais PAS sur la roadmap
                 chrome.tabs.executeScript(tabId, {
                     file: "injected.js"
                 });
                 
+                this.check();
+            } if(tab.url !== undefined && tab.url.indexOf("siteduzero.com") != -1 && tab.url.indexOf("siteduzero.com") < 14 && changeInfo.status == "complete" && tab.url.indexOf("roadmap") != -1) {
+                //si on est sur le SdZ ET sur la roadmap
+                delete this.notifications[this.getNotification("roadmap")];
+                delete this.roadmapNotif;
                 this.check();
             }
         },
@@ -274,6 +280,8 @@ Notificateur.prototype = {
         }
         
         this.notifications = notifsList;
+        if(this.roadmapNotif)
+            this.notifications.push(this.roadmapNotif);
         
         for(var i = 0; i < oldNotifs.length; i++) { // Faire la liste des notifs enlevées
             var exists = false;
@@ -554,11 +562,14 @@ Notificateur.prototype = {
     },
     
     checkRoadmap: function() {
-        var self = this;        
+        var self = this;
         $.get(this.roadmap, function(data) {
             //on passe direct par jQuery car le parsage en XML bug
             var dateEdit = $(data).find("section#mainSection article h1 strong span").text();
 
+            console.log(self.options.lastEdit);
+            console.log(dateEdit);
+            
             if(dateEdit != self.options.lastEdit) { //si il y a du nouveau, alors on agit !
                 //on fait une notif de plus
                 var notifObj = {
@@ -571,13 +582,13 @@ Notificateur.prototype = {
                 };
                 
                 self.newNotifCallback && self.newNotifCallback(notifObj);
-                self.notifications.push(notifObj); //on l'ajoute à la liste des notifications
+                self.roadmapNotif = notifObj; //sera ajouter à la liste des notifications
+                self.notifications.push(self.roadmapNotif);
                 self.updateBadge(); //met à jour le badge
                 self.showDesktopNotif(notifObj); //on montre la notif de bureau
                 //mise à jour du storage pour cette info (pas encore actif pour moins d'emmerdes lors des tests)
-                //this.storage.set({lastEdit: dateEdit});
-                
-                //TODO Fix bug supposé ligne 276 : add .push et test
+                self.options.lastEdit = dateEdit;
+                self.setOptions(self.options);
             }
         });
     },

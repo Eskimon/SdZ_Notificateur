@@ -73,6 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         });
                     }
                 });
+                //si c'est la notification de la roadmap, traitement spécial !
             }, false);
         }
         
