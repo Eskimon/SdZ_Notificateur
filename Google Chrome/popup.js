@@ -24,7 +24,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         notifLink = $("<a>", { href: 'http://www.siteduzero.com/membres/' + notifs[i]["messageId"]}).appendTo(elem);
                         break;
                     case("mp"): //MP
-                    
+                        elem = $("<div>", { class: "element mp", id: "notif-" + notifs[i].id }).appendTo(notifList);
+                        notifLink = $("<a>", { href: 'http://www.siteduzero.com/mp/' + notifs[i]["thread"] + '/' + notifs[i]["messageId"] }).appendTo(elem);
                         break;
                     case("roadmap"): //roadmap
                         elem = $("<div>", { class: "element roadmap", id: "notif-" + notifs[i].id }).appendTo(notifList);

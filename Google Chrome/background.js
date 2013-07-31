@@ -115,6 +115,7 @@ Notificateur.prototype = {
                             this.openSdZ("/membres/" + notif.messageId);
                             break;
                         case("mp"): //MP
+                            this.openSdZ("/mp/" + notif.thread + "/" + notif.messageId);
                             break;
                         case("roadmap"): //roadmap
                             this.openSdZ("/p/roadmap-du-site-du-zero");
@@ -151,6 +152,7 @@ Notificateur.prototype = {
                         this.openSdZ("/membres/" + notif.messageId);
                         break;
                     case("mp"): //MP
+                        this.openSdZ("/mp/" + notif.thread + "/" + notif.messageId);
                         break;
                     case("roadmap"): //roadmap
                         this.openSdZ("/p/roadmap-du-site-du-zero");
@@ -173,7 +175,7 @@ Notificateur.prototype = {
     
     check: function() {
         var self = this;
-        $.get(this.url, this.loadCallbackV2.bind(this), "text").error(function() {
+        $.get(this.url, this.loadCallback.bind(this), "text").error(function() {
             //si jamais la requete plante (pas d'internet, 404 ou autre 500...)
             chrome.browserAction.setBadgeText({text: "err"});
             chrome.browserAction.setIcon({"path":"icons/icone_38_logout.png"});
@@ -196,189 +198,20 @@ Notificateur.prototype = {
         }
     },
     
-    cleaning : function cleaning(data) {
-    	data = data.replace(/<img[^>]*>/gi,""); //vire les images
-    	//data.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,''); //vire le javascript
-    	return data;
-    },
-    
     //ancien "verifNotif()"
     loadCallback: function(data) {
 
+        //ancienne solution car elle marche mieux oO
         var self = this,
-            xmlDoc = new DOMParser().parseFromString(data, "text/xml"), 
-            $data = $(xmlDoc),
-            loginBox = $($data).find("div#login");
-            
-        //on est pas connecté !
-        if(loginBox.length != 0) {
-            if(this.logged) {
-                chrome.browserAction.setBadgeText({text: ""});
-                chrome.browserAction.setIcon({"path":"icons/icone_38_logout.png"});
-                chrome.browserAction.disable();
-                chrome.alarms.clear('refresh');
-                this.logged = false;
-            }
-            return;
-        } else {
-            if(!this.logged) {
-                chrome.browserAction.enable();
-                chrome.browserAction.setIcon({"path":"icons/icone_38.png"});
-                chrome.alarms.create('refresh', {periodInMinutes: parseInt(this.options.updateInterval)});
-                chrome.alarms.onAlarm.addListener(this.listeners.alarm.bind(this));
-                this.logged = true;
-            }
-        }
-        
-        // Check les MPs
-        var MPs = $data.find("ul.privateMessagesList"),
-            newMPs = [], // Liste des nouvelles notifications
-            oldMPs = this.notifications, // Ancienne liste
-            removedMPs = [], // Notifs enlevées
-            MPsList = []; // Nouvelle liste
-            
-         //a remplir, besoin de plus de donnée concernant les MPs
-            
-            
-            
-            
-        
-        // Check les notifications
-        var notifications = $data.find("div#scrollMe ul.list li.notification"),
-            newNotifs = [], // Liste des nouvelles notifications
-            oldNotifs = this.notifications, // Ancienne liste
-            removedNotifs = [], // Notifs enlevées
-            notifsList = []; // Nouvelle liste
-            
-        for(var i = 0; i < notifications.length; i++) {
-            var notif = $(notifications[i]),
-                notifLink = notif.find("a.link").attr('href'),
-                archiveLink = notif.find("a.delete").attr('href');
-            
-            var notifObj = {
-                id: archiveLink.substr(archiveLink.lastIndexOf("/") + 1),
-                title: notif.find("li.title").text(),
-                date: notif.find("li.date").text(),
-                messageId: notifLink.substr(notifLink.lastIndexOf("/") + 1),
-                thread: notifLink.substr(13, notifLink.lastIndexOf("/") - 13),
-                type: notif.find("a.badgeSdz").text().length==0 ? "forum" : "badge" //si c'est un badge
-                /* type de notif :
-                                                   - forum
-                                                   - badge
-                                                   - MP
-                                                   - roadmap
-                                            */
-            };
-                        
-            var existingNotif = this.getNotification(notifObj.id);
-            if(existingNotif) {
-                $.extend(notifObj, existingNotif);
-            }
-            else {
-                newNotifs.push(notifObj);
-                this.newNotifCallback && this.newNotifCallback(notifObj);
-            }
-            
-            if(this.options.useDetailedNotifs && !notifObj.detailed && (notifObj.type == "forum")) {
-                this.fetchNotificationDetails(notifObj, function(newNotif) {
-                    $.extend(notifObj, newNotif);
-                    console.log("Detail fectched", newNotif);
-                    self.showDesktopNotif(notifObj);
-                });
-            }
-            else if(!existingNotif) {
-                this.showDesktopNotif(notifObj);
-            }
-            
-            notifsList.push(notifObj);
-        }
-        
-        // Check les notifications "alertes" des modos
-        notifications = $data.find("ul.alertsList li.notification");
-        newNotifs = []; // Liste des nouvelles notifications
-        removedNotifs = []; // Notifs enlevées
- 
-        for(var i = 0; i < notifications.length-1; i++) { //-1 our pas avoir le lien "toutes les alertes"
-            var notif = $(notifications[i]),
-                notifLink = notif.find("a.linkAlert").attr('href'),
-                archiveLink = notifLink; //pas de lien d'archives pour les alertes
-
-            var notifObj = {
-                id: "alerte-"+notifLink.substr(notifLink.lastIndexOf("/") + 1),
-                title: notif.find("li.title").text(),
-                date: notif.find("li.date").text(),
-                messageId: notifLink.substr(notifLink.lastIndexOf("/") + 1),
-                thread: notifLink.substr(13, notifLink.lastIndexOf("/") - 13),
-                type: "alerte" //si c'est un badge
-                /* type de notif :
-                                                   - forum
-                                                   - badge
-                                                   - MP
-                                                   - roadmap
-                                                   - alerte
-                                            */
-            };
-
-            var existingNotif = this.getNotification(notifObj.id);
-            if(existingNotif) {
-                $.extend(notifObj, existingNotif);
-            }
-            else {
-                newNotifs.push(notifObj);
-                this.newNotifCallback && this.newNotifCallback(notifObj);
-            }
-            
-            if(!existingNotif)
-                this.showDesktopNotif(notifObj);
-                        
-            notifsList.push(notifObj);
-        }
-        
-        
-        
-        
-        
-        
-        
-        this.notifications = notifsList;
-        if(this.roadmapNotif)
-            this.notifications.push(this.roadmapNotif);
-        
-        for(var i = 0; i < oldNotifs.length; i++) { // Faire la liste des notifs enlevées
-            var exists = false;
-            for(var j = 0; j < this.notifications.length; j++) {
-                if(oldNotifs[i].id == this.notifications[j].id) {
-                    exists = true;
-                    break;
-                }
-            }
-            if(!exists) {
-                removedNotifs.push(oldNotifs[i]);
-                this.removeNotifCallback && this.removeNotifCallback(oldNotifs[i]);
-            }
-        }
-        
-        console.log("Update", {
-            newNotifs: newNotifs,
-            removedNotifs: removedNotifs,
-            notifs: this.notifications
-        });
-        
-        this.clearDesktopNotifs(removedNotifs);
-        
-        //set le texte du badge
-        this.updateBadge();
-    },
-    
-    //ancien "verifNotif()"
-    loadCallbackV2: function(data) {
-
-        var self = this,
-            data = this.cleaning(data),
-            $data = $(data),
+            $data = $(data.replace(/<img[^>]*>/gi,"")),
             loginBox = $data.find("div#login");
-            console.log(loginBox);
-        
+            
+                /*
+                var self = this,
+                xmlDoc = new DOMParser().parseFromString(data, "text/xml"), 
+                $data = $(xmlDoc),
+                loginBox = $($data).find("div#login");
+                */
         
         //on est pas connecté !
         if(loginBox.length != 0) {
@@ -399,19 +232,6 @@ Notificateur.prototype = {
                 this.logged = true;
             }
         }
-        
-        // Check les MPs
-        var MPs = $data.find("ul.privateMessagesList"),
-            newMPs = [], // Liste des nouvelles notifications
-            oldMPs = this.notifications, // Ancienne liste
-            removedMPs = [], // Notifs enlevées
-            MPsList = []; // Nouvelle liste
-            
-         //a remplir, besoin de plus de donnée concernant les MPs
-            
-            
-            
-            
         
         // Check les notifications
         var notifications = $data.find("div#scrollMe ul.list li.notification"),
@@ -439,7 +259,7 @@ Notificateur.prototype = {
                                                    - roadmap
                                             */
             };
-                        
+
             var existingNotif = this.getNotification(notifObj.id);
             if(existingNotif) {
                 $.extend(notifObj, existingNotif);
@@ -462,6 +282,57 @@ Notificateur.prototype = {
             
             notifsList.push(notifObj);
         }
+
+        
+        // Check les mp
+        notifications = $data.find("li#lastPrivateMessages a");
+        newNotifs = []; // Liste des nouvelles notifications
+        removedNotifs = []; // Notifs enlevées
+
+        for(var i = 0; i < notifications.length-1; i++) { //-1 our pas avoir le lien "tout mes MP"
+            var notif = $(notifications[i]),
+                notifLink = notif.attr('href'),
+                archiveLink = notifLink,
+                texte = notif.text(); //pas de lien d'archives pour les alertes
+
+            texte = texte.replace(/\s+/g," "); //vire les tabulations et autres cochonneries
+            
+            var debut = texte.indexOf("par"),
+                fin = texte.indexOf("Il y a")-1;
+                
+            var notifObj = {
+                id: "mp-"+notifLink.substr(notifLink.lastIndexOf("/") + 1),
+                title: notif.find("strong").text() + " (" + texte.substr(debut, fin-debut) + ")",
+                date: texte.substr(texte.indexOf("Il y a")),
+                messageId: notifLink.substr(notifLink.lastIndexOf("/") + 1),
+                thread: notifLink.substr(4, notifLink.lastIndexOf("/") - 4),
+                type: "mp" //si c'est un badge
+                /* type de notif :
+                                                   - forum
+                                                   - badge
+                                                   - MP
+                                                   - roadmap
+                                                   - alerte
+                                            */
+            };
+            
+            console.log(notifObj);
+
+            var existingNotif = this.getNotification(notifObj.id);
+            if(existingNotif) {
+                $.extend(notifObj, existingNotif);
+            }
+            else {
+                newNotifs.push(notifObj);
+                this.newNotifCallback && this.newNotifCallback(notifObj);
+            }
+            
+            if(!existingNotif)
+                this.showDesktopNotif(notifObj);
+                        
+            notifsList.push(notifObj);
+        }
+        
         
         // Check les notifications "alertes" des modos
         notifications = $data.find("ul.alertsList li.notification");
@@ -503,11 +374,6 @@ Notificateur.prototype = {
                         
             notifsList.push(notifObj);
         }
-        
-        
-        
-        
-        
         
         
         this.notifications = notifsList;
