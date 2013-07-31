@@ -42,7 +42,7 @@ Notificateur.prototype = {
             this.loadSounds(function() {
                 this.loadSoundpack(this.soundpack);
             }.bind(this));
-            
+
             this.check();
             
             //this.checkRoadmap();
@@ -175,6 +175,7 @@ Notificateur.prototype = {
     
     check: function() {
         var self = this;
+        chrome.browserAction.setIcon({"path":"icons/icone_38_parsing.png"});
         $.get(this.url, this.loadCallback.bind(this), "text").error(function() {
             //si jamais la requete plante (pas d'internet, 404 ou autre 500...)
             chrome.browserAction.setBadgeText({text: "err"});
@@ -404,6 +405,8 @@ Notificateur.prototype = {
         
         //set le texte du badge
         this.updateBadge();
+        
+        chrome.browserAction.setIcon({"path":"icons/icone_38.png"});
     },
     
     showDesktopNotif: function(notif) {
