@@ -70,18 +70,21 @@ Notificateur.prototype = {
     
     listeners: {
         tabUpdate: function(tabId, changeInfo, tab) {
-            if(tab.url !== undefined && tab.url.indexOf("siteduzero.com") != -1 && tab.url.indexOf("siteduzero.com") < 14 && changeInfo.status == "complete" && tab.url.indexOf("roadmap") == -1) {
-                //si on est sur le SdZ mais PAS sur la roadmap
-                chrome.tabs.executeScript(tabId, {
-                    file: "injected.js"
-                });
-                
-                this.check();
-            } if(tab.url !== undefined && tab.url.indexOf("siteduzero.com") != -1 && tab.url.indexOf("siteduzero.com") < 14 && changeInfo.status == "complete" && tab.url.indexOf("roadmap") != -1) {
-                //si on est sur le SdZ ET sur la roadmap
-                delete this.notifications[this.getNotification("roadmap")];
-                delete this.roadmapNotif;
-                this.check();
+            if(tab.url !== undefined && tab.url.indexOf("siteduzero.com") != -1 && tab.url.indexOf("siteduzero.com") < 14 && changeInfo.status == "complete") {
+                if(tab.url.indexOf("/forum/sujet/") != -1) {//cas d'une notif de type badge ou forum -> il faut faire l'injection
+                    //attention, se déclenchera aussi pour une alerte de modo (mais c'est pas très grave)
+                    chrome.tabs.executeScript(tabId, {
+                        file: "injected.js"
+                    });
+                    //on attend une seconde pour que le script soit injecté puis on check de nouveau les notifs pour mettre à jour le badge
+                    setTimeout(this.check.bind(this),1000);
+                } else if(tab.url.indexOf("roadmap") != -1) {// cas de la roadmap
+                    delete this.notifications[this.getNotification("roadmap")];
+                    delete this.roadmapNotif;
+                    this.check();
+                } else if(tab.url.indexOf("/mp/") != -1) { //cas des MP
+                    this.check();
+                }
             }
         },
         
