@@ -8,7 +8,9 @@
             openInNewTab: document.getElementById("newTab"),
             showAllNotifButton: document.getElementById("allNotifs"),
             showDesktopNotif: document.getElementById("notifNative"),
-            useDetailedNotifs: document.getElementById("detailedNotifs")
+            useDetailedNotifs: document.getElementById("detailedNotifs"),
+            notifPriority: document.getElementById("priorityNotif"),
+            mpPriority: document.getElementById("priorityMP")
         };
         
         document.getElementById("enregistrer").addEventListener("click", this.save.bind(this));
@@ -58,6 +60,28 @@
         this.elems['showAllNotifButton'].disabled = etat;
         
         this.elems['useDetailedNotifs'].disabled = !this.elems['showDesktopNotif'].checked;
+        
+        $(".priority input").on("change", function(e) {
+            var value = "Erreur";
+            switch(parseInt(e.target.value)) {
+                case -2:
+                    value = "Pas important";
+                    break;
+                case -1:
+                    value = "Peu important";
+                    break;
+                case 0:
+                    value = "Priorité normale";
+                    break;
+                case 1:
+                    value = "Important";
+                    break;
+                case 2:
+                    value = "Très important";
+                    break;
+            }
+            $(e.target).parent().find(".value").text(value);
+        }).trigger("change");
     },
     
     checkAvatar: function() {

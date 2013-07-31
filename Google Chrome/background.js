@@ -16,7 +16,9 @@ Notificateur.prototype = {
         showAllNotifButton: true,
         showDesktopNotif: true,
         useDetailedNotifs: false,
-        lastEdit: ""
+        lastEdit: "",
+        notifPriority: 0,
+        mpPriority: 0
     },
     
     storage: chrome.storage.sync,
