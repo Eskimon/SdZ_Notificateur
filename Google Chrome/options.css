@@ -3,6 +3,10 @@
     margin: 0;
 }
 
+body, html, .content {
+    height: 100%;
+}
+
 body {
     background: url('http://www.siteduzero.com/bundles/common/images/background.png');
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -37,6 +41,11 @@ header {
 
 .clear {
     clear: both;
+}
+
+body > .content {
+    min-height: 100%;
+    height: auto;
 }
 
 input[type="button"] {
@@ -113,10 +122,10 @@ footer {
     font-size: 12px;
     text-align: right;
     border-top: solid 1px #CCC;
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    position: relative;
+    height: 45px;
+    margin-top: -76px;
+    clear: both;
 }
 
 footer a {
@@ -132,9 +141,19 @@ footer p {
     margin: 5px 10px;
 }
 
+.footerSubstitutor {
+    height: 96px;
+    width: 100%;
+}
+
+#connecteComme {
+    margin-bottom: 0;
+}
+
 #connecteComme a {
     text-decoration: none;
     color: black;
+    display: block;
 }
 
 #connecteComme img {

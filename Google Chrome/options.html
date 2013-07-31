@@ -9,49 +9,65 @@
     </head>
      
     <body>
-        <header>
-            <div class="container">
-                <h1>Options de l'extension</h1>
-            </div>
-        </header>
-        <div class="container">
-            <div class="options">
-                <p class="champ">
-                    <label for="interval">Interval de rafraîchissement (en minutes) </label>
-                    <input type="number" name="interval" id="interval" min="1" max="60" placeholder=" min." required/>
-                </p>
-				<p class="champ">
-                    <label for="openListe"><input type="checkbox" name="openListe" id="openListe" /> Ouvrir une liste de notifications?</label>
-					<span class="complement">Sinon, un click ouvrira l'accueil du SdZ</span>
-                </p>
-				<div class="sub">
-	                <p class="champ">
-	                    <label for="newTab"><input type="checkbox" name="newTab" id="newTab" /> Ouvrir les liens dans un nouvel onglet ?</label>
-						<span class="complement">Ouvrira les notifications dans un nouvel onglet si la page courante n'est pas une page du SdZ</span>
-	                </p>
-	                <p class="champ">
-	                    <label for="allNotifs"><input type="checkbox" name="allNotifs" id="allNotifs"/> Afficher une ligne "Toutes mes notifications" ?</label>
-	                </p>
-				</div>
-                <p id="notifSpan" class="champ">
-                    <label for="notifNative"><input type="checkbox" name="notifNative" id="notifNative" /> Afficher les notification du bureau ?</label>
-					<span class="complement">Attention, cette option à un comportement incomplet sur Linux et Mac (limitation de Chrome)</span>
-                </p>
-                <div class="sub">
-                    <p class="champ">
-                        <label for="detailedNotifs"><input type="checkbox" name="detailedNotifs" id="detailedNotifs"/> Utiliser des notifications d&eacute;taill&eacute;es ?</label>
-                        <span class="complement"><span class="experimental">EXPERIMENTAL</span> Les notifications afficheront plus d'informations (plus long &agrave; charger)</span>
-                    </p>
+        <div class="content">
+            <header>
+                <div class="container">
+                    <h1>Options de l'extension</h1>
                 </div>
-                <input type="button" id="enregistrer" value="Enregistrer" />
-                <div class="clear"></div>
-            </div>
-            <div id="connecteComme" class="options">
+            </header>
+            <div class="container">
+                <div class="options">
+                    <p class="champ">
+                        <label for="interval">Interval de rafraîchissement (en minutes) </label>
+                        <input type="number" name="interval" id="interval" min="1" max="60" placeholder=" min." required/>
+                    </p>
+                    <p class="champ">
+                        <label for="openListe"><input type="checkbox" name="openListe" id="openListe" /> Ouvrir une liste de notifications?</label>
+                        <span class="complement">Sinon, un click ouvrira l'accueil du SdZ</span>
+                    </p>
+                    <div class="sub">
+                        <p class="champ">
+                            <label for="newTab"><input type="checkbox" name="newTab" id="newTab" /> Ouvrir les liens dans un nouvel onglet ?</label>
+                            <span class="complement">Ouvrira les notifications dans un nouvel onglet si la page courante n'est pas une page du SdZ</span>
+                        </p>
+                        <p class="champ">
+                            <label for="allNotifs"><input type="checkbox" name="allNotifs" id="allNotifs"/> Afficher une ligne "Toutes mes notifications" ?</label>
+                        </p>
+                    </div>
+                    <p id="notifSpan" class="champ">
+                        <label for="notifNative"><input type="checkbox" name="notifNative" id="notifNative" /> Afficher les notification du bureau ?</label>
+                        <span class="complement">Attention, cette option à un comportement incomplet sur Linux et Mac (limitation de Chrome)</span>
+                    </p>
+                    <div class="sub">
+                        <p class="champ">
+                            <label for="detailedNotifs"><input type="checkbox" name="detailedNotifs" id="detailedNotifs"/> Utiliser des notifications d&eacute;taill&eacute;es ?</label>
+                            <span class="complement"><span class="experimental">EXPERIMENTAL</span> Les notifications afficheront plus d'informations (plus long &agrave; charger)</span>
+                        </p>
+                    </div>
+                    <p class="champ">
+                        <label for="priorityNotif">Priorité des notifications (forum)</label>
+                        <span class="complement">Les notifications seront plus ou mois visibles</span>
+                        <input type="range" min="-2" max="2" step="1" value="0" />
+                    </p>
+                    
+                    <p class="champ">
+                        <label for="priorityNotif">Priorité des notifications (MP)</label>
+                        <span class="complement">Les notifications seront plus ou mois visibles</span>
+                        <input type="range" min="-2" max="2" step="1" value="0" />
+                    </p>
+                    
+                    <input type="button" id="enregistrer" value="Enregistrer" />
+                    <div class="clear"></div>
+                </div>
+                <div id="connecteComme" class="options">
                     <a href="#">
                         <p>Vous êtes connecté(e) au site du zéro en tant que : <strong>(chargement...)</strong></p>
                         <img src="" >
                     </a>
+                </div>
             </div>
+            
+            <div class="footerSubstitutor"></div> <!-- dat nom -->
         </div>
         <footer>
             <div class="container">
