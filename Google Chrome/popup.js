@@ -15,18 +15,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 var elem, notifLink;
                 
                 switch(notifs[i].type) {
-                    case(0): //message
+                    case("forum"): //message
                         elem = $("<div>", { class: "element message", id: "notif-" + notifs[i].id }).appendTo(notifList);
                         notifLink = $("<a>", { href: 'http://www.siteduzero.com/forum/sujet/' + notifs[i]["thread"] + '/' + notifs[i]["messageId"] }).appendTo(elem);
                         break;
-                    case(1): //badge
+                    case("badge"): //badge
                         elem = $("<div>", { class: "element badge", id: "notif-" + notifs[i].id }).appendTo(notifList);
                         notifLink = $("<a>", { href: 'http://www.siteduzero.com/membres/' + notifs[i]["messageId"]}).appendTo(elem);
                         break;
-                    case(2): //MP
+                    case("mp"): //MP
                     
                         break;
-                    case(3): //roadmap
+                    case("roadmap"): //roadmap
                         elem = $("<div>", { class: "element roadmap", id: "notif-" + notifs[i].id }).appendTo(notifList);
                         notifLink = $("<a>", { href: 'http://www.siteduzero.com/p/roadmap-du-site-du-zero' }).appendTo(elem);
                         break;

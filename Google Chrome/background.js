@@ -96,7 +96,7 @@ Notificateur.prototype = {
         },
         
         notifButtonClick: function(notifId, button) {
-            var notif = this.getNotification(parseInt(notifId));
+            var notif = this.getNotification(notifId);
             if(button == 0) { // Open last message
                 if(notif) {
                     switch(notif.type) {
@@ -130,7 +130,7 @@ Notificateur.prototype = {
         },
         
         notifClick: function(notifId) {
-            var notif = this.getNotification(parseInt(notifId));
+            var notif = this.getNotification(notifId);
             if(notif) {
                 switch(notif.type) {
                     case("forum"): //normal
@@ -477,7 +477,7 @@ Notificateur.prototype = {
         soundsList.innerHTML = "";
         
         ["notif_mp_new", "notif_new", "mp_new"].forEach(function(element) {
-            debugger;
+            //debugger;
             var exists = document.getElementById("audio_" + element) !== null,
                 sound = exists ? document.getElementById("audio_" + element) : new Audio();
             sound.src = chrome.extension.getURL("/sounds/" + soundpack.folder + "/" + soundpack.sounds[element]);
