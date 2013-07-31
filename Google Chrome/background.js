@@ -432,28 +432,34 @@ Notificateur.prototype = {
             }
             else {
                 var boutons = new Array();
+                var priority = 0;
                 var icone = "";
                 switch(notif.type) {
                     case("forum"):
                         boutons[0] = { title: "Voir le message" };
                         boutons[1] = { title: "Voir le début du thread" };
                         icone = "icons/big_message.png";
+                        priority = this.options.notifPriority;
                         break;
                     case("badge"):
                         boutons[0] = { title: "Voir les badges" };
                         icone = "icons/big_badge.png";
+                        priority = this.options.notifPriority;
                         break;
                     case("mp"):
                         boutons[0] = { title: "Voir le MP" };
                         icone = "icons/big_mp.png";
+                        priority = this.options.mpPriority;
                         break;
                     case("roadmap"):
                         boutons[0] = { title: "Voir la roadmap" };
                         icone = "icons/big_roadmap.png";
+                        priority = this.options.notifPriority;
                         break;
                     case("alerte"):
                         boutons[0] = { title: "Voir l'alerte" };
                         icone = "icons/big_alerte.png";
+                        priority = this.options.notifPriority;
                         break;
                 }
                 var notifOptions = { // Options des notifications
@@ -461,7 +467,8 @@ Notificateur.prototype = {
                     iconUrl: icone,
                     title: notif.title,
                     message: notif.date,
-                    buttons: boutons
+                    buttons: boutons,
+                    priority: priority
                 };
                 
                 chrome.notifications.create(notif.id, notifOptions, function() {});
