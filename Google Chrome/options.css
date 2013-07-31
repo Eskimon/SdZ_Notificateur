@@ -114,6 +114,14 @@ input[type="number"]:focus {
     font-weight: bold;
 }
 
+input[type="range"] {
+    margin: 5px 10px 0 0;
+}
+
+span.value {
+    font-size: 11px;
+}
+
 footer {
     background-color: #f8f8f4;
     padding: 15px 0;

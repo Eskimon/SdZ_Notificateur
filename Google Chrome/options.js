@@ -71,7 +71,7 @@
                     value = "Peu important";
                     break;
                 case 0:
-                    value = "Priorité normale";
+                    value = "Normale";
                     break;
                 case 1:
                     value = "Important";

@@ -45,7 +45,7 @@ Notificateur.prototype = {
             
             this.check();
             
-            this.checkRoadmap();
+            //this.checkRoadmap();
             
         }.bind(this));
     },
