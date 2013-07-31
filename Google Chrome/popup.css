@@ -28,6 +28,10 @@ body {
     background: url('icons/roadmap.png') no-repeat 7px 14px;
 }
 
+.element.alerte {
+    background: url('icons/alerte.png') no-repeat 7px 14px;
+}
+
 .allNotifs, .noNotifs {
     padding: 8px 8px 8px 30px;
     margin: 0px 1px 1px 1px;

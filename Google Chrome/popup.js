@@ -30,6 +30,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         elem = $("<div>", { class: "element roadmap", id: "notif-" + notifs[i].id }).appendTo(notifList);
                         notifLink = $("<a>", { href: 'http://www.siteduzero.com/p/roadmap-du-site-du-zero' }).appendTo(elem);
                         break;
+                    case("alerte"): //alerte
+                        elem = $("<div>", { class: "element alerte", id: "notif-" + notifs[i].id }).appendTo(notifList);
+                        notifLink = $("<a>", { href: 'http://www.siteduzero.com/forum/sujet/' + notifs[i]["thread"] + '/' + notifs[i]["messageId"] }).appendTo(elem);
+                        break;
                 }
                     
                 $("<div>", { class: "titre" }).text(notifs[i]["title"]).appendTo(notifLink);

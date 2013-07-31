@@ -119,6 +119,9 @@ Notificateur.prototype = {
                         case("roadmap"): //roadmap
                             this.openSdZ("/p/roadmap-du-site-du-zero");
                             break;
+                        case("alerte"): //roadmap
+                            this.openSdZ("/forum/sujet/" + notif.thread + "/" + notif.messageId);
+                            break;
                     }
                 }
                 
@@ -152,6 +155,9 @@ Notificateur.prototype = {
                     case("roadmap"): //roadmap
                         this.openSdZ("/p/roadmap-du-site-du-zero");
                         break;
+                    case("alerte"): //roadmap
+                        this.openSdZ("/forum/sujet/" + notif.thread + "/" + notif.messageId);
+                        break;
                 }
             }
             
@@ -167,7 +173,7 @@ Notificateur.prototype = {
     
     check: function() {
         var self = this;
-        $.get(this.url, this.loadCallback.bind(this), "text").error(function() {
+        $.get(this.url, this.loadCallbackV2.bind(this), "text").error(function() {
             //si jamais la requete plante (pas d'internet, 404 ou autre 500...)
             chrome.browserAction.setBadgeText({text: "err"});
             chrome.browserAction.setIcon({"path":"icons/icone_38_logout.png"});
@@ -188,6 +194,12 @@ Notificateur.prototype = {
         else {
             return this.notifications;
         }
+    },
+    
+    cleaning : function cleaning(data) {
+    	data = data.replace(/<img[^>]*>/gi,""); //vire les images
+    	//data.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,''); //vire le javascript
+    	return data;
     },
     
     //ancien "verifNotif()"
@@ -237,7 +249,7 @@ Notificateur.prototype = {
             oldNotifs = this.notifications, // Ancienne liste
             removedNotifs = [], // Notifs enlevées
             notifsList = []; // Nouvelle liste
-        
+            
         for(var i = 0; i < notifications.length; i++) {
             var notif = $(notifications[i]),
                 notifLink = notif.find("a.link").attr('href'),
@@ -280,6 +292,223 @@ Notificateur.prototype = {
             
             notifsList.push(notifObj);
         }
+        
+        // Check les notifications "alertes" des modos
+        notifications = $data.find("ul.alertsList li.notification");
+        newNotifs = []; // Liste des nouvelles notifications
+        removedNotifs = []; // Notifs enlevées
+ 
+        for(var i = 0; i < notifications.length-1; i++) { //-1 our pas avoir le lien "toutes les alertes"
+            var notif = $(notifications[i]),
+                notifLink = notif.find("a.linkAlert").attr('href'),
+                archiveLink = notifLink; //pas de lien d'archives pour les alertes
+
+            var notifObj = {
+                id: "alerte-"+notifLink.substr(notifLink.lastIndexOf("/") + 1),
+                title: notif.find("li.title").text(),
+                date: notif.find("li.date").text(),
+                messageId: notifLink.substr(notifLink.lastIndexOf("/") + 1),
+                thread: notifLink.substr(13, notifLink.lastIndexOf("/") - 13),
+                type: "alerte" //si c'est un badge
+                /* type de notif :
+                                                   - forum
+                                                   - badge
+                                                   - MP
+                                                   - roadmap
+                                                   - alerte
+                                            */
+            };
+
+            var existingNotif = this.getNotification(notifObj.id);
+            if(existingNotif) {
+                $.extend(notifObj, existingNotif);
+            }
+            else {
+                newNotifs.push(notifObj);
+                this.newNotifCallback && this.newNotifCallback(notifObj);
+            }
+            
+            if(!existingNotif)
+                this.showDesktopNotif(notifObj);
+                        
+            notifsList.push(notifObj);
+        }
+        
+        
+        
+        
+        
+        
+        
+        this.notifications = notifsList;
+        if(this.roadmapNotif)
+            this.notifications.push(this.roadmapNotif);
+        
+        for(var i = 0; i < oldNotifs.length; i++) { // Faire la liste des notifs enlevées
+            var exists = false;
+            for(var j = 0; j < this.notifications.length; j++) {
+                if(oldNotifs[i].id == this.notifications[j].id) {
+                    exists = true;
+                    break;
+                }
+            }
+            if(!exists) {
+                removedNotifs.push(oldNotifs[i]);
+                this.removeNotifCallback && this.removeNotifCallback(oldNotifs[i]);
+            }
+        }
+        
+        console.log("Update", {
+            newNotifs: newNotifs,
+            removedNotifs: removedNotifs,
+            notifs: this.notifications
+        });
+        
+        this.clearDesktopNotifs(removedNotifs);
+        
+        //set le texte du badge
+        this.updateBadge();
+    },
+    
+    //ancien "verifNotif()"
+    loadCallbackV2: function(data) {
+
+        var self = this,
+            data = this.cleaning(data),
+            $data = $(data),
+            loginBox = $data.find("div#login");
+            console.log(loginBox);
+        
+        
+        //on est pas connecté !
+        if(loginBox.length != 0) {
+            if(this.logged) {
+                chrome.browserAction.setBadgeText({text: ""});
+                chrome.browserAction.setIcon({"path":"icons/icone_38_logout.png"});
+                chrome.browserAction.disable();
+                chrome.alarms.clear('refresh');
+                this.logged = false;
+            }
+            return;
+        } else {
+            if(!this.logged) {
+                chrome.browserAction.enable();
+                chrome.browserAction.setIcon({"path":"icons/icone_38.png"});
+                chrome.alarms.create('refresh', {periodInMinutes: parseInt(this.options.updateInterval)});
+                chrome.alarms.onAlarm.addListener(this.listeners.alarm.bind(this));
+                this.logged = true;
+            }
+        }
+        
+        // Check les MPs
+        var MPs = $data.find("ul.privateMessagesList"),
+            newMPs = [], // Liste des nouvelles notifications
+            oldMPs = this.notifications, // Ancienne liste
+            removedMPs = [], // Notifs enlevées
+            MPsList = []; // Nouvelle liste
+            
+         //a remplir, besoin de plus de donnée concernant les MPs
+            
+            
+            
+            
+        
+        // Check les notifications
+        var notifications = $data.find("div#scrollMe ul.list li.notification"),
+            newNotifs = [], // Liste des nouvelles notifications
+            oldNotifs = this.notifications, // Ancienne liste
+            removedNotifs = [], // Notifs enlevées
+            notifsList = []; // Nouvelle liste
+            
+        for(var i = 0; i < notifications.length; i++) {
+            var notif = $(notifications[i]),
+                notifLink = notif.find("a.link").attr('href'),
+                archiveLink = notif.find("a.delete").attr('href');
+            
+            var notifObj = {
+                id: archiveLink.substr(archiveLink.lastIndexOf("/") + 1),
+                title: notif.find("li.title").text(),
+                date: notif.find("li.date").text(),
+                messageId: notifLink.substr(notifLink.lastIndexOf("/") + 1),
+                thread: notifLink.substr(13, notifLink.lastIndexOf("/") - 13),
+                type: notif.find("a.badgeSdz").text().length==0 ? "forum" : "badge" //si c'est un badge
+                /* type de notif :
+                                                   - forum
+                                                   - badge
+                                                   - MP
+                                                   - roadmap
+                                            */
+            };
+                        
+            var existingNotif = this.getNotification(notifObj.id);
+            if(existingNotif) {
+                $.extend(notifObj, existingNotif);
+            }
+            else {
+                newNotifs.push(notifObj);
+                this.newNotifCallback && this.newNotifCallback(notifObj);
+            }
+            
+            if(this.options.useDetailedNotifs && !notifObj.detailed && (notifObj.type == "forum")) {
+                this.fetchNotificationDetails(notifObj, function(newNotif) {
+                    $.extend(notifObj, newNotif);
+                    console.log("Detail fectched", newNotif);
+                    self.showDesktopNotif(notifObj);
+                });
+            }
+            else if(!existingNotif) {
+                this.showDesktopNotif(notifObj);
+            }
+            
+            notifsList.push(notifObj);
+        }
+        
+        // Check les notifications "alertes" des modos
+        notifications = $data.find("ul.alertsList li.notification");
+        newNotifs = []; // Liste des nouvelles notifications
+        removedNotifs = []; // Notifs enlevées
+ 
+        for(var i = 0; i < notifications.length-1; i++) { //-1 our pas avoir le lien "toutes les alertes"
+            var notif = $(notifications[i]),
+                notifLink = notif.find("a.linkAlert").attr('href'),
+                archiveLink = notifLink; //pas de lien d'archives pour les alertes
+
+            var notifObj = {
+                id: "alerte-"+notifLink.substr(notifLink.lastIndexOf("/") + 1),
+                title: notif.find("li.title").text(),
+                date: notif.find("li.date").text(),
+                messageId: notifLink.substr(notifLink.lastIndexOf("/") + 1),
+                thread: notifLink.substr(13, notifLink.lastIndexOf("/") - 13),
+                type: "alerte" //si c'est un badge
+                /* type de notif :
+                                                   - forum
+                                                   - badge
+                                                   - MP
+                                                   - roadmap
+                                                   - alerte
+                                            */
+            };
+
+            var existingNotif = this.getNotification(notifObj.id);
+            if(existingNotif) {
+                $.extend(notifObj, existingNotif);
+            }
+            else {
+                newNotifs.push(notifObj);
+                this.newNotifCallback && this.newNotifCallback(notifObj);
+            }
+            
+            if(!existingNotif)
+                this.showDesktopNotif(notifObj);
+                        
+            notifsList.push(notifObj);
+        }
+        
+        
+        
+        
+        
+        
         
         this.notifications = notifsList;
         if(this.roadmapNotif)
@@ -351,6 +580,10 @@ Notificateur.prototype = {
                     case("roadmap"):
                         boutons[0] = { title: "Voir la roadmap" };
                         icone = "icons/big_roadmap.png";
+                        break;
+                    case("alerte"):
+                        boutons[0] = { title: "Voir l'alerte" };
+                        icone = "icons/big_alerte.png";
                         break;
                 }
                 var notifOptions = { // Options des notifications
