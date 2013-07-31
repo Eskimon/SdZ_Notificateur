@@ -80,7 +80,7 @@
                     value = "Très important";
                     break;
             }
-            $(e.target).parent().find(".value").text(value);
+            $(e.currentTarget).parent().find(".value").text(value);
         }).trigger("change");
     },
     

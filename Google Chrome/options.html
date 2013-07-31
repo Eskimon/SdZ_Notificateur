@@ -17,52 +17,62 @@
             </header>
             <div class="container">
                 <div class="options">
-                    <p class="champ">
+                    <div class="champ">
                         <label for="interval">Interval de rafraîchissement (en minutes) </label>
                         <input type="number" name="interval" id="interval" min="1" max="60" placeholder=" min." required/>
-                    </p>
-                    <p class="champ">
+                    </div>
+                    <div class="champ">
                         <label for="openListe"><input type="checkbox" name="openListe" id="openListe" /> Ouvrir une liste de notifications?</label>
                         <span class="complement">Sinon, un click ouvrira l'accueil du SdZ</span>
-                    </p>
+                    </div>
                     <div class="sub">
-                        <p class="champ">
+                        <div class="champ">
                             <label for="newTab"><input type="checkbox" name="newTab" id="newTab" /> Ouvrir les liens dans un nouvel onglet ?</label>
                             <span class="complement">Ouvrira les notifications dans un nouvel onglet si la page courante n'est pas une page du SdZ</span>
-                        </p>
-                        <p class="champ">
+                        </div>
+                        <div class="champ">
                             <label for="allNotifs"><input type="checkbox" name="allNotifs" id="allNotifs"/> Afficher une ligne "Toutes mes notifications" ?</label>
-                        </p>
+                        </div>
                     </div>
-                    <p id="notifSpan" class="champ">
+                    <div id="notifSpan" class="champ">
                         <label for="notifNative"><input type="checkbox" name="notifNative" id="notifNative" /> Afficher les notification du bureau ?</label>
                         <span class="complement">Attention, cette option à un comportement incomplet sur Linux et Mac (limitation de Chrome)</span>
-                    </p>
+                    </div>
                     <div class="sub">
-                        <p class="champ">
+                        <div class="champ">
                             <label for="detailedNotifs"><input type="checkbox" name="detailedNotifs" id="detailedNotifs"/> Utiliser des notifications d&eacute;taill&eacute;es ?</label>
                             <span class="complement"><span class="experimental">EXPERIMENTAL</span> Les notifications afficheront plus d'informations (plus long &agrave; charger)</span>
-                        </p>
-                        <p class="champ priority">
-                            <label for="priorityNotif">Priorité des notifications (<strong>forum</strong>)</label>
-                            <span class="complement">Les notifications seront plus ou mois visibles</span>
-                            <input type="range" name="priorityNotif" id="priorityNotif" min="-2" max="2" step="1" value="0" />
-                            <span class="value"></span>
-                        </p>
+                        </div>
+                        <div class="champ priority">
+                            <div class="pull-left">
+                                <label for="priorityNotif">Priorité des notifications (<strong>Forum</strong>)</label>
+                                <span class="complement">Les notifications seront plus ou mois visibles</span>
+                            </div>
+                            <div class="pull-right">
+                                <input type="range" name="priorityNotif" id="priorityNotif" min="-2" max="2" step="1" value="0" />
+                                <div class="value"></div>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
                     
-                        <p class="champ priority">
-                            <label for="priorityMP">Priorité des notifications (<strong>MP</strong>)</label>
-                            <span class="complement">Les notifications seront plus ou mois visibles</span>
-                            <input type="range" name="priorityMP" id="priorityMP" min="-2" max="2" step="1" value="0" />
-                            <span class="value"></span>
-                        </p>
+                        <div class="champ priority">
+                            <div class="pull-left">
+                                <label for="priorityMP">Priorité des notifications (<strong>MP</strong>)</label>
+                                <span class="complement">Les notifications seront plus ou mois visibles</span>
+                            </div>
+                            <div class="pull-right">
+                                <input type="range" name="priorityMP" id="priorityMP" min="-2" max="2" step="1" value="0" />
+                                <div class="value"></div>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
                     </div>
                     <input type="button" id="enregistrer" value="Enregistrer" />
                     <div class="clear"></div>
                 </div>
                 <div id="connecteComme" class="options">
                     <a href="#">
-                        <p>Vous êtes connecté(e) au site du zéro en tant que : <strong>(chargement...)</strong></p>
+                        <div>Vous êtes connecté(e) au site du zéro en tant que : <strong>(chargement...)</strong></div>
                         <img src="" >
                     </a>
                 </div>

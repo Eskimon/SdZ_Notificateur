@@ -12,6 +12,19 @@ body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+.pull-right {
+    float: right;
+}
+
+.pull-left {
+    float: left;
+}
+
+.clear {
+    clear: both;
+    height: 0!important;
+}
+
 header {
     background: #002d40;
     border-bottom: 4px solid #03638b;
@@ -37,10 +50,6 @@ header {
     padding: 20px;
     box-shadow: 0 3px 2px rgba(0, 0, 0, 0.1);
     margin-bottom : 20px;
-}
-
-.clear {
-    clear: both;
 }
 
 body > .content {
@@ -114,12 +123,25 @@ input[type="number"]:focus {
     font-weight: bold;
 }
 
-input[type="range"] {
-    margin: 5px 10px 0 0;
+.priority > div {
+    height: 32px;
 }
 
-span.value {
+.priority .value {
+    line-height: 32px;
     font-size: 11px;
+    float: right;
+    width: 100px;
+}
+
+.priority .pull-right {
+    width: 240px;
+    height: 32px;
+}
+
+.priority input[type="range"] {
+    height: 32px;
+    width: 130px;
 }
 
 footer {
