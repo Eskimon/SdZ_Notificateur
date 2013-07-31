@@ -18,7 +18,7 @@
             <div class="container">
                 <div class="options">
                     <div class="champ">
-                        <label for="interval">Interval de rafraîchissement (en minutes) </label>
+                        <label for="interval">Intervalle de rafraîchissement (en minutes) </label>
                         <input type="number" name="interval" id="interval" min="1" max="60" placeholder=" min." required/>
                     </div>
                     <div class="champ">
@@ -28,7 +28,7 @@
                     <div class="sub">
                         <div class="champ">
                             <label for="newTab"><input type="checkbox" name="newTab" id="newTab" /> Ouvrir les liens dans un nouvel onglet ?</label>
-                            <span class="complement">Ouvrira les notifications dans un nouvel onglet si la page courante n'est pas une page du SdZ</span>
+                            <span class="complement">Les notifications s'ouvrent de toutes façons dans un nouvel onglet si la page courante n'est pas une page du SdZ</span>
                         </div>
                         <div class="champ">
                             <label for="allNotifs"><input type="checkbox" name="allNotifs" id="allNotifs"/> Afficher une ligne "Toutes mes notifications" ?</label>
@@ -36,9 +36,9 @@
                     </div>
                     <div id="notifSpan" class="champ">
                         <label for="notifNative"><input type="checkbox" name="notifNative" id="notifNative" /> Afficher les notification du bureau ?</label>
-                        <span class="complement">Attention, cette option à un comportement incomplet sur Linux et Mac (limitation de Chrome)</span>
+                        <span class="complement">Attention, cette option a un comportement incomplet sur Linux et Mac (limitation de Chrome)</span>
                     </div>
-                    <div class="sub">
+                    <div class="sub subNotifFields">
                         <div class="champ">
                             <label for="detailedNotifs"><input type="checkbox" name="detailedNotifs" id="detailedNotifs"/> Utiliser des notifications d&eacute;taill&eacute;es ?</label>
                             <span class="complement"><span class="experimental">EXPERIMENTAL</span> Les notifications afficheront plus d'informations (plus long &agrave; charger)</span>
@@ -46,7 +46,7 @@
                         <div class="champ priority">
                             <div class="pull-left">
                                 <label for="priorityNotif">Priorité des notifications (<strong>Forum</strong>)</label>
-                                <span class="complement">Les notifications seront plus ou mois visibles</span>
+                                <span class="complement">Les notifications seront plus ou moins visibles</span>
                             </div>
                             <div class="pull-right">
                                 <input type="range" name="priorityNotif" id="priorityNotif" min="-2" max="2" step="1" value="0" />
@@ -72,7 +72,7 @@
                 </div>
                 <div id="connecteComme" class="options">
                     <a href="#">
-                        <div>Vous êtes connecté(e) au site du zéro en tant que : <strong>(chargement...)</strong></div>
+                        <div>Vous êtes connecté(e)<!-- le (e) pour les 1% de filles sur le SdZ ^^--> au Site du Zéro en tant que <strong>(chargement...)</strong></div>
                         <img src="" >
                     </a>
                 </div>

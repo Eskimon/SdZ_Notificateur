@@ -43,6 +43,11 @@ header {
 
 .champ {
     padding: 5px 0;
+    -webkit-transition: color .1s ease-in-out;
+}
+
+.disabled .champ {
+    color: #CCC;
 }
 
 .options {
@@ -102,6 +107,11 @@ input[type="number"]:focus {
     border-color: #6bb4bf;
 }
 
+input[type="checkbox"] {
+    margin: 4px 4px 0 0;
+    float: left;
+}
+
 .complement {
 	color: #999;
 	font-size: 10px;
@@ -121,6 +131,11 @@ input[type="number"]:focus {
 .experimental {
     color: #df3716; 
     font-weight: bold;
+    -webkit-transition: color .1s ease-in-out;
+}
+
+.disabled .experimental {
+    color: #e09f92;
 }
 
 .priority > div {

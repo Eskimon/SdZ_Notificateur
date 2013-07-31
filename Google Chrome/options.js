@@ -4,7 +4,7 @@
         
         this.elems = {
             updateInterval: document.getElementById('interval'),
-			openListe: document.getElementById('openListe'),
+            openListe: document.getElementById('openListe'),
             openInNewTab: document.getElementById("newTab"),
             showAllNotifButton: document.getElementById("allNotifs"),
             showDesktopNotif: document.getElementById("notifNative"),
@@ -59,7 +59,15 @@
         this.elems['openInNewTab'].disabled = etat;
         this.elems['showAllNotifButton'].disabled = etat;
         
-        this.elems['useDetailedNotifs'].disabled = !this.elems['showDesktopNotif'].checked;
+        //this.elems['useDetailedNotifs'].disabled = !this.elems['showDesktopNotif'].checked;
+        if(this.elems['showDesktopNotif'].checked) {
+            $(".subNotifFields").removeClass("disabled");
+            $(".subNotifFields input").attr("disabled", false);
+        }
+        else {
+            $(".subNotifFields").addClass("disabled");
+            $(".subNotifFields input").attr("disabled", true);
+        }
         
         $(".priority input").on("change", function(e) {
             var value = "Erreur";
