@@ -18,3 +18,32 @@ var elem = document.getElementById("notifications");
 elem.click();
 elem.click();
 */
+
+// KONAMI!
+var keys = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65],
+    current = 0;
+
+document.addEventListener("keydown", function(e) {
+    if(e.which == keys[current]) {
+        current++;
+    }
+    else {
+        current = 0;
+    }
+    
+    if(current >= keys.length) {
+        setInterval(function() {
+            var i = document.createElement("img"),
+                h = window.innerHeight,
+                w = window.innerWidth;
+            i.src = "http://www.siteduzero.com/uploads/fr/ftp/iphone/zozor.png";
+            i.style.position = "fixed";
+            i.style.top = (Math.floor(Math.random() * (h - 480))) + "px";
+            i.style.right = (Math.floor(Math.random() * (w - 320))) + "px";
+            i.style.zIndex = 2000;
+            document.body.appendChild(i);
+            console.log("Konami");
+        }, 100);
+        current = 0;
+    }
+}, false);
