@@ -100,15 +100,15 @@ Notificateur.prototype = {
             if(button == 0) { // Open last message
                 if(notif) {
                     switch(notif.type) {
-                        case(0): //normal
+                        case("forum"): //normal
                             this.openSdZ("/forum/sujet/" + notif.thread + "/" + notif.messageId);
                             break;
-                        case(1): //badge
+                        case("badge"): //badge
                             this.openSdZ("/membres/" + notif.messageId);
                             break;
-                        case(2): //MP
+                        case("mp"): //MP
                             break;
-                        case(3): //roadmap
+                        case("roadmap"): //roadmap
                             this.openSdZ("/p/roadmap-du-site-du-zero");
                             break;
                     }
@@ -133,15 +133,15 @@ Notificateur.prototype = {
             var notif = this.getNotification(parseInt(notifId));
             if(notif) {
                 switch(notif.type) {
-                    case(0): //normal
+                    case("forum"): //normal
                         this.openSdZ("/forum/sujet/" + notif.thread + "/" + notif.messageId);
                         break;
-                    case(1): //badge
+                    case("badge"): //badge
                         this.openSdZ("/membres/" + notif.messageId);
                         break;
-                    case(2): //MP
+                    case("mp"): //MP
                         break;
-                    case(3): //roadmap
+                    case("roadmap"): //roadmap
                         this.openSdZ("/p/roadmap-du-site-du-zero");
                         break;
                 }
@@ -241,12 +241,12 @@ Notificateur.prototype = {
                 date: notif.find("li.date").text(),
                 messageId: notifLink.substr(notifLink.lastIndexOf("/") + 1),
                 thread: notifLink.substr(13, notifLink.lastIndexOf("/") - 13),
-                type: notif.find("a.badgeSdz").text().length==0 ? 0 : 1 //si c'est un badge
+                type: notif.find("a.badgeSdz").text().length==0 ? "forum" : "badge" //si c'est un badge
                 /* type de notif :
-                                                   0 - normal
-                                                   1 - badge
-                                                   2 - MP
-                                                   3 - roadmap
+                                                   - forum
+                                                   - badge
+                                                   - MP
+                                                   - roadmap
                                             */
             };
                         
@@ -259,7 +259,7 @@ Notificateur.prototype = {
                 this.newNotifCallback && this.newNotifCallback(notifObj);
             }
             
-            if(this.options.useDetailedNotifs && !notifObj.detailed && (notifObj.type == 0)) {
+            if(this.options.useDetailedNotifs && !notifObj.detailed && (notifObj.type == "forum")) {
                 this.fetchNotificationDetails(notifObj, function(newNotif) {
                     $.extend(notifObj, newNotif);
                     console.log("Detail fectched", newNotif);
@@ -310,7 +310,7 @@ Notificateur.prototype = {
         }
         
         if(chrome.notifications && this.options.showDesktopNotif) {
-            if(this.options.useDetailedNotifs && notif.detailed && (notif.type == 0)) {
+            if(this.options.useDetailedNotifs && notif.detailed && (notif.type == "forum")) {
                 var notifOptions = {};
                 
                 chrome.notifications.create(notif.id, {
@@ -325,20 +325,20 @@ Notificateur.prototype = {
                 var boutons = new Array();
                 var icone = "";
                 switch(notif.type) {
-                    case(0):
+                    case("forum"):
                         boutons[0] = { title: "Voir le message" };
                         boutons[1] = { title: "Voir le début du thread" };
                         icone = "icons/big_message.png";
                         break;
-                    case(1):
+                    case("badge"):
                         boutons[0] = { title: "Voir les badges" };
                         icone = "icons/big_badge.png";
                         break;
-                    case(2):
+                    case("mp"):
                         boutons[0] = { title: "Voir le MP" };
                         icone = "icons/big_mp.png";
                         break;
-                    case(3):
+                    case("roadmap"):
                         boutons[0] = { title: "Voir la roadmap" };
                         icone = "icons/big_roadmap.png";
                         break;
@@ -567,7 +567,7 @@ Notificateur.prototype = {
                     date: dateEdit,
                     messageId: "",
                     thread: "",
-                    type: 3 //type roadmap
+                    type: "roadmap" //type roadmap
                 };
                 
                 self.newNotifCallback && self.newNotifCallback(notifObj);
@@ -576,6 +576,8 @@ Notificateur.prototype = {
                 self.showDesktopNotif(notifObj); //on montre la notif de bureau
                 //mise à jour du storage pour cette info (pas encore actif pour moins d'emmerdes lors des tests)
                 //this.storage.set({lastEdit: dateEdit});
+                
+                //TODO Fix bug supposé ligne 276 : add .push et test
             }
         });
     },
@@ -585,7 +587,7 @@ Notificateur.prototype = {
             len = notifs.length,
             totMP = 0;
         for(var i=0; i<len; i++)
-            if(notifs[i].type == 2)
+            if(notifs[i].type == "mp")
                 totMP++;
                 
         var badgeTexte = (totMP > 0) ? totMP.toString() + " - " : "";
