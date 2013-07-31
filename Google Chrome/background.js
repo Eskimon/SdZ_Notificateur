@@ -78,9 +78,11 @@ Notificateur.prototype = {
                     });
                     //on attend une seconde pour que le script soit injecté puis on check de nouveau les notifs pour mettre à jour le badge
                     setTimeout(this.check.bind(this),1000);
-                } else if(tab.url.indexOf("roadmap") != -1) {// cas de la roadmap
-                    delete this.notifications[this.getNotification("roadmap")];
-                    delete this.roadmapNotif;
+                } else if(tab.url.indexOf("/p/roadmap") != -1) {// cas de la roadmap
+                    if(this.roadmapNotif) { //on supprime que si c'est nécessaire
+                        delete this.notifications[this.getNotification("roadmap")];
+                        delete this.roadmapNotif;
+                    }
                     this.check();
                 } else if(tab.url.indexOf("/mp/") != -1) { //cas des MP
                     this.check();
