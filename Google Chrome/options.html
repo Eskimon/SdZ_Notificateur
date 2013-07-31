@@ -44,16 +44,18 @@
                             <span class="complement"><span class="experimental">EXPERIMENTAL</span> Les notifications afficheront plus d'informations (plus long &agrave; charger)</span>
                         </p>
                     </div>
-                    <p class="champ">
+                    <p class="champ priority">
                         <label for="priorityNotif">Priorité des notifications (forum)</label>
                         <span class="complement">Les notifications seront plus ou mois visibles</span>
-                        <input type="range" min="-2" max="2" step="1" value="0" />
+                        <input type="range" name="priorityNotif" id="priorityNotif" min="-2" max="2" step="1" value="0" />
+                        <span class="value"></span>
                     </p>
                     
-                    <p class="champ">
-                        <label for="priorityNotif">Priorité des notifications (MP)</label>
+                    <p class="champ priority">
+                        <label for="priorityMP">Priorité des notifications (MP)</label>
                         <span class="complement">Les notifications seront plus ou mois visibles</span>
-                        <input type="range" min="-2" max="2" step="1" value="0" />
+                        <input type="range" name="priorityMP" id="priorityMP" min="-2" max="2" step="1" value="0" />
+                        <span class="value"></span>
                     </p>
                     
                     <input type="button" id="enregistrer" value="Enregistrer" />
