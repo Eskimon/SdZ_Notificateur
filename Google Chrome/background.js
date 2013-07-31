@@ -26,6 +26,7 @@ Notificateur.prototype = {
     init: function() {
         this.notifications = []; //tableau stockant les notifs
         this.MPs = []; //tableau stockant les MPs
+        chrome.browserAction.enable(); //sinon un concours de circonstance pourrait nous faire démarrer avec une icone disable
         this.loadOptions(function() {
     		//action lorsqu'on click sur le bouton (affichage liste ou chargement SdZ
     		if(!this.options.openListe) { //soit on ouvre le SdZ
