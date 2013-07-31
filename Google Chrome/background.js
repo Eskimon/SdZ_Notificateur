@@ -468,7 +468,7 @@ Notificateur.prototype = {
                     title: notif.title,
                     message: notif.date,
                     buttons: boutons,
-                    priority: priority
+                    priority: parseInt(priority)
                 };
                 
                 chrome.notifications.create(notif.id, notifOptions, function() {});
