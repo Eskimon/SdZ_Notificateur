@@ -12,28 +12,34 @@ body {
 }
 
 .element {
-    padding: 8px 8px 8px 30px;
-    margin: 0px 1px 1px 1px;
+    padding: 8px 10px 8px 30px;
+    margin: 0px 0px 1px 1px;
+    border-right: solid 8px;
 }
 
 .element.message {
     background: url('icons/bulle.png') no-repeat 7px 16px;
+    border-color: green;
 }
 
 .element.badge {
     background: url('icons/badge.png') no-repeat 7px 14px;
+    border-color: blue;
 }
 
 .element.roadmap {
     background: url('icons/roadmap.png') no-repeat 7px 14px;
+    border-color: yellow;
 }
 
 .element.alerte {
     background: url('icons/alerte.png') no-repeat 7px 14px;
+    border-color: red;
 }
 
 .element.mp {
     background: url('icons/mp.png') no-repeat 7px 14px;
+    border-color: white;
 }
 
 .allNotifs, .noNotifs {
