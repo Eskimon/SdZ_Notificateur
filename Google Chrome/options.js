@@ -69,6 +69,15 @@
             $(".subNotifFields input").attr("disabled", true);
         }
         
+        if(this.elems['openListe'].checked) {
+            $(".subPopupFields").removeClass("disabled");
+            $(".subPopupFields input").attr("disabled", false);
+        }
+        else {
+            $(".subPopupFields").addClass("disabled");
+            $(".subPopupFields input").attr("disabled", true);
+        }
+        
         $(".priority input").on("change", function(e) {
             var value = "Erreur";
             switch(parseInt(e.target.value)) {
