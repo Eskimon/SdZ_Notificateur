@@ -1,3 +1,29 @@
+var linkListener = function(event) {
+    event.preventDefault();
+    var url = $(this).attr("href");
+    chrome.windows.getCurrent({ populate: true }, function(currentWindow) {
+        var tab = false;
+        for(var i in currentWindow.tabs) {
+            if(currentWindow.tabs[i].active) {
+                tab = currentWindow.tabs[i];
+                break;
+            }
+        }
+        
+        if(!notificator.getOptions("openInNewTab") && tab && tab.url !== undefined && tab.url.indexOf("siteduzero.com") != -1 && tab.url.indexOf("siteduzero.com") < 14) {
+            chrome.tabs.update(tab.id, { url: url });
+        }
+        else {
+            chrome.tabs.create({
+                'url': url,
+                'active': false
+            });
+        }
+    });
+    //si c'est la notification de la roadmap, traitement spécial !
+}
+
+
 document.addEventListener('DOMContentLoaded', function () {
     chrome.runtime.getBackgroundPage(function(bgWindow) {
         var notificator = bgWindow.theNotificator,
@@ -56,30 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
         
         var liens = document.getElementsByTagName("a");
         for (var i = 0; i < liens.length; i++) {
-            liens[i].addEventListener("click", function (event) {
-                event.preventDefault();
-                var url = this.href;
-                chrome.windows.getCurrent({ populate: true }, function(currentWindow) {
-                    var tab = false;
-                    for(var i in currentWindow.tabs) {
-                        if(currentWindow.tabs[i].active) {
-                            tab = currentWindow.tabs[i];
-                            break;
-                        }
-                    }
-                    
-                    if(!notificator.getOptions("openInNewTab") && tab && tab.url !== undefined && tab.url.indexOf("siteduzero.com") != -1 && tab.url.indexOf("siteduzero.com") < 14) {
-                        chrome.tabs.update(tab.id, { url: url });
-                    }
-                    else {
-                        chrome.tabs.create({
-                            'url': url,
-                            'active': false
-                        });
-                    }
-                });
-                //si c'est la notification de la roadmap, traitement spécial !
-            }, false);
+            $(liens[i]).on("click", linkListener);
         }
         
         notificator.setNewNotifCallback(function(notif) {
@@ -93,6 +96,7 @@ document.addEventListener('DOMContentLoaded', function () {
             
             $("<div>", { class: "titre" }).text(notif["title"]).appendTo(notifLink);
             $("<div>", { class: "date" }).text(notif["date"]).appendTo(notifLink);
+            notifLink.on("click", notifLink);
         });
         
         notificator.setRemoveNotifCallback(function(notif) {
