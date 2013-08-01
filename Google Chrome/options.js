@@ -55,11 +55,6 @@
     },
     
     toggle: function() {
-        var etat = !this.elems['openListe'].checked;
-        this.elems['openInNewTab'].disabled = etat;
-        this.elems['showAllNotifButton'].disabled = etat;
-        
-        //this.elems['useDetailedNotifs'].disabled = !this.elems['showDesktopNotif'].checked;
         if(this.elems['showDesktopNotif'].checked) {
             $(".subNotifFields").removeClass("disabled");
             $(".subNotifFields input").attr("disabled", false);
