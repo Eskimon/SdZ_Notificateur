@@ -1,5 +1,6 @@
 var url = document.URL;
-url = url.slice(0,url.indexOf("?")) + "/" + url.slice(url.lastIndexOf("-")+1);
+if((url.indexOf("/membres/") == -1) && (url.indexOf("#badges") == -1)) //si on est pas sur la page pour les badges
+    url = url.slice(0,url.indexOf("?")) + "/" + url.slice(url.lastIndexOf("-")+1);
 var els = document.getElementsByTagName("a");
 var len = els.length;
 var target = false;
