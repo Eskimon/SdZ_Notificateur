@@ -14,10 +14,27 @@
         };
         
         document.getElementById("enregistrer").addEventListener("click", this.save.bind(this));
+        this.elems["updateInterval"].addEventListener("keyup", this.checkInput.bind(this));
         this.elems["openListe"].addEventListener("click", this.toggle.bind(this));
         this.elems["showDesktopNotif"].addEventListener("click", this.toggle.bind(this));
         
         this.load();
+    },
+    
+    oldValue: 5,
+    
+    checkInput: function(evt) {
+        var val = this.elems["updateInterval"].value;
+        if(val == '')
+            this.elems["updateInterval"].value = this.oldValue;
+        else {
+            if(parseInt(val) > 60) {
+                this.elems["updateInterval"].value = 60;
+                this.oldValue = 60;
+            } else {
+                this.oldValue = val;
+            }
+        }
     },
     
     save: function() {
@@ -41,7 +58,7 @@
             }
         }
         this.toggle();
-        
+        this.oldValue = this.elems['updateInterval'].value;
         this.checkAvatar();
     },
     
