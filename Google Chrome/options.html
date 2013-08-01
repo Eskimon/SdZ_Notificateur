@@ -58,7 +58,7 @@
                         <div class="champ priority">
                             <div class="pull-left">
                                 <label for="priorityMP">Priorité des notifications (<strong>MP</strong>)</label>
-                                <span class="complement">Les notifications seront plus ou mois visibles</span>
+                                <span class="complement">Les notifications seront plus ou moins visibles</span>
                             </div>
                             <div class="pull-right">
                                 <input type="range" name="priorityMP" id="priorityMP" min="-2" max="2" step="1" value="0" />
@@ -66,6 +66,10 @@
                             </div>
                             <div class="clear"></div>
                         </div>
+                    </div>
+                    <div class="champ">
+                        <label for="playSon"><input type="checkbox" name="playSon" id="playSon" /> Jouer un son lors d'une nouvelle notification ?</label>
+                        <span class="complement">Un son sera joué pour vous alerter d'une nouvelle notification</span>
                     </div>
                     <input type="button" id="enregistrer" value="Enregistrer" />
                     <div class="clear"></div>

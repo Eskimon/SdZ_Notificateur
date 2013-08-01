@@ -10,7 +10,8 @@
             showDesktopNotif: document.getElementById("notifNative"),
             useDetailedNotifs: document.getElementById("detailedNotifs"),
             notifPriority: document.getElementById("priorityNotif"),
-            mpPriority: document.getElementById("priorityMP")
+            mpPriority: document.getElementById("priorityMP"),
+            mpPriority: document.getElementById("playSon")
         };
         
         document.getElementById("enregistrer").addEventListener("click", this.save.bind(this));

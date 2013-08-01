@@ -18,7 +18,8 @@ Notificateur.prototype = {
         useDetailedNotifs: false,
         lastEdit: "",
         notifPriority: 0,
-        mpPriority: 0
+        mpPriority: 0,
+        playSon: false
     },
     
     storage: chrome.storage.sync,
