@@ -13,11 +13,10 @@ body {
 
 .element {
     padding: 8px 10px 8px 30px;
-    margin: 0px 0px 1px 1px;
     border-right: solid 8px;
 }
 
-.element.message {
+.element.forum {
     background: url('icons/bulle.png') no-repeat 7px 16px;
     border-color: green;
 }

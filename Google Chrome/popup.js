@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 
                 switch(notifs[i].type) {
                     case("forum"): //message
-                        elem = $("<div>", { class: "element message", id: "notif-" + notifs[i].id }).appendTo(notifList);
+                        elem = $("<div>", { class: "element forum", id: "notif-" + notifs[i].id }).appendTo(notifList);
                         notifLink = $("<a>", { href: 'http://www.siteduzero.com/forum/sujet/' + notifs[i]["thread"] + '/' + notifs[i]["messageId"] }).appendTo(elem);
                         break;
                     case("badge"): //badge
