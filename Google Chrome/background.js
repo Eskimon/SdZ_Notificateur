@@ -71,7 +71,7 @@ Notificateur.prototype = {
     listeners: {
         tabUpdate: function(tabId, changeInfo, tab) {
             if(tab.url !== undefined && tab.url.indexOf("siteduzero.com") != -1 && tab.url.indexOf("siteduzero.com") < 14 && changeInfo.status == "complete") {
-                if(tab.url.indexOf("/forum/sujet/") != -1) {//cas d'une notif de type badge ou forum -> il faut faire l'injection
+                if(tab.url.indexOf("/forum/sujet/") != -1 || tab.url.indexOf("/membres/") != -1) {//cas d'une notif de type badge ou forum -> il faut faire l'injection
                     //attention, se déclenchera aussi pour une alerte de modo (mais c'est pas très grave)
                     chrome.tabs.executeScript(tabId, {
                         file: "injected.js"
