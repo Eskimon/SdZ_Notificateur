@@ -11,7 +11,7 @@
             useDetailedNotifs: document.getElementById("detailedNotifs"),
             notifPriority: document.getElementById("priorityNotif"),
             mpPriority: document.getElementById("priorityMP"),
-            mpPriority: document.getElementById("playSon")
+            playSon: document.getElementById("playSon")
         };
         
         document.getElementById("enregistrer").addEventListener("click", this.save.bind(this));
