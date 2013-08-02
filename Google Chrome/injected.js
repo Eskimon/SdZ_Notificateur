@@ -1,7 +1,7 @@
 var url = document.URL;
 if((url.indexOf("/membres/") == -1) && (url.indexOf("#badges") == -1)) //si on est pas sur la page pour les badges
     url = url.slice(0,url.indexOf("?")) + "/" + url.slice(url.lastIndexOf("-")+1);
-var container = document.getElementsById("lastNotifications"); //on restreint juste aux notifications
+var container = document.getElementById("lastNotifications"); //on restreint juste aux notifications
 var els = container.getElementsByTagName("a");
 var len = els.length;
 var target = false;
