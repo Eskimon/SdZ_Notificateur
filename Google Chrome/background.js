@@ -212,7 +212,7 @@ Notificateur.prototype = {
     
     //ancien "verifNotif()"
     loadCallback: function(data) {
-data = this.fakeData;
+//data = this.fakeData; //pour Debug only
         //ancienne solution car elle marche mieux oO
         var self = this,
             $data = $(data.replace(/<img[^>]*>/gi,"")),
