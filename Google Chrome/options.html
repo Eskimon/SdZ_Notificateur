@@ -43,33 +43,36 @@
                             <label for="detailedNotifs"><input type="checkbox" name="detailedNotifs" id="detailedNotifs"/> Utiliser des notifications d&eacute;taill&eacute;es ?</label>
                             <span class="complement"><span class="experimental">EXPERIMENTAL</span> Les notifications afficheront plus d'informations (plus long &agrave; charger)</span>
                         </div>
-                        <div class="champ priority">
-                            <div class="pull-left">
-                                <label for="priorityNotif">Priorité des notifications (<strong>Forum</strong>)</label>
-                                <span class="complement">Les notifications seront plus ou moins visibles</span>
+                        <div class="hidden">
+                            <div class="champ priority">
+                                <div class="pull-left">
+                                    <label for="priorityNotif">Priorité des notifications (<strong>Forum</strong>)</label>
+                                    <span class="complement">Les notifications seront plus ou moins visibles</span>
+                                </div>
+                                <div class="pull-right">
+                                    <input type="range" name="priorityNotif" id="priorityNotif" min="-2" max="2" step="1" value="0" />
+                                    <div class="value"></div>
+                                </div>
+                                <div class="clear"></div>
                             </div>
-                            <div class="pull-right">
-                                <input type="range" name="priorityNotif" id="priorityNotif" min="-2" max="2" step="1" value="0" />
-                                <div class="value"></div>
+                            <div class="champ priority">
+                                <div class="pull-left">
+                                    <label for="priorityMP">Priorité des notifications (<strong>MP</strong>)</label>
+                                    <span class="complement">Les notifications seront plus ou moins visibles</span>
+                                </div>
+                                <div class="pull-right">
+                                    <input type="range" name="priorityMP" id="priorityMP" min="-2" max="2" step="1" value="0" />
+                                    <div class="value"></div>
+                                </div>
+                                <div class="clear"></div>
                             </div>
-                            <div class="clear"></div>
-                        </div>
-                    
-                        <div class="champ priority">
-                            <div class="pull-left">
-                                <label for="priorityMP">Priorité des notifications (<strong>MP</strong>)</label>
-                                <span class="complement">Les notifications seront plus ou moins visibles</span>
-                            </div>
-                            <div class="pull-right">
-                                <input type="range" name="priorityMP" id="priorityMP" min="-2" max="2" step="1" value="0" />
-                                <div class="value"></div>
-                            </div>
-                            <div class="clear"></div>
                         </div>
                     </div>
-                    <div class="champ">
-                        <label for="playSon"><input type="checkbox" name="playSon" id="playSon" /> Jouer un son lors d'une nouvelle notification ?</label>
-                        <span class="complement">Un son sera joué pour vous alerter d'une nouvelle notification</span>
+                    <div class="hidden">
+                        <div class="champ">
+                            <label for="playSon"><input type="checkbox" name="playSon" id="playSon" /> Jouer un son lors d'une nouvelle notification ?</label>
+                            <span class="complement">Un son sera joué pour vous alerter d'une nouvelle notification</span>
+                        </div>
                     </div>
                     <input type="button" id="enregistrer" value="Enregistrer" />
                     <div class="clear"></div>
