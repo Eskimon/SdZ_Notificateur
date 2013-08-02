@@ -1,4 +1,12 @@
-﻿var notificatorOptions = {
+﻿/**
+ * Notificator Options
+ * @namespace
+ */
+
+var NotificatorOptions = {
+    /**
+     * Init options
+     */
     init: function(_notificator) {
         this.notificator = _notificator;
         
@@ -24,6 +32,10 @@
     
     oldValue: 5,
     
+    /**
+     * Check inputs
+     * @param {Object} [evt] JS Event
+     */
     checkInput: function(evt) {
         var val = this.elems["updateInterval"].value;
         if(val == '')
@@ -38,6 +50,9 @@
         }
     },
     
+    /**
+     * Save options
+     */
     save: function() {
         this.notificator.setOptions(this.getValues(), function() {
             console.log("Options Saved");
@@ -45,6 +60,9 @@
         });
     },
     
+    /**
+     * Load options
+     */
     load: function() {
         this.options = this.notificator.getOptions();
         
@@ -63,6 +81,10 @@
         this.checkAvatar();
     },
     
+    /**
+     * Get inputs value
+     * @returns {Object} The input values
+     */
     getValues: function() {
         var obj = {};
         for(var key in this.elems) {
@@ -72,6 +94,9 @@
         return obj;
     },
     
+    /**
+     * Toggle inputs
+     */
     toggle: function() {
         if(this.elems['showDesktopNotif'].checked) {
             $(".subNotifFields").removeClass("disabled");
@@ -114,10 +139,16 @@
         }).trigger("change");
     },
     
+    /**
+     * Check avatar
+     */
     checkAvatar: function() {
         $.get("http://www.siteduzero.com", this.loadCallback.bind(this), "text");
     },
     
+    /**
+     * Callback when page loaded
+     */
     loadCallback: function(data) {
         var self = this,
             xmlDoc = new DOMParser().parseFromString(data, "text/xml"), 

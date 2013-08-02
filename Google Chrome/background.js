@@ -18,12 +18,24 @@ var Notificateur = function() {
 };
 
 Notificateur.prototype = {
+    /**
+     * SdZ URL
+     */
     url: "http://www.siteduzero.com",
     
+    /**
+     * Roadmap URL
+     */
     roadmap: "http://www.siteduzero.com/p/roadmap-du-site-du-zero",
     
-    logged: true, //savoir si le dernier statut est connecté ou déconnecté
-        
+    /**
+     * If logged in last check
+     */
+    logged: true,
+    
+    /**
+     * Options
+     */  
     options: {
         updateInterval: 5,
 		openListe: true,
@@ -37,9 +49,14 @@ Notificateur.prototype = {
         playSon: false
     },
     
+    /**
+     * chrome.storage
+     */
     storage: chrome.storage.sync,
     
-    /* Init */
+    /**
+     * Init
+     */
     init: function() {
         this.notifications = []; //tableau stockant les notifs
         this.alertTabId = [];
@@ -87,8 +104,13 @@ Notificateur.prototype = {
         }
     },
     
-    /* Listeners */
+    /**
+     * Listeners 
+     */
     listeners: {
+        /**
+         * Tab Update
+         */
         tabUpdate: function(tabId, changeInfo, tab) {
             if(tab.url !== undefined && tab.url.indexOf("siteduzero.com") != -1 && tab.url.indexOf("siteduzero.com") < 14 && changeInfo.status == "complete") {
                 if(tab.url.indexOf("/forum/sujet/") != -1 || tab.url.indexOf("/membres/") != -1) {//cas d'une notif de type badge ou forum -> il faut faire l'injection
@@ -113,12 +135,18 @@ Notificateur.prototype = {
             }
         },
         
+        /**
+         * Tab create
+         */
         tabCreate: function(tab) {
             if(tab.url !== undefined && tab.url.indexOf("siteduzero.com") != -1 && tab.url.indexOf("siteduzero.com") < 14) {
                 this.check();
             }
         },
         
+        /**
+         * Toolbar Click
+         */
         toolbarClick: function() {
             chrome.tabs.create({
     				'url': this.url,
@@ -126,12 +154,18 @@ Notificateur.prototype = {
     			});
         },
         
+        /**
+         * Alarm
+         */
         alarm: function(alarm) {
             if (alarm.name == 'refresh') {
                 this.check();
             }
         },
         
+        /**
+         * Notification button click
+         */
         notifButtonClick: function(notifId, button) {
             var notif = this.getNotification(notifId);
             if(button == 0) { // Open last message
@@ -170,6 +204,9 @@ Notificateur.prototype = {
             }
         },
         
+        /**
+         * Notif Click
+         */
         notifClick: function(notifId) {
             var notif = this.getNotification(notifId);
             if(notif) {
@@ -197,12 +234,17 @@ Notificateur.prototype = {
             });
         },
         
+        /**
+         * Notif close
+         */
         notifClose: function(notifId) {
             // A la fermeture de la notif
         }
     },
     
-    /* Check for new Notifications */
+    /**
+     * Check for new Notifications
+     */
     check: function() {
         var self = this;
         chrome.browserAction.setIcon({"path":"icons/icone_38_parsing.png"});
@@ -581,7 +623,7 @@ Notificateur.prototype = {
     /**
      * Get options
      * @param {String} [key] Option key
-     * @returns {Object|...} The options value or all options
+     * @returns {Object} The options value or all options
      */
     getOptions: function(key) {
         if(key) {
@@ -626,7 +668,9 @@ Notificateur.prototype = {
         });
     },
     
-    /* Update options */
+    /**
+     * Update options
+     */
     updateOptions: function() {
         // Update interval
         chrome.alarms.create('refresh', { periodInMinutes: parseInt(this.options.updateInterval) });
@@ -905,4 +949,6 @@ Notificateur.prototype = {
 '
 };
 
+
+/** @global */
 var theNotificator = new Notificateur();
