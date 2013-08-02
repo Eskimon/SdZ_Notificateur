@@ -12,7 +12,8 @@ for (var i = 0; i < len; i++) {
         break;
     }
 }
-target && target.click();
+//target && target.click();
+alert('coucou');
 /*
 // Je suspecte ce bout de code de faire remonter la page tout en haut plutot que rester sur le lien qui va bien
 // Update du nombre de notifs

@@ -26,6 +26,7 @@ Notificateur.prototype = {
     
     init: function() {
         this.notifications = []; //tableau stockant les notifs
+        this.alertTabId = [];
         this.MPs = []; //tableau stockant les MPs
         chrome.browserAction.enable(); //sinon un concours de circonstance pourrait nous faire démarrer avec une icone disable
         this.loadOptions(function() {
@@ -73,10 +74,13 @@ Notificateur.prototype = {
         tabUpdate: function(tabId, changeInfo, tab) {
             if(tab.url !== undefined && tab.url.indexOf("siteduzero.com") != -1 && tab.url.indexOf("siteduzero.com") < 14 && changeInfo.status == "complete") {
                 if(tab.url.indexOf("/forum/sujet/") != -1 || tab.url.indexOf("/membres/") != -1) {//cas d'une notif de type badge ou forum -> il faut faire l'injection
-                    //attention, se déclenchera aussi pour une alerte de modo (mais c'est pas très grave)
-                    chrome.tabs.executeScript(tabId, {
-                        file: "injected.js"
-                    });
+                    if(this.alertTabId.indexOf(tabId) == -1) { //ne se déclenche pas si on arrive via une alerte de modo
+                        chrome.tabs.executeScript(tabId, {
+                            file: "injected.js"
+                        });
+                    } else {
+                        this.alertTabId.splice(this.alertTabId.indexOf(tabId),1);
+                    }
                     //on attend une seconde pour que le script soit injecté puis on check de nouveau les notifs pour mettre à jour le badge
                     setTimeout(this.check.bind(this),1000);
                 } else if(tab.url.indexOf("/p/roadmap") != -1) {// cas de la roadmap
@@ -127,8 +131,8 @@ Notificateur.prototype = {
                         case("roadmap"): //roadmap
                             this.openSdZ("/p/roadmap-du-site-du-zero");
                             break;
-                        case("alerte"): //roadmap
-                            this.openSdZ("/forum/sujet/" + notif.thread + "/" + notif.messageId);
+                        case("alerte"): //alerte
+                            this.openSdZ("/forum/sujet/" + notif.thread + "/" + notif.messageId, true);
                             break;
                     }
                 }
@@ -164,8 +168,8 @@ Notificateur.prototype = {
                     case("roadmap"): //roadmap
                         this.openSdZ("/p/roadmap-du-site-du-zero");
                         break;
-                    case("alerte"): //roadmap
-                        this.openSdZ("/forum/sujet/" + notif.thread + "/" + notif.messageId);
+                    case("alerte"): //alerte
+                        this.openSdZ("/forum/sujet/" + notif.thread + "/" + notif.messageId, true);
                         break;
                 }
             }
@@ -208,7 +212,7 @@ Notificateur.prototype = {
     
     //ancien "verifNotif()"
     loadCallback: function(data) {
-
+data = this.fakeData;
         //ancienne solution car elle marche mieux oO
         var self = this,
             $data = $(data.replace(/<img[^>]*>/gi,"")),
@@ -654,7 +658,7 @@ Notificateur.prototype = {
         }
     },
     
-    openSdZ: function(_url) {
+    openSdZ: function(_url, remember) {
         var url = this.url + _url,
             self = this;
         
@@ -668,12 +672,19 @@ Notificateur.prototype = {
             }
             
             if(!self.getOptions("openInNewTab") && tab && tab.url !== undefined && tab.url.indexOf("siteduzero.com") != -1 && tab.url.indexOf("siteduzero.com") < 14) {
+                if(remember) {
+                    self.alertTabId.push(tab.id); //on ajout l'id du tab
+                }
                 chrome.tabs.update(tab.id, { url: url });
             }
             else {
                 chrome.tabs.create({
                     'url': url,
                     'active': false
+                }, function(tab){
+                    if(remember) {
+                        self.alertTabId.push(tab.id); //on ajout l'id du tab
+                    }
                 });
             }
         });
@@ -722,7 +733,90 @@ Notificateur.prototype = {
         var badgeTexte = (totMP > 0) ? totMP.toString() + " - " : "";
         badgeTexte += (len-totMP > 0) ? (len-totMP).toString() : ((totMP > 0) ? "0" : "");
         chrome.browserAction.setBadgeText({text: badgeTexte});
-    }
+    },
+    
+    
+    fakeData : '<ul class="nav nav-pills headerNotifications "> \
+	<li class="dropdown all-camera-dropdown"> \
+		<a id="notifications" class="dropdown-toggle fullOpacity" data-toggle="dropdown" data-target="#" href="/notifications"> \
+			<span class="nbNotif">5</span> <div class="NotificationLink" style=""></div> \
+		</a> \
+		<a id="notificationsMob" class="fullOpacity" href="/notifications"> \
+			<div><span class="nbNotif">5</span></div> \
+		</a> \
+		<a href="/notifications/lecture" class="read"></a> \
+		<ul class="notificationList dropdown-menu"> \
+			<li style="list-style: none;"> \
+			<div id="lastNotifications"> \
+				<div id="scrollMe"> \
+						<ul class="list"> \
+							<li class="notification "> \
+								<a class="forumSdz link" href="/forum/sujet/session-jeux-d-ete-on-remet-ca/84550349"> \
+									<ul class="content"> \
+										<li class="title">Uzrok a répondu au sujet « Session jeux d\'été ? On...</li> \
+										<li class="date">Il y a 7 minutes</li> \
+									</ul> \
+								</a> \
+								<a class="delete" href="/notifications/archiver/988011" style=""><span>x</span></a> \
+							</li> \
+                            <li class="notification "> \
+                                <a class="badgeSdz link" href="/membres/eskimon-32590#badges"> \
+                                    <ul class="content"> \
+                                        <li class="title">Vous avez gagné le badge Twitter Addict</li> \
+                                        <li class="date">Il y a moins de 5s</li> \
+                                    </ul> \
+                                </a> \
+                                <a class="delete" href="/notifications/archiver/1020034" style=""><span>x</span></a> \
+                            </li> \
+							<li class="notification "> \
+								<a class="forumSdz link" href="/forum/sujet/jeu-forum-trouvez-l-insolite-dans-cette-photo/84550314"> \
+									<ul class="content"> \
+										<li class="title">Acrumus a répondu au sujet « [JEU Forum] Trouvez l...</li> \
+										<li class="date">Il y a 18 minutes</li> \
+									</ul> \
+								</a> \
+								<a class="delete" href="/notifications/archiver/987925" style=""><span>x</span></a> \
+							</li> \
+						</ul> \
+					</div> \
+					<ul class="list"> \
+						<li class="notification seeall"> \
+							<a href="/notifications" class="linkMP">Toutes mes notifications</a> \
+						</li> \
+					</ul>\
+				</div>\
+			</li>\
+		</ul>\
+	</li>\
+</ul> \
+<ul class="nav nav-pills headerAlerts"> \
+    <li class="dropdown all-camera-dropdown"> \
+        <a id="alerts" class="dropdown-toggle secondaryLink admin " data-toggle="dropdown" data-target="#" href="/alertes/"> \
+            <span>1</span> <div class="alertsLink"></div> \
+        </a> \
+        <a id="alertsMob" class="" href="/alertes/"> \
+            <div><span>1</span></div> \
+        </a> \
+        <ul class="alertsList  dropdown-menu"> \
+            <li style="list-style: none;"> \
+                <ul class="list" id="lastAlerts" style="width: 240px;"> \
+                    <li class="notification read"> \
+                        <a class="linkAlert" href="/forum/sujet/mon-image-de-fond-ne-s-affiche-pas-en-css/84572853"> \
+                            <ul class="content"> \
+                                <li class="title">Message de viki53</li> \
+                                <li class="date">Il y a 5 minutes</li> \
+                            </ul> \
+                        </a> \
+                    </li> \
+                    <li class="notification read"> \
+                        <a href="/alertes/" class="linkMP">Toutes les alertes</a> \
+                    </li> \
+                </ul> \
+            </li> \
+        </ul> \
+    </li> \
+</ul> \
+'
 };
 
 var theNotificator = new Notificateur();

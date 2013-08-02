@@ -1,6 +1,9 @@
+var notificator;
+
 var linkListener = function(notificator, event) {
     event.preventDefault();
     var url = $(event.currentTarget).attr("href");
+    var isAlerte = $(event.currentTarget).hasClass("alerte");
     console.log(url);
     chrome.windows.getCurrent({ populate: true }, function(currentWindow) {
         var tab = false;
@@ -10,24 +13,30 @@ var linkListener = function(notificator, event) {
                 break;
             }
         }
-        
+        // /!\ traitement particulier à prévoir si c'est une alerte !
         if(!notificator.getOptions("openInNewTab") && tab && tab.url !== undefined && tab.url.indexOf("siteduzero.com") != -1 && tab.url.indexOf("siteduzero.com") < 14) {
+            if(isAlerte) {
+                notificator.alertTabId.push(tab.id);
+            }
             chrome.tabs.update(tab.id, { url: url });
         }
         else {
             chrome.tabs.create({
                 'url': url,
                 'active': false
+            }, function(tab){
+                if(isAlerte) {
+                    notificator.alertTabId.push(tab.id); //on ajout l'id du tab
+                }
             });
         }
     });
-    //si c'est la notification de la roadmap, traitement spécial !
 }
 
 
 document.addEventListener('DOMContentLoaded', function () {
     chrome.runtime.getBackgroundPage(function(bgWindow) {
-        var notificator = bgWindow.theNotificator,
+        notificator = bgWindow.theNotificator,
             notifs = notificator.getNotification();
         
         var len = notifs.length;
@@ -60,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         break;
                     case("alerte"): //alerte
                         elem = $("<div>", { class: "element alerte", id: "notif-" + notifs[i].id }).appendTo(notifList);
-                        notifLink = $("<a>", { href: 'http://www.siteduzero.com/forum/sujet/' + notifs[i]["thread"] + '/' + notifs[i]["messageId"] }).appendTo(elem);
+                        notifLink = $("<a>", { href: 'http://www.siteduzero.com/forum/sujet/' + notifs[i]["thread"] + '/' + notifs[i]["messageId"], class: "alerte" }).appendTo(elem);
                         break;
                 }
                     
