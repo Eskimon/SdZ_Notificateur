@@ -1,3 +1,18 @@
+/**
+ * SdZ Notificateur
+ * @author Eskimon & Sandhose
+ * @licence under MIT Licence
+ * @version 1.12.1
+ * ======
+ * background.js
+ * Main background script
+ */
+
+
+/**
+ * Notificateur - Main class
+ * @constructor
+ */
 var Notificateur = function() {
     this.init.apply(this, arguments);
 };
@@ -24,6 +39,7 @@ Notificateur.prototype = {
     
     storage: chrome.storage.sync,
     
+    /* Init */
     init: function() {
         this.notifications = []; //tableau stockant les notifs
         this.alertTabId = [];
@@ -53,6 +69,7 @@ Notificateur.prototype = {
         }.bind(this));
     },
     
+    /* Add events listeners */
     initListeners: function() {
         if(chrome.tabs) {
             chrome.tabs.onUpdated.addListener(this.listeners.tabUpdate.bind(this));
@@ -70,6 +87,7 @@ Notificateur.prototype = {
         }
     },
     
+    /* Listeners */
     listeners: {
         tabUpdate: function(tabId, changeInfo, tab) {
             if(tab.url !== undefined && tab.url.indexOf("siteduzero.com") != -1 && tab.url.indexOf("siteduzero.com") < 14 && changeInfo.status == "complete") {
@@ -184,6 +202,7 @@ Notificateur.prototype = {
         }
     },
     
+    /* Check for new Notifications */
     check: function() {
         var self = this;
         chrome.browserAction.setIcon({"path":"icons/icone_38_parsing.png"});
@@ -196,6 +215,11 @@ Notificateur.prototype = {
         });
     },
     
+    /**
+     * Get notifications by id 
+     * @param {String} [id] Notification ID
+     * @returns {Array|Object} A notifications if ID is set, or an array of all Notifications
+     */
     getNotification: function(id) {
         if(id) {
             for(var i = 0; i < this.notifications.length; i++) {
@@ -210,9 +234,12 @@ Notificateur.prototype = {
         }
     },
     
-    //ancien "verifNotif()"
+    /**
+     * Callback on page load
+     * @param {String} data Page data
+     */
     loadCallback: function(data) {
-//data = this.fakeData; //pour Debug only
+        //data = this.fakeData; //pour Debug only
         //ancienne solution car elle marche mieux oO
         var self = this,
             $data = $(data.replace(/<img[^>]*>/gi,"")),
@@ -420,6 +447,10 @@ Notificateur.prototype = {
         chrome.browserAction.setIcon({"path":"icons/icone_38.png"});
     },
     
+    /**
+     * Show a desktop notification
+     * @param {Objecy|Array} notif A Notification or an Array of Notifications
+     */
     showDesktopNotif: function(notif) {
         if(typeof notif == "Array") {
             for(var i = 0; i < notif.length; i++) {
@@ -486,6 +517,10 @@ Notificateur.prototype = {
         }
     },
     
+    /**
+     * Clear desktops notifications
+     * @param {Array} notifs Array of notifications to clear
+     */
     clearDesktopNotifs: function(notifs) {
         if(chrome.notifications) {
             for(var i = 0; i < notifs.length; i++) {
@@ -494,6 +529,11 @@ Notificateur.prototype = {
         }
     },
     
+    /**
+     * Fetch notifications details (forum posts only)
+     * @param {Object|Array} notif A notifications or an Array of notifications
+     * @param {Function} callback The callback when the details are fetched
+     */
     fetchNotificationDetails: function(notif, callback) {
         if(typeof notif == "Array") {
             for(var i = 0; i < notif.length; i++) {
@@ -538,6 +578,11 @@ Notificateur.prototype = {
         }, "text");
     },
     
+    /**
+     * Get options
+     * @param {String} [key] Option key
+     * @returns {Object|...} The options value or all options
+     */
     getOptions: function(key) {
         if(key) {
             return this.options[key];
@@ -547,6 +592,11 @@ Notificateur.prototype = {
         }
     },
     
+    /**
+     * Set options
+     * @param {Object} changes Object of options changes
+     * @param {Function} [callback]
+     */
     setOptions: function(changes, callback) {
         callback = callback || function() { console.log("Options saved"); };
         for(var key in changes) {
@@ -558,6 +608,10 @@ Notificateur.prototype = {
         this.updateOptions();
     },
     
+    /**
+     * Load options from chrome.storage
+     * @param {Function} [callback] Callback when options are loaded
+     */
     loadOptions: function(callback) { // Charge les options depuis le chrome.storage
         var self = this,
             keys = Object.keys(this.options);
@@ -572,6 +626,7 @@ Notificateur.prototype = {
         });
     },
     
+    /* Update options */
     updateOptions: function() {
         // Update interval
         chrome.alarms.create('refresh', { periodInMinutes: parseInt(this.options.updateInterval) });
@@ -586,6 +641,10 @@ Notificateur.prototype = {
 		}
     },
     
+    /**
+     * Load soundpacks
+     * @param {Function} [callback] Callback fired when soundpacks are loaded
+     */
     loadSounds: function(callback) {
         $.getJSON(chrome.extension.getURL("/sounds/packs.json"), function(data) {
             this.soundpacks = data;
@@ -600,6 +659,10 @@ Notificateur.prototype = {
         }.bind(this));
     },
     
+    /**
+     * Load a specific soundpack
+     * @param {Object} soundpack The soundpack to load
+     */
     loadSoundpack: function(soundpack) {
         var soundsList = document.getElementById("sound_list") || document.createElement("div");
         soundsList.id = "sound_list";
@@ -618,6 +681,10 @@ Notificateur.prototype = {
         }, this);
     },
     
+    /**
+     * Play sound
+     * @param {Object} options Which sound should be played?
+     */
     playSound: function(options) {
         var sound;
         if(options.notification && options.mp) {
@@ -640,6 +707,10 @@ Notificateur.prototype = {
         }
     },
     
+    /**
+     * Set new notif callback
+     * @param {Function} callback
+     */
     setNewNotifCallback: function(callback) {
         if(typeof callback == "function") {
             this.newNotifCallback = callback;
@@ -649,6 +720,10 @@ Notificateur.prototype = {
         }
     },
     
+    /**
+     * Set remove notif callback
+     * @param {Function} callback
+     */
     setRemoveNotifCallback: function(callback) {
         if(typeof callback == "function") {
             this.removeNotifCallback = callback;
@@ -658,6 +733,11 @@ Notificateur.prototype = {
         }
     },
     
+    /**
+     * Open a SdZ page
+     * @param {String} _url The url to open
+     * @param {Boolean} remember
+     */
     openSdZ: function(_url, remember) {
         var url = this.url + _url,
             self = this;
@@ -690,6 +770,9 @@ Notificateur.prototype = {
         });
     },
     
+    /**
+     * Check the Roadmap
+     */
     checkRoadmap: function() {
         var self = this;
         $.get(this.roadmap, function(data) {
@@ -722,6 +805,9 @@ Notificateur.prototype = {
         });
     },
     
+    /**
+     * Update badge
+     */
     updateBadge: function() {
         var notifs = this.notifications,
             len = notifs.length,
