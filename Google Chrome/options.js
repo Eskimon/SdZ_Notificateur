@@ -176,6 +176,6 @@ var NotificatorOptions = {
 document.addEventListener('DOMContentLoaded', function () {
     chrome.runtime.getBackgroundPage(function(bgWindow) {
         var notificator = bgWindow.theNotificator;
-        notificatorOptions.init.call(notificatorOptions, notificator);
+        NotificatorOptions.init.call(NotificatorOptions, notificator);
     });
 });
