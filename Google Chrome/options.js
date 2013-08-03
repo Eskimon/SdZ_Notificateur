@@ -88,7 +88,7 @@ var NotificatorOptions = {
     getValues: function() {
         var obj = {};
         for(var key in this.elems) {
-            var val = this.elems[key].type == "checkbox" ? this.elems[key].checked : this.elems[key].value;
+            var val = this.elems[key].type == "checkbox" ? this.elems[key].checked : parseInt(this.elems[key].value);
             obj[key] = val;
         }
         return obj;
