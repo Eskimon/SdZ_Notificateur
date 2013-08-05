@@ -299,13 +299,11 @@ Notificateur.prototype = {
         var self = this,
             $data = $(data.replace(/<img[^>]*>/gi,"")),
             loginBox = $data.find("div#login");
-            
-                /*
-                var self = this,
-                xmlDoc = new DOMParser().parseFromString(data, "text/xml"), 
-                $data = $(xmlDoc),
-                loginBox = $($data).find("div#login");
-                */
+        
+        var hasNewNotif = {
+            notification: false,
+            mp: false
+        };
         
         //on est pas connecté !
         if(loginBox.length != 0) {
@@ -346,12 +344,6 @@ Notificateur.prototype = {
                 messageId: notifLink.substr(notifLink.lastIndexOf("/") + 1),
                 thread: notifLink.substr(13, notifLink.lastIndexOf("/") - 13),
                 type: notif.find("a.badgeSdz").text().length==0 ? "forum" : "badge" //si c'est un badge
-                /* type de notif :
-                                                   - forum
-                                                   - badge
-                                                   - MP
-                                                   - roadmap
-                                            */
             };
 
             var existingNotif = this.getNotification(notifObj.id);
@@ -361,6 +353,7 @@ Notificateur.prototype = {
             else {
                 newNotifs.push(notifObj);
                 this.newNotifCallback && this.newNotifCallback(notifObj);
+                hasNewNotif.notification = true;
             }
             
             if(this.options.useDetailedNotifs && !notifObj.detailed && (notifObj.type == "forum")) {
@@ -380,8 +373,6 @@ Notificateur.prototype = {
         
         // Check les mp
         notifications = $data.find("li#lastPrivateMessages a");
-        newNotifs = []; // Liste des nouvelles notifications
-        removedNotifs = []; // Notifs enlevées
 
         for(var i = 0; i < notifications.length-1; i++) { //-1 our pas avoir le lien "tout mes MP"
             var notif = $(notifications[i]),
@@ -400,17 +391,9 @@ Notificateur.prototype = {
                 date: texte.substr(texte.indexOf("Il y a")),
                 messageId: notifLink.substr(notifLink.lastIndexOf("/") + 1),
                 thread: notifLink.substr(4, notifLink.lastIndexOf("/") - 4),
-                type: "mp" //si c'est un badge
-                /* type de notif :
-                                                   - forum
-                                                   - badge
-                                                   - MP
-                                                   - roadmap
-                                                   - alerte
-                                            */
+                type: "mp"
             };
             
-            console.log(notifObj);
 
             var existingNotif = this.getNotification(notifObj.id);
             if(existingNotif) {
@@ -419,6 +402,7 @@ Notificateur.prototype = {
             else {
                 newNotifs.push(notifObj);
                 this.newNotifCallback && this.newNotifCallback(notifObj);
+                hasNewNotif.mp = true;
             }
             
             if(!existingNotif)
@@ -430,8 +414,6 @@ Notificateur.prototype = {
         
         // Check les notifications "alertes" des modos
         notifications = $data.find("ul.alertsList li.notification");
-        newNotifs = []; // Liste des nouvelles notifications
-        removedNotifs = []; // Notifs enlevées
  
         for(var i = 0; i < notifications.length-1; i++) { //-1 our pas avoir le lien "toutes les alertes"
             var notif = $(notifications[i]),
@@ -444,14 +426,7 @@ Notificateur.prototype = {
                 date: notif.find("li.date").text(),
                 messageId: notifLink.substr(notifLink.lastIndexOf("/") + 1),
                 thread: notifLink.substr(13, notifLink.lastIndexOf("/") - 13),
-                type: "alerte" //si c'est un badge
-                /* type de notif :
-                                                   - forum
-                                                   - badge
-                                                   - MP
-                                                   - roadmap
-                                                   - alerte
-                                            */
+                type: "alerte"
             };
 
             var existingNotif = this.getNotification(notifObj.id);
@@ -461,6 +436,7 @@ Notificateur.prototype = {
             else {
                 newNotifs.push(notifObj);
                 this.newNotifCallback && this.newNotifCallback(notifObj);
+                hasNewNotif.notification = true;
             }
             
             if(!existingNotif)
@@ -488,11 +464,10 @@ Notificateur.prototype = {
             }
         }
         
-        console.log("Update", {
-            newNotifs: newNotifs,
-            removedNotifs: removedNotifs,
-            notifs: this.notifications
-        });
+        // Play sounds
+        if(this.options.playSon) {
+            this.playSound(hasNewNotif);
+        }
         
         this.clearDesktopNotifs(removedNotifs);
         
@@ -574,6 +549,38 @@ Notificateur.prototype = {
     },
     
     /**
+     * Archive notification via XMLHttpRequest
+     * @param {Array|Object|String} notifs ID de la notif ou Notif ou array de notifs
+     */
+    archiveNotification: function(_notif) {
+        if(Object.prototype.toString.call(_notif) == "[object Array]") {
+            for(var i = 0; i < _notif.length; i++) {
+                this.archiveNotification(_notif[i]);
+            }
+            
+            return;
+        }
+        var notif;
+        if(typeof _notif == "object") {
+            notif = _notif;
+        }
+        else {
+            notif = this.getNotification(_notif);
+        }
+        
+        if(notif.type != "mp" && notif.type != "alerte" && notif.id !== undefined) {
+            $.get(this.url + "/notifications/archiver/" + notif.id, function(data) {
+                if(data == "ok") {
+                    console.log("Notification", notif.id, "archived", data);
+                }
+                else {
+                    console.error("Failed to archive notification", notif.id);
+                }
+            });
+        }
+    },
+    
+    /**
      * Clear desktops notifications
      * @param {Array} notifs Array of notifications to clear
      */
@@ -591,7 +598,7 @@ Notificateur.prototype = {
      * @param {Function} callback The callback when the details are fetched
      */
     fetchNotificationDetails: function(notif, callback) {
-        if(typeof notif == "Array") {
+        if(Object.prototype.toString.call(notif) == "[object Array]") {
             for(var i = 0; i < notif.length; i++) {
                 this.fetchNotificationDetails(notif[i], function(newNotif) {
                     callback && callback(newNotif, i);
@@ -602,7 +609,7 @@ Notificateur.prototype = {
         }
         
         $.get(this.url + "/forum/sujet/" + notif.thread + "/" + notif.messageId, function(_data) {
-            data = _data.replace(/src=/ig, "data-src=").replace(/href=/ig, "data-href="); // <-- pas forcement la meilleur methode... marche pas si qqn a un nom/avatar avec src=/href= dans le nom
+            var data = _data.replace(/src=/ig, "data-src=").replace(/href=/ig, "data-href="); // <-- pas forcement la meilleur methode... marche pas si qqn a un nom/avatar avec src=/href= dans le nom
             //data = data.replace(/<img\b[^>]*>(.*?)<\/img>/ig,'');
             //data = data.replace(/<head\b[^>]*>(.*?)<\/head>/ig,'');
             //var xmlDoc = new DOMParser().parseFromString(data, "text/xml"); <-- Le parser bug...
