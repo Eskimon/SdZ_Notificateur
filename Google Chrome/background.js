@@ -523,6 +523,7 @@ Notificateur.prototype = {
                     iconUrl: notif.avatarUrl,
                     title: notif.author + " - " + notif.threadTitle,
                     message: notif.postContent.replace(/<br \/>/ig, "\n").replace(/(<([^>]+)>)/ig, "").substr(0, 140) + "...\n" + notif.date,
+                    priority: parseInt(this.options.notifPriority),
                     buttons: [{ title: "Voir le message" }, { title: "Voir le début du thread"}]
                 }, function() {});
             }
