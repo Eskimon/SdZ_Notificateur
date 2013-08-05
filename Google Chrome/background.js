@@ -49,6 +49,19 @@ Notificateur.prototype = {
         playSon: false
     },
     
+    _optionsTypes: { // Je l'ai quand meme fait ^
+        updateInterval: Number,
+        openListe: Boolean,
+        openInNewTab: Boolean,
+        showAllNotifButton: Boolean,
+        showDesktopNotif: Boolean,
+        useDetailedNotifs: Boolean,
+        lastEdit: String,
+        notifPriority: Number,
+        mpPriority: Number,
+        playSon: Boolean
+    },
+    
     /**
      * chrome.storage
      */
@@ -641,12 +654,29 @@ Notificateur.prototype = {
      */
     setOptions: function(changes, callback) {
         callback = callback || function() { console.log("Options saved"); };
+        
+        var oldOptions = this.options;
         for(var key in changes) {
-            if(this.options[key] !== undefined) {
+            if(this.options.hasOwnProperty(key)) {
+                // Conversion des donnees dans le bon type
+                if(this._optionsTypes[key] == Number) {
+                    changes[key] = parseInt(changes[key]);
+                }
+                else if(this._optionsTypes[key] == Boolean) {
+                    changes[key] = !!changes[key];
+                }
+                else if(this._optionsTypes[key] == String) {
+                    changes[key] = changes[key].toString();
+                }
+                
                 this.options[key] = changes[key];
             }
         }
-        this.storage.set(this.options, callback);
+        
+        changes.timestamp = Date.now();
+        
+        console.log("Options changes from", oldOptions, "to", this.options);
+        this.storage.set(changes, callback);
         this.updateOptions();
     },
     
@@ -655,17 +685,16 @@ Notificateur.prototype = {
      * @param {Function} [callback] Callback when options are loaded
      */
     loadOptions: function(callback) { // Charge les options depuis le chrome.storage
-        var self = this,
-            keys = Object.keys(this.options);
+        var keys = Object.keys(this.options);
         this.storage.get(keys, function(items) {
             for(var key in items) {
-                if(self.options[key]) {
-                    self.options[key] = items[key];
+                if(this.options.hasOwnProperty(key)) {
+                    this.options[key] = items[key];
                 }
             }
             
             (typeof callback == "function") && callback();
-        });
+        }.bind(this));
     },
     
     /**
