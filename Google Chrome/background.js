@@ -86,8 +86,6 @@ Notificateur.prototype = {
     		
             chrome.alarms.create('refresh', {periodInMinutes: parseInt(this.options.updateInterval)});
             
-            this.initListeners();
-            
             this.loadSounds(function() {
                 this.loadSoundpack(this.soundpack);
             }.bind(this));
@@ -97,10 +95,14 @@ Notificateur.prototype = {
             //this.checkRoadmap();
             
         }.bind(this));
+        
+        this.initListeners();
     },
     
     /* Add events listeners */
     initListeners: function() {
+        chrome.runtime.onInstalled.addListener(this.listeners.install.bind(this));
+        
         if(chrome.tabs) {
             chrome.tabs.onUpdated.addListener(this.listeners.tabUpdate.bind(this));
             chrome.tabs.onCreated.addListener(this.listeners.tabCreate.bind(this));
@@ -121,6 +123,18 @@ Notificateur.prototype = {
      * Listeners 
      */
     listeners: {
+        /**
+         * Extension install
+         */
+        install: function(details) {
+            if(details.reason == "install") {
+                chrome.tabs.create({
+                    'url': chrome.runtime.getURL("welcome.html"),
+                    'active': true
+                });
+            }
+        },
+        
         /**
          * Tab Update
          */

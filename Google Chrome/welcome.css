@@ -1,0 +1,131 @@
+html, body, h1, h2, h3, h4, h5, h6, p {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: url('http://www.siteduzero.com/bundles/common/images/background.png');
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #333;
+}
+
+a {
+    text-decoration: none;
+    color: #428bca;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #2a6496;
+}
+
+.clearfix:after {
+    clear: both;
+    height: 1px;
+    width: 1px;
+    content: " ";
+    display: block;
+}
+
+.container {
+    width: 800px;
+    margin: auto;
+}
+
+.main-content {
+    background-color: white;
+    margin-top: 80px;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.08); /* La p'tite ombre qui chnage tout ^^ */
+}
+
+header {
+    height: 128px;
+    margin: 20px 0;
+    padding: 40px 20px 10px 20px;
+}
+
+header .logo {
+    float: left;
+    height: 128px;
+    width: 128px;
+}
+
+header h1 {
+    line-height: 40px;
+    font-size: 2em;
+    padding: 82px 0 6px 142px;
+    color: rgb(9,33,49);
+}
+
+section {
+    margin: 30px 50px;
+    font-size: 1.2em;
+    line-height: 1.4em;
+}
+
+.github-btns {
+    margin-top: 30px;
+}
+
+.github-btns .wrapper {
+    width: 50%;
+    float: left;
+}
+
+.github-btns .wrapper .button {
+    margin: auto;
+    width: 80px;
+}
+
+.links {
+    border-top: solid 1px #E3E3E3;
+    border-bottom: solid 1px #E3E3E3;
+    height: 20px;
+    line-height: 20px;
+    background-color: #f8f8f4;
+    padding: 20px;
+    color: #707070;
+    text-align: center;
+}
+
+.links a {
+}
+
+.authors {
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.authors .author {
+    width: 50%;
+}
+
+.authors .author.eskimon {
+    float: left;
+}
+
+.authors .author.sandhose {
+    float: right;
+}
+
+.author .avatar {
+    float: left;
+    margin: 5px;
+}
+
+.author .avatar img {
+    padding: 2px;
+    border: 1px solid #666;
+}
+
+.author .text {
+    margin: 5px;
+    padding-left: 116px;
+    font-size: 0.9em;
+    color: #454545;
+}
+
+.author .text h3 {
+    color: #222;
+    margin: 2px 0;
+}
