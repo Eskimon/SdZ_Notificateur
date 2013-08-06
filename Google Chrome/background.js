@@ -589,12 +589,18 @@ Notificateur.prototype = {
         }
         
         if(notif.type != "mp" && notif.type != "alerte" && notif.id !== undefined) {
-            $.get(this.url + "/notifications/archiver/" + notif.id, function(data) {
-                if(data == "ok") {
-                    console.log("Notification", notif.id, "archived", data);
-                }
-                else {
-                    console.error("Failed to archive notification", notif.id);
+            $.ajax({
+                url: this.url + "/notifications/archiver/" + notif.id, 
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                success: function(data) {
+                    if(data == "ok") {
+                        console.log("Notification", notif.id, "archived", data);
+                    }
+                    else {
+                        console.error("Failed to archive notification", notif.id);
+                    }
                 }
             });
         }
