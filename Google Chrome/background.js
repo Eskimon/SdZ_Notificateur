@@ -308,7 +308,7 @@ Notificateur.prototype = {
      * @param {String} data Page data
      */
     loadCallback: function(data) {
-        //data = this.fakeData; //pour Debug only
+        //data = this.fakeData; //pour DEBUG only
         //ancienne solution car elle marche mieux oO
         var self = this,
             $data = $(data.replace(/<img[^>]*>/gi,"")),
@@ -529,7 +529,13 @@ Notificateur.prototype = {
                         break;
                     case("badge"):
                         boutons[0] = { title: "Voir les badges" };
-                        icone = "icons/big_badge.png";
+                        //récupère le nom du badge
+                        var badgeTitle = notif.title.slice(notif.title.indexOf(" le badge ")+10);
+                        badgeTitle = badgeTitle.replace(/\s/g, '_');
+                        if(this.badgeLink.hasOwnProperty(badgeTitle)) //si on a ce badge en stock
+                            icone = this.url + this.badgeLink[badgeTitle];
+                        else
+                            icone = "icons/big_badge.png";
                         priority = this.options.notifPriority;
                         break;
                     case("mp"):
@@ -913,6 +919,49 @@ Notificateur.prototype = {
         chrome.browserAction.setBadgeText({text: badgeTexte});
     },
     
+    badgeLink : {
+        Instituteur:"/bundles/common/images/badge/instituteur.png",
+        Aventurier:"/bundles/common/images/badge/aventurier.png",
+        Twitter_Addict:"/bundles/common/images/badge/twitter.png",
+        Urgentiste:"/bundles/common/images/badge/urgentiste.png",
+        Jet_set:"/bundles/common/images/badge/jet_set.png",
+        Birthday:"/bundles/common/images/badge/birthday.png",
+        The_place_to_be:"/bundles/common/images/badge/the_place_to_be.png",
+        Secouriste:"/bundles/common/images/badge/secouriste.png",
+        Sauveur:"/bundles/common/images/badge/sauveur.png",
+        Beau_parleur:"/bundles/common/images/badge/beau_parleur.png",
+        Bavard:"/bundles/common/images/badge/bavard.png",
+        Premiers_secours:"/bundles/common/images/badge/premiers_secours.png",
+        Timide:"/bundles/common/images/badge/timide.png",
+        Extraverti:"/bundles/common/images/badge/extraverti.png",
+        Écolier:"/bundles/common/images/badge/ecolier.png",
+        Frimeur:"/bundles/common/images/badge/frimeur.png",
+        Premiers_mots:"/bundles/common/images/badge/premiers_mots.png",
+        Teenager:"/bundles/common/images/badge/teenager.png",
+        Baby_Zéro:"/bundles/common/images/badge/baby_zero.png",
+        Vieux_de_la_vieille:"/bundles/common/images/badge/vieux_de_la_vieille.png",
+        Vétéran:"/bundles/common/images/badge/veteran.png",
+        Challenger:"/bundles/common/images/badge/challenger.png",
+        Expert:"/bundles/common/images/badge/expert.png",
+        Groupie:"/bundles/common/images/badge/groupie.png",
+        La_science_infuse:"/bundles/common/images/badge/la_science_infuse.png",
+        Professeur:"/bundles/common/images/badge/professeur.png",
+        Scribe:"/bundles/common/images/badge/scribe.png",
+        Scribe_du_futur:"/bundles/common/images/badge/scribe_du_futur.png",
+        Adulte:"/bundles/common/images/badge/adulte.png",
+        Ange_Gardien:"/bundles/common/images/badge/ange_gardien.png",
+        Baratineur:"/bundles/common/images/badge/baratineur.png",
+        Bienfaiteur:"/bundles/common/images/badge/bienfaiteur.png",
+        Bosseur:"/bundles/common/images/badge/bosseur.png",
+        Commère:"/bundles/common/images/badge/commere.png",
+        Dictionnaire_ambulant:"/bundles/common/images/badge/dictionnaire_ambulant.png",
+        Fossile:"/bundles/common/images/badge/fossile.png",
+        Moulin_à_Paroles:"/bundles/common/images/badge/moulin_a_paroles.png",
+        Pipelette:"/bundles/common/images/badge/pipelette.png",
+        Superhéros:"/bundles/common/images/badge/superhero.png",
+        Facebook_Addict:"/bundles/common/images/badge/facebook.png",
+        Abonné:"/bundles/common/images/badge/abonnement.png"
+    },
     
     fakeData : '<ul class="nav nav-pills headerNotifications "> \
 	<li class="dropdown all-camera-dropdown"> \
