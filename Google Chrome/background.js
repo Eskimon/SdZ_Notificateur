@@ -597,12 +597,42 @@ Notificateur.prototype = {
                 success: function(data) {
                     if(data == "ok") {
                         console.log("Notification", notif.id, "archived", data);
+                        this.removeNotification();
                     }
                     else {
                         console.error("Failed to archive notification", notif.id);
                     }
-                }
+                }.bind(this)
             });
+        }
+    },
+    
+    /**
+     * Remove notification(s)
+     * @param {Array|Object|String} notifs ID de la notif ou notif ou array de notifs
+     */
+    removeNotification: function(_notif) {
+        if(Object.prototype.toString.call(_notif) == "[object Array]") {
+            for(var i = 0; i < _notif.length; i++) {
+                this.removeNotification(_notif[i]);
+            }
+            
+            return;
+        }
+        var id;
+        if(typeof _notif == "object") {
+            id = _notif.id;
+        }
+        else {
+            id = _notif;
+        }
+        
+        for(var i = 0; i < this.notifications.length; i++) {
+            if(this.notifications[i].id == id) {
+                this.removeNotifCallback && this.removeNotifCallback(this.notifications[i]);
+                this.notifications.splice(i, 1);
+                this.updateBadge();
+            }
         }
     },
     
