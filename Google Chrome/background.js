@@ -43,7 +43,7 @@ Notificateur.prototype = {
         showAllNotifButton: true,
         showDesktopNotif: true,
         useDetailedNotifs: false,
-        lastEdit: "",
+        lastEdit: "Edit du 02/08/2013 à 15h48",
         notifPriority: 0,
         mpPriority: 0,
         playSon: false
@@ -92,7 +92,7 @@ Notificateur.prototype = {
 
             this.check();
             
-            //this.checkRoadmap();
+            this.checkRoadmap();
             
         }.bind(this));
         
@@ -873,9 +873,6 @@ Notificateur.prototype = {
         $.get(this.roadmap, function(data) {
             //on passe direct par jQuery car le parsage en XML bug
             var dateEdit = $(data).find("section#mainSection article h1 strong span").text();
-
-            console.log(self.options.lastEdit);
-            console.log(dateEdit);
             
             if(dateEdit != self.options.lastEdit) { //si il y a du nouveau, alors on agit !
                 //on fait une notif de plus
