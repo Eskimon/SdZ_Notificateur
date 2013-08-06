@@ -1049,6 +1049,30 @@ Notificateur.prototype = {
         </ul> \
     </li> \
 </ul> \
+<ul class="nav nav-pills headerPrivateMessages "> \
+	<li class="dropdown all-camera-dropdown"> \
+		<a id="privateMessages" class="dropdown-toggle " data-toggle="dropdown" href="/mp/"> \
+			<span>1</span> \
+			<div class="MPLink" style=""></div> \
+		</a> \
+		<a id="privateMessagesMob" class="" href="/mp/"> \
+			<div> \
+			<span>1</span> \
+			</div> \
+		</a> \
+		<ul class="privateMessagesList dropdown-menu"> \
+			<li class="list " id="lastPrivateMessages"> \
+				<a href="/mp/image-du-sdz/84552097"> \
+					<strong>Image du SdZ</strong><br> \
+					par \
+					Eskimon \
+					Il y a 9 minutes \
+				</a> \
+				<a href="/mp/" class="linkMP">Tous mes MP</a> \
+			</li> \
+		</ul> \
+	</li> \
+</ul> \
 '
 };
 
