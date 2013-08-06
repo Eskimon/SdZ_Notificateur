@@ -41,7 +41,7 @@ body {
     border-color: white;
 }
 
-.allNotifs, .noNotifs {
+.allNotifs, .noNotifs, .not-connected {
     padding: 8px 8px 8px 30px;
     margin: 0px 1px 1px 1px;
     text-align: center;

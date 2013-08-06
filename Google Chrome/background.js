@@ -63,6 +63,11 @@ Notificateur.prototype = {
     },
     
     /**
+     * Check en cours
+     */
+    checkPending: false,
+    
+    /**
      * chrome.storage
      */
     storage: chrome.storage.sync,
@@ -274,6 +279,11 @@ Notificateur.prototype = {
      */
     check: function() {
         var self = this;
+        if(this.checkPending) {
+            return;
+        }
+        
+        this.checkPending = true;
         chrome.browserAction.setIcon({"path":"icons/icone_38_parsing.png"});
         $.get(this.url, this.loadCallback.bind(this), "text").error(function() {
             //si jamais la requete plante (pas d'internet, 404 ou autre 500...)
@@ -324,17 +334,17 @@ Notificateur.prototype = {
             if(this.logged) {
                 chrome.browserAction.setBadgeText({text: "log"});
                 chrome.browserAction.setIcon({"path":"icons/icone_38_logout.png"});
-                chrome.browserAction.disable();
-                chrome.alarms.clear('refresh');
+                //chrome.browserAction.disable();
+                //chrome.alarms.clear('refresh');
                 this.logged = false;
             }
             return;
         } else {
             if(!this.logged) {
-                chrome.browserAction.enable();
+                //chrome.browserAction.enable();
                 chrome.browserAction.setIcon({"path":"icons/icone_38.png"});
-                chrome.alarms.create('refresh', {periodInMinutes: parseInt(this.options.updateInterval)});
-                chrome.alarms.onAlarm.addListener(this.listeners.alarm.bind(this));
+                //chrome.alarms.create('refresh', {periodInMinutes: parseInt(this.options.updateInterval)});
+                //chrome.alarms.onAlarm.addListener(this.listeners.alarm.bind(this));
                 this.logged = true;
             }
         }
@@ -489,6 +499,8 @@ Notificateur.prototype = {
         this.updateBadge();
         
         chrome.browserAction.setIcon({"path":"icons/icone_38.png"});
+        
+        this.checkPending = false;
     },
     
     /**
