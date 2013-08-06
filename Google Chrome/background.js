@@ -86,7 +86,7 @@ Notificateur.prototype = {
     			chrome.browserAction.setPopup({popup:""});
     			chrome.browserAction.onClicked.addListener(this.listeners.toolbarClick.bind(this));
     		} else { //sinon on ouvre une popup avec le contenu des notifs
-    			chrome.browserAction.setPopup({popup:"popup.html"});
+    			chrome.browserAction.setPopup({popup:"popup/popup.html"});
     		}
     		
             chrome.alarms.create('refresh', {periodInMinutes: parseInt(this.options.updateInterval)});
@@ -134,7 +134,7 @@ Notificateur.prototype = {
         install: function(details) {
             if(details.reason == "install") {
                 chrome.tabs.create({
-                    'url': chrome.runtime.getURL("welcome.html"),
+                    'url': chrome.runtime.getURL("welcome/welcome.html"),
                     'active': true
                 });
             }
@@ -786,7 +786,7 @@ Notificateur.prototype = {
 			chrome.browserAction.onClicked.addListener(this.listeners.toolbarClick.bind(this));
 		} else { //sinon on ouvre une popup avec le contenu des notifs
 			chrome.browserAction.onClicked.removeListener(this.listeners.toolbarClick);
-			chrome.browserAction.setPopup({popup:"popup.html"});
+			chrome.browserAction.setPopup({popup:"popup/popup.html"});
 		}
     },
     
