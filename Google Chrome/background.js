@@ -322,7 +322,7 @@ Notificateur.prototype = {
         //on est pas connecté !
         if(loginBox.length != 0) {
             if(this.logged) {
-                chrome.browserAction.setBadgeText({text: ""});
+                chrome.browserAction.setBadgeText({text: "log"});
                 chrome.browserAction.setIcon({"path":"icons/icone_38_logout.png"});
                 chrome.browserAction.disable();
                 chrome.alarms.clear('refresh');
