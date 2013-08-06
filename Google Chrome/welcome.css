@@ -108,6 +108,14 @@ section {
     float: right;
 }
 
+.avatar {
+	height: 96px;
+	width: 96px;
+	background-position: center;
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
 .author .avatar {
     float: left;
     margin: 5px;
