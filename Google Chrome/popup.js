@@ -52,11 +52,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 
                 switch(notifs[i].type) {
                     case("forum"): //message
-                        elem = $("<div>", { class: "element forum", id: "notif-" + notifs[i].id }).appendTo(notifList);
+                        elem = $("<div>", { class: "element forum", id: "notif-" + notifs[i].id }).appendTo(notifList);         
+                        $("<span>", { class: "delete" }).text('x').appendTo(elem);
                         notifLink = $("<a>", { href: 'http://www.siteduzero.com/forum/sujet/' + notifs[i]["thread"] + '/' + notifs[i]["messageId"] }).appendTo(elem);
                         break;
                     case("badge"): //badge
                         elem = $("<div>", { class: "element badge", id: "notif-" + notifs[i].id }).appendTo(notifList);
+                        $("<span>", { class: "delete" }).text('x').appendTo(elem);
                         notifLink = $("<a>", { href: 'http://www.siteduzero.com/membres/' + notifs[i]["messageId"]}).appendTo(elem);
                         break;
                     case("mp"): //MP

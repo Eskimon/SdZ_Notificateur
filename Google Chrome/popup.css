@@ -55,13 +55,24 @@ a {
 
 .titre {
     width: 234px;
-    padding: 2px 3px;
+    padding: 2px 30px 2px 3px;
 }
 
 .date {
     font-size: 10px;
     color: rgba(255, 255, 255, 0.5);
     text-align: right;
+}
+
+.delete {
+    z-index: 1;
+    cursor: pointer;
+    float: right;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.delete:hover {
+    color: rgba(255, 255, 255, 1);
 }
 
 hr {
