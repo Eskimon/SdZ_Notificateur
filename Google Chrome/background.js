@@ -314,7 +314,7 @@ Notificateur.prototype = {
      * @param {String} data Page data
      */
     loadCallback: function(data) {
-        data = this.fakeData; //pour DEBUG only
+        //data = this.fakeData; //pour DEBUG only
         //ancienne solution car elle marche mieux oO
         var self = this,
             $data = $(data.replace(/<img[^>]*>/gi,"")),
