@@ -2,9 +2,15 @@ var notificator;
 
 var linkListener = function(notificator, event) {
     event.preventDefault();
+    
+    var parent = $(event.currentTarget).closest('div'); //trouve l'id du parent
+    var id = $(parent).attr('id').slice(6);
+        
     var url = $(event.currentTarget).attr("href");
-    var isAlerte = $(event.currentTarget).hasClass("alerte");
-    console.log(url);
+    var isAlerte = $(parent).hasClass("alerte");
+    var isArchivable = $(parent).hasClass("forum") || $(parent).hasClass("badge");
+    
+    //console.log(url);
     chrome.windows.getCurrent({ populate: true }, function(currentWindow) {
         var tab = false;
         for(var i in currentWindow.tabs) {
@@ -13,12 +19,13 @@ var linkListener = function(notificator, event) {
                 break;
             }
         }
-        // /!\ traitement particulier à prévoir si c'est une alerte !
         if(!notificator.getOptions("openInNewTab") && tab && tab.url !== undefined && tab.url.indexOf("siteduzero.com") != -1 && tab.url.indexOf("siteduzero.com") < 14) {
             if(isAlerte) {
                 notificator.alertTabId.push(tab.id);
             }
             chrome.tabs.update(tab.id, { url: url });
+            if(isArchivable)
+                archiver(id, parent);
         }
         else {
             chrome.tabs.create({
@@ -28,6 +35,8 @@ var linkListener = function(notificator, event) {
                 if(isAlerte) {
                     notificator.alertTabId.push(tab.id); //on ajout l'id du tab
                 }
+                if(isArchivable)
+                    archiver(id, parent);
             });
         }
     });
@@ -41,10 +50,12 @@ var createNotif = function(notif) {
         case("forum"): //message
             elem.addClass("forum");
             notifLink.attr("href", 'http://www.siteduzero.com/forum/sujet/' + notif["thread"] + '/' + notif["messageId"]);
+            $("<span>", { class: "delete" }).text('x').appendTo(elem); 
             break;
         case("badge"): //badge
             elem.addClass("badge");
             notifLink.attr("href", 'http://www.siteduzero.com/membres/' + notif["messageId"]);
+            $("<span>", { class: "delete" }).text('x').appendTo(elem); 
             break;
         case("mp"): //MP
             elem.addClass("mp");
@@ -65,6 +76,20 @@ var createNotif = function(notif) {
     
     return elem;
 };
+
+var linkArchiveur = function(notificator, event) {
+    event.preventDefault();
+    var parent = $(event.currentTarget).closest('div'); //trouve l'id du parent
+    var id = $(parent).attr('id').slice(6);
+    
+    archiver(id, parent);
+}
+
+var archiver = function(id, parent) {
+    //l'idéal serait d'envoyer le remove en callback de succès... mais la flemme
+    notificator.archiveNotification(id);
+    $(parent).remove();
+}
 
 var backgroundLoaded = function(bgWindow) {
     if(!bgWindow || !bgWindow.theNotificator) {
@@ -102,6 +127,11 @@ var backgroundLoaded = function(bgWindow) {
         var liens = document.getElementsByTagName("a");
         for (var i = 0; i < liens.length; i++) {
             $(liens[i]).on("click", linkListener.bind(this, notificator));
+        }
+        
+        liens = document.getElementsByTagName("span");
+        for (var i = 0; i < liens.length; i++) {
+            $(liens[i]).on("click", linkArchiveur.bind(this, notificator));
         }
         
         notificator.setNewNotifCallback(function(notif) {

@@ -1,3 +1,5 @@
+/* PLUS NECESSAIRE MAINTENANT QUE L'ON SAIT ARCHIVER !
+
 var url = document.URL;
 if((url.indexOf("/membres/") == -1) && (url.indexOf("#badges") == -1)) //si on est pas sur la page pour les badges
     url = url.slice(0,url.indexOf("?")) + "/" + url.slice(url.lastIndexOf("-")+1);
@@ -13,6 +15,7 @@ for (var i = 0; i < len; i++) {
     }
 }
 target && target.click();
+*/
 /*
 // Je suspecte ce bout de code de faire remonter la page tout en haut plutot que rester sur le lien qui va bien
 // Update du nombre de notifs
