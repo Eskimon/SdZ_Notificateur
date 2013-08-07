@@ -65,7 +65,7 @@ Notificateur.prototype = {
     /**
      * Use fake data for debug
      */
-    useFakeData: false,
+    useFakeData: true,
     
     /**
      * Check en cours
@@ -298,6 +298,7 @@ Notificateur.prototype = {
             chrome.browserAction.setIcon({"path":"icons/icone_38_logout.png"});
             chrome.browserAction.disable();
             self.logged = false;
+            self.checkPending = false;
         });
     },
     
@@ -348,7 +349,7 @@ Notificateur.prototype = {
             return;
         } else {
             if(!this.logged) {
-                //chrome.browserAction.enable();
+                chrome.browserAction.enable();
                 chrome.browserAction.setIcon({"path":"icons/icone_38.png"});
                 //chrome.alarms.create('refresh', {periodInMinutes: parseInt(this.options.updateInterval)});
                 //chrome.alarms.onAlarm.addListener(this.listeners.alarm.bind(this));
@@ -1021,4 +1022,4 @@ Notificateur.prototype = {
 
 
 /** @global */
-var theNotificator = new Notificateur();
+window.theNotificator = new Notificateur();
