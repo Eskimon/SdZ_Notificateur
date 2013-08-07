@@ -587,8 +587,9 @@ Notificateur.prototype = {
         else {
             notif = this.getNotification(_notif);
         }
-        
-        if(notif.type != "mp" && notif.type != "alerte" && notif.id !== undefined) {
+        console.log(notif);
+        if(notif.id !== undefined && (notif.type == "forum" || notif.type == "badge")) {
+        console.log(notif);
             $.ajax({
                 url: this.url + "/notifications/archiver/" + notif.id, 
                 headers: {
@@ -598,9 +599,11 @@ Notificateur.prototype = {
                     if(data == "ok") {
                         console.log("Notification", notif.id, "archived", data);
                         this.removeNotification();
+                        return true;
                     }
                     else {
                         console.error("Failed to archive notification", notif.id);
+                        return false;
                     }
                 }.bind(this)
             });

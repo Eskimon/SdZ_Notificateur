@@ -4,7 +4,7 @@ var linkListener = function(notificator, event) {
     event.preventDefault();
     var url = $(event.currentTarget).attr("href");
     var isAlerte = $(event.currentTarget).hasClass("alerte");
-    console.log(url);
+    //console.log(url);
     chrome.windows.getCurrent({ populate: true }, function(currentWindow) {
         var tab = false;
         for(var i in currentWindow.tabs) {
@@ -13,7 +13,6 @@ var linkListener = function(notificator, event) {
                 break;
             }
         }
-        // /!\ traitement particulier à prévoir si c'est une alerte !
         if(!notificator.getOptions("openInNewTab") && tab && tab.url !== undefined && tab.url.indexOf("siteduzero.com") != -1 && tab.url.indexOf("siteduzero.com") < 14) {
             if(isAlerte) {
                 notificator.alertTabId.push(tab.id);
@@ -31,6 +30,16 @@ var linkListener = function(notificator, event) {
             });
         }
     });
+}
+
+var linkArchiveur = function(notificator, event) {
+    event.preventDefault();
+    var parent = $(event.currentTarget).closest('div'); //trouve l'id du parent
+    var id = $(parent).attr('id').slice(6);
+    
+    //l'idéal serait d'envoyer le remove en callback de succès... mais la flemme
+    notificator.archiveNotification(id);
+    $(parent).remove();
 }
 
 
@@ -53,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 switch(notifs[i].type) {
                     case("forum"): //message
                         elem = $("<div>", { class: "element forum", id: "notif-" + notifs[i].id }).appendTo(notifList);         
-                        $("<span>", { class: "delete" }).text('x').appendTo(elem);
+                        $("<span>", { class: "delete"}).text('x').appendTo(elem);
                         notifLink = $("<a>", { href: 'http://www.siteduzero.com/forum/sujet/' + notifs[i]["thread"] + '/' + notifs[i]["messageId"] }).appendTo(elem);
                         break;
                     case("badge"): //badge
@@ -95,6 +104,11 @@ document.addEventListener('DOMContentLoaded', function () {
         var liens = document.getElementsByTagName("a");
         for (var i = 0; i < liens.length; i++) {
             $(liens[i]).on("click", linkListener.bind(this, notificator));
+        }
+        
+        liens = document.getElementsByTagName("span");
+        for (var i = 0; i < liens.length; i++) {
+            $(liens[i]).on("click", linkArchiveur.bind(this, notificator));
         }
         
         notificator.setNewNotifCallback(function(notif) {
