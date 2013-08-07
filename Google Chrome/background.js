@@ -65,7 +65,7 @@ Notificateur.prototype = {
     /**
      * Use fake data for debug
      */
-    useFakeData: false,
+    useFakeData: true,
     
     /**
      * Check en cours

@@ -64,6 +64,17 @@ a {
     text-align: right;
 }
 
+span.delete {
+    cursor: pointer;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.5);
+    float: right;
+}
+
+span.delete:hover {
+    color: rgba(255, 255, 255, 1);
+}
+
 hr {
     border: 0;
     width: 90%;

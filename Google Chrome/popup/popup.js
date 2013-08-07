@@ -49,13 +49,13 @@ var createNotif = function(notif) {
     switch(notif.type) {
         case("forum"): //message
             elem.addClass("forum");
-            notifLink.attr("href", 'http://www.siteduzero.com/forum/sujet/' + notif["thread"] + '/' + notif["messageId"]);
-            $("<span>", { class: "delete" }).text('x').appendTo(elem); 
+            $("<span>", { class: "delete" }).text('x').prependTo(elem);
+            notifLink.attr("href", 'http://www.siteduzero.com/forum/sujet/' + notif["thread"] + '/' + notif["messageId"]); 
             break;
         case("badge"): //badge
             elem.addClass("badge");
+            $("<span>", { class: "delete" }).text('x').prependTo(elem); 
             notifLink.attr("href", 'http://www.siteduzero.com/membres/' + notif["messageId"]);
-            $("<span>", { class: "delete" }).text('x').appendTo(elem); 
             break;
         case("mp"): //MP
             elem.addClass("mp");
