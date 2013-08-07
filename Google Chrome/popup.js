@@ -2,8 +2,14 @@ var notificator;
 
 var linkListener = function(notificator, event) {
     event.preventDefault();
+    
+    var parent = $(event.currentTarget).closest('div'); //trouve l'id du parent
+    var id = $(parent).attr('id').slice(6);
+        
     var url = $(event.currentTarget).attr("href");
-    var isAlerte = $(event.currentTarget).hasClass("alerte");
+    var isAlerte = $(parent).hasClass("alerte");
+    var isArchivable = $(parent).hasClass("forum") || $(parent).hasClass("badge");
+    
     //console.log(url);
     chrome.windows.getCurrent({ populate: true }, function(currentWindow) {
         var tab = false;
@@ -18,6 +24,8 @@ var linkListener = function(notificator, event) {
                 notificator.alertTabId.push(tab.id);
             }
             chrome.tabs.update(tab.id, { url: url });
+            if(isArchivable)
+                archiver(id, parent);
         }
         else {
             chrome.tabs.create({
@@ -27,6 +35,8 @@ var linkListener = function(notificator, event) {
                 if(isAlerte) {
                     notificator.alertTabId.push(tab.id); //on ajout l'id du tab
                 }
+                if(isArchivable)
+                    archiver(id, parent);
             });
         }
     });
@@ -37,6 +47,10 @@ var linkArchiveur = function(notificator, event) {
     var parent = $(event.currentTarget).closest('div'); //trouve l'id du parent
     var id = $(parent).attr('id').slice(6);
     
+    archiver(id, parent);
+}
+
+var archiver = function(id, parent) {
     //l'idéal serait d'envoyer le remove en callback de succès... mais la flemme
     notificator.archiveNotification(id);
     $(parent).remove();

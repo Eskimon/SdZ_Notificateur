@@ -142,6 +142,7 @@ Notificateur.prototype = {
             if(tab.url !== undefined && tab.url.indexOf("siteduzero.com") != -1 && tab.url.indexOf("siteduzero.com") < 14 && changeInfo.status == "complete") {
                 if(tab.url.indexOf("/forum/sujet/") != -1 || tab.url.indexOf("/membres/") != -1) {//cas d'une notif de type badge ou forum -> il faut faire l'injection
                     if(this.alertTabId.indexOf(tabId) == -1) { //ne se déclenche pas si on arrive via une alerte de modo
+                        //on garde le inject juste pour le plaisir du konami code :D
                         chrome.tabs.executeScript(tabId, {
                             file: "injected.js"
                         });
@@ -149,7 +150,7 @@ Notificateur.prototype = {
                         this.alertTabId.splice(this.alertTabId.indexOf(tabId),1);
                     }
                     //on attend une seconde pour que le script soit injecté puis on check de nouveau les notifs pour mettre à jour le badge
-                    setTimeout(this.check.bind(this),1000);
+                    this.check();
                 } else if(tab.url.indexOf("/p/roadmap") != -1) {// cas de la roadmap
                     if(this.roadmapNotif) { //on supprime que si c'est nécessaire
                         delete this.notifications[this.getNotification("roadmap")];
@@ -200,9 +201,11 @@ Notificateur.prototype = {
                     switch(notif.type) {
                         case("forum"): //normal
                             this.openSdZ("/forum/sujet/" + notif.thread + "/" + notif.messageId);
+                            this.archiveNotification(notif.id);
                             break;
                         case("badge"): //badge
                             this.openSdZ("/membres/" + notif.messageId);
+                            this.archiveNotification(notif.id);
                             break;
                         case("mp"): //MP
                             this.openSdZ("/mp/" + notif.thread + "/" + notif.messageId);
@@ -223,6 +226,7 @@ Notificateur.prototype = {
             else if(button == 1) { // Open thread
                 if(notif) {
                     this.openSdZ("/forum/sujet/" + notif.thread);
+                    this.archiveNotification(notif.id);
                 }
                 
                 chrome.notifications.clear(notifId, function() {
@@ -240,9 +244,11 @@ Notificateur.prototype = {
                 switch(notif.type) {
                     case("forum"): //normal
                         this.openSdZ("/forum/sujet/" + notif.thread + "/" + notif.messageId);
+                        this.archiveNotification(notif.id);
                         break;
                     case("badge"): //badge
                         this.openSdZ("/membres/" + notif.messageId);
+                        this.archiveNotification(notif.id);
                         break;
                     case("mp"): //MP
                         this.openSdZ("/mp/" + notif.thread + "/" + notif.messageId);
