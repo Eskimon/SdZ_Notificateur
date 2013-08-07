@@ -314,7 +314,7 @@ Notificateur.prototype = {
      * @param {String} data Page data
      */
     loadCallback: function(data) {
-        //data = this.fakeData; //pour DEBUG only
+        data = this.fakeData; //pour DEBUG only
         //ancienne solution car elle marche mieux oO
         var self = this,
             $data = $(data.replace(/<img[^>]*>/gi,"")),
@@ -593,9 +593,8 @@ Notificateur.prototype = {
         else {
             notif = this.getNotification(_notif);
         }
-        console.log(notif);
+
         if(notif.id !== undefined && (notif.type == "forum" || notif.type == "badge")) {
-        console.log(notif);
             $.ajax({
                 url: this.url + "/notifications/archiver/" + notif.id, 
                 headers: {
@@ -604,12 +603,10 @@ Notificateur.prototype = {
                 success: function(data) {
                     if(data == "ok") {
                         console.log("Notification", notif.id, "archived", data);
-                        this.removeNotification();
-                        return true;
+                        this.removeNotification(notif.id);
                     }
                     else {
                         console.error("Failed to archive notification", notif.id);
-                        return false;
                     }
                 }.bind(this)
             });
@@ -635,7 +632,6 @@ Notificateur.prototype = {
         else {
             id = _notif;
         }
-        
         for(var i = 0; i < this.notifications.length; i++) {
             if(this.notifications[i].id == id) {
                 this.removeNotifCallback && this.removeNotifCallback(this.notifications[i]);
