@@ -4,11 +4,13 @@ var linkListener = function(notificator, event) {
     event.preventDefault();
     
     var parent = $(event.currentTarget).closest('div'); //trouve l'id du parent
-    var id = $(parent).attr('id').slice(6);
-        
+    var isShortcut = $(parent).hasClass("allNotifs");
+    if(!isShortcut) {
+        var id = $(parent).attr('id').slice(6);
+        var isAlerte = $(parent).hasClass("alerte");
+        var isArchivable = $(parent).hasClass("forum") || $(parent).hasClass("badge");
+    }
     var url = $(event.currentTarget).attr("href");
-    var isAlerte = $(parent).hasClass("alerte");
-    var isArchivable = $(parent).hasClass("forum") || $(parent).hasClass("badge");
     
     //console.log(url);
     chrome.windows.getCurrent({ populate: true }, function(currentWindow) {
@@ -117,10 +119,19 @@ var backgroundLoaded = function(bgWindow) {
         
         notifList.appendTo(content);
         
+        //ligne "Afficher toute les notifications"
         if(notificator.getOptions("showAllNotifButton")) {
             $("<hr>").appendTo(content);
             $("<div>", { class: "allNotifs" }).append(
                 $("<a>", { href: "http://www.siteduzero.com/notifications" }).text("Toutes mes notifications")
+            ).appendTo(content);
+        }
+        
+        //ligne "Ouvrir le SdZ"
+        if(notificator.getOptions("SdZLink")) {
+            $("<hr>").appendTo(content);
+            $("<div>", { class: "allNotifs" }).append(
+                $("<a>", { href: "http://www.siteduzero.com/" }).text("Aller au SdZ")
             ).appendTo(content);
         }
         

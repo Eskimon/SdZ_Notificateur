@@ -20,7 +20,8 @@ var NotificatorOptions = {
             notifPriority: document.getElementById("priorityNotif"),
             mpPriority: document.getElementById("priorityMP"),
             playSon: document.getElementById("playSon"),
-            tweet: document.getElementById("tweet")            
+            tweet: document.getElementById("tweet"),
+            SdZLink: document.getElementById("SdZLink"),
         };
         
         document.getElementById("enregistrer").addEventListener("click", this.save.bind(this));

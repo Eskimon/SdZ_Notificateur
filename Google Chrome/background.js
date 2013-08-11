@@ -46,7 +46,8 @@ Notificateur.prototype = {
         lastEdit: "Edit du 02/08/2013 à 15h48",
         notifPriority: 0,
         mpPriority: 0,
-        playSon: false
+        playSon: false,
+        SdZLink: false
     },
     
     _optionsTypes: { // Je l'ai quand meme fait ^
@@ -59,7 +60,8 @@ Notificateur.prototype = {
         lastEdit: String,
         notifPriority: Number,
         mpPriority: Number,
-        playSon: Boolean
+        playSon: Boolean,
+        SdZLink: Boolean
     },
     
     /**
