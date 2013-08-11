@@ -1,0 +1,12 @@
+<prefwindow id="appPreferences" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    <prefpane id="pane1" label="&pane1.title;">
+        <preferences>
+            <preference id="pref1" name="pref.name" type="bool"/>
+        </preferences>
+     
+        .. UI elements that refer to the preferences above, e.g.:
+        <checkbox id="check1" preference="pref1" label="&check1.label;" accesskey="&check1.accesskey;"/>
+    </prefpane>
+
+    <prefpane id="pane2" label="&pane2.title;" src="chrome://uri/to/pane.xul"/>
+</prefwindow>

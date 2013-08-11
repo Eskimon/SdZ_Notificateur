@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+
+  <Description about="urn:mozilla:install-manifest">
+    <em:id>notificateur@sdz.com</em:id>
+    <em:version>0.1</em:version>
+    <em:type>2</em:type>
+   
+    <!-- L'application cible de votre extension, 
+         avec les versions minimums et maximums supportées. --> 
+    <em:targetApplication>
+      <Description>
+        <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+        <em:minVersion>1.5</em:minVersion>
+        <em:maxVersion>23.*</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+   
+    <!-- Méta-données visibles -->
+    <em:name>SdZ Notificateur</em:name>
+    <em:description>Extensions pour Mozilla Firefox pour connaitre le nombre de notifications ou MP SdZ sans avoir besoin d'ouvrir le site</em:description>
+    <em:creator>Eskimon</em:creator>
+    <em:homepageURL>https://github.com/Eskimon/SdZ_Notificateur</em:homepageURL>
+  </Description>      
+</RDF>
