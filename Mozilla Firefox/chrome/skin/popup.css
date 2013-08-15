@@ -1,0 +1,24 @@
+#SdZNotificateur-Button {
+    list-style-image: url("chrome://sdznotificateur/skin/icone_24.png");
+}
+
+.forum {
+    list-style-image: url("chrome://sdznotificateur/skin/bulle.png");
+}
+
+.badge {
+    list-style-image: url("chrome://sdznotificateur/skin/badge.png");
+}
+
+.roadmap {
+    list-style-image: url("chrome://sdznotificateur/skin/roadmap.png");
+}
+
+.alerte {
+    list-style-image: url("chrome://sdznotificateur/skin/alerte.png");
+}
+
+.mp {
+    list-style-image: url("chrome://sdznotificateur/skin/mp.png");
+}
+

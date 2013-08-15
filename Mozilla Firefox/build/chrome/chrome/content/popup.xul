@@ -5,34 +5,38 @@
 <overlay id="SdZNotificateur-Overlay"
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-    <script type="application/javascript" src="chrome://sdznotificateur/content/jquery.js"/>
+<!-- a supprimer bientot -->
     <script type="application/javascript" src="chrome://sdznotificateur/content/popup.js"/>
 
     <!-- Firefox -->
     <toolbarpalette id="BrowserToolbarPalette">
+        <!-- button details 
+        class="toolbarbutton-1 chromeclass-toolbar-additional" 
+        -->
         <toolbarbutton id="SdZNotificateur-Button"
             label="SdZ Notificateur"
             tooltiptext="SdZ Notificateur"
             type="menu" >
-            <menupopup id="lemenu" onpopupshowing="Notificateur.populate()">
-            <!--
+            <menupopup>
+            
                 <menuitem label="roadmap"
-                    class="roadmap" />
+                    class="element roadmap" />
                     
+                   
                 <menuitem label="forum"
-                    class="forum" />
+                    class="element forum" />
                     
                 <menuitem label="mp"
-                    class="mp" />
+                    class="element mp" />
                     
                 <menuitem label="badge"
-                    class="badge" />
+                    class="element badge" />
                     
                 <menuitem label="alerte"
-                    class="alerte" />            
+                    class="element alerte" />            
             
                 <menuseparator />
-                -->
+
             </menupopup>
         </toolbarbutton>
     </toolbarpalette>

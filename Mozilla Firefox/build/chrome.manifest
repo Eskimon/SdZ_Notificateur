@@ -1,7 +1,7 @@
-content sdznotificateur chrome/content/
+content sdznotificateur jar:chrome/sdznotificateur.jar!/chrome/content/
 
 overlay chrome://browser/content/browser.xul chrome://sdznotificateur/content/popup.xul
 
-skin sdznotificateur classic/1.0 chrome/skin/
+skin sdznotificateur classic/1.0 jar:chrome/sdznotificateur.jar!/chrome/skin/
 
 style chrome://global/content/customizeToolbar.xul chrome://sdznotificateur/skin/popup.css

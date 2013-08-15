@@ -1,0 +1,33 @@
+#SdZNotificateur-Button {
+    list-style-image: url("chrome://sdznotificateur/skin/icone_24.png");
+}
+
+.element {
+    padding: 8px 10px 8px 30px;
+    border-right: solid 8px;
+}
+
+.element.forum {
+    background: url('../icons/bulle.png') no-repeat 7px 16px;
+    border-right-color: green;
+}
+
+.element.badge {
+    background: url('../icons/badge.png') no-repeat 7px 14px;
+    border-right-color: blue;
+}
+
+.element.roadmap {
+    background: url('../icons/roadmap.png') no-repeat 7px 14px;
+    border-right-color: yellow;
+}
+
+.element.alerte {
+    background: url('../icons/alerte.png') no-repeat 7px 14px;
+    border-right-color: red;
+}
+
+.element.mp {
+    background: url('../icons/mp.png') no-repeat 7px 14px;
+    border-right-color: white;
+}
