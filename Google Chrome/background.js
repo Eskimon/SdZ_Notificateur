@@ -83,6 +83,7 @@ Notificateur.prototype = {
      * Init
      */
     init: function() {
+        this.initialized = false;
         this.notifications = []; //tableau stockant les notifs
         this.alertTabId = [];
         this.MPs = []; //tableau stockant les MPs
@@ -101,9 +102,10 @@ Notificateur.prototype = {
             this.loadSounds(function() {
                 this.loadSoundpack(this.soundpack);
             }.bind(this));
-
-            this.check();
             
+            this.initialized = true;
+            
+            this.check();
             this.checkRoadmap();
             
         }.bind(this));
@@ -292,7 +294,7 @@ Notificateur.prototype = {
      */
     check: function() {
         var self = this;
-        if(this.checkPending) {
+        if(this.checkPending || !this.initialized) { // Si l'extension n'est pas (encore) initialisee ou un check est deja en cours
             return;
         }
         
@@ -938,6 +940,7 @@ Notificateur.prototype = {
      * Check the Roadmap
      */
     checkRoadmap: function() {
+        if(!this.initialized) return; // Si l'extension n'est pas (encore) initialisee
         var self = this;
         $.get(this.roadmap, function(data) {
             //on passe direct par jQuery car le parsage en XML bug
