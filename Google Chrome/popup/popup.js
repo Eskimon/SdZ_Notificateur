@@ -172,7 +172,7 @@ var backgroundLoaded = function(bgWindow) {
             if(notifList.children().length > 0) {
                 $("<hr>").appendTo(notifList);
             }
-            createNotif(notif).appendTo(notifList).find("a").on("click", linkArchiveur.bind(this, notificator));
+            createNotif(notif).appendTo(notifList).find("a").on("click", linkListener.bind(this, notificator));
         });
         
         notificator.setRemoveNotifCallback(function(notif) {
