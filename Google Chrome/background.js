@@ -2,7 +2,7 @@
  * SdZ Notificateur
  * @author Eskimon & Sandhose
  * @licence under MIT Licence
- * @version 1.12.1
+ * @version 2.2.0
  * ======
  * background.js
  * Main background script
@@ -36,22 +36,25 @@ Notificateur.prototype = {
     /**
      * Options
      */  
-    options: {
+    default_options: {
         updateInterval: 5,
-		openListe: true,
+        openListe: true,
         openInNewTab: true,
         showAllNotifButton: true,
         showDesktopNotif: true,
         useDetailedNotifs: false,
-        lastEdit: "Edit du 02/08/2013 à 15h48",
+        lastEdit: "Edit du 23/08/2013 à 11h48",
         notifPriority: 0,
         mpPriority: 0,
         playSon: false,
         SdZLink: false,
-        autoclosePopup: false
+        autoclosePopup: true,
+        archiveAllLink: false
     },
+
+    options: {},
     
-    _optionsTypes: { // Je l'ai quand meme fait ^
+    _optionsTypes: { // Je l'ai quand meme fait ^^
         updateInterval: Number,
         openListe: Boolean,
         openInNewTab: Boolean,
@@ -63,7 +66,8 @@ Notificateur.prototype = {
         mpPriority: Number,
         playSon: Boolean,
         SdZLink: Boolean,
-        autoclosePopup: Boolean
+        autoclosePopup: Boolean,
+        archiveAllLink: Boolean
     },
     
     /**
@@ -638,6 +642,24 @@ Notificateur.prototype = {
             });
         }
     },
+
+    /**
+     * Archive all notifications
+     * @param {Function} callback
+     */
+    archiveAll: function(callback) {
+        $.get(this.url + "/notifications", function() {
+            var toRemove = [];
+            for(var i in this.notifications) {
+                if(this.notifications[i].type == "forum" || this.notifications[i].type == "badge") {
+                    toRemove.push(this.notifications[i].id);
+                }
+            }
+            this.removeNotification(toRemove);
+            console.log(toRemove);
+            callback && callback();
+        }.bind(this));
+    },
     
     /**
      * Remove notification(s)
@@ -774,12 +796,22 @@ Notificateur.prototype = {
         this.storage.set(changes, callback);
         this.updateOptions();
     },
+
+    /**
+     * Reset options
+     */
+    resetOptions: function() {
+        var defaults = this.default_options;
+        delete defaults["lastEdit"];
+        this.setOptions(defaults);
+    },
     
     /**
      * Load options from chrome.storage
      * @param {Function} [callback] Callback when options are loaded
      */
     loadOptions: function(callback) { // Charge les options depuis le chrome.storage
+        this.options = $.extend(this.options, this.default_options);
         var keys = Object.keys(this.options);
         this.storage.get(keys, function(items) {
             for(var key in items) {

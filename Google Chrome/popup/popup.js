@@ -1,8 +1,11 @@
 var notificator;
 
 var linkListener = function(notificator, event) {
+    var url = $(event.currentTarget).attr("href");
+    if(url == "#") return;
+
     event.preventDefault();
-    
+
     var parent = $(event.currentTarget).closest('div'); //trouve l'id du parent
     var isShortcut = $(parent).hasClass("allNotifs");
     if(!isShortcut) {
@@ -10,7 +13,6 @@ var linkListener = function(notificator, event) {
         var isAlerte = $(parent).hasClass("alerte");
         var isArchivable = $(parent).hasClass("forum") || $(parent).hasClass("badge");
     }
-    var url = $(event.currentTarget).attr("href");
     
     //console.log(url);
     chrome.windows.getCurrent({ populate: true }, function(currentWindow) {
@@ -89,13 +91,21 @@ var linkArchiveur = function(notificator, event) {
     var id = $(parent).attr('id').slice(6);
     
     archiver(id, parent);
-}
+};
 
 var archiver = function(id, parent) {
     //l'idéal serait d'envoyer le remove en callback de succès... mais la flemme
     notificator.archiveNotification(id);
     $(parent).remove();
-}
+};
+
+var archiveAll = function() {
+    notificator.archiveAll(function() {
+        $(".archiveAll").text("Fait!").delay(1000).slideUp();
+    });
+
+    $(".archiveAll").text("En cours...");
+};
 
 var backgroundLoaded = function(bgWindow) {
     if(!bgWindow || !bgWindow.theNotificator) {
@@ -114,10 +124,18 @@ var backgroundLoaded = function(bgWindow) {
         if(len == 0 && !notificator.newRoadmap) {
             $("<div>", { class: "noNotifs" }).text("Aucune nouvelle notifications").appendTo(content);
         } else {
+            //ligne "Archiver toutes les notifications"
+            if(notificator.getOptions("showAllNotifButton")) {
+                $("<div>", { class: "archiveAll" }).append(
+                    $("<a>", { href: "#" }).text("Tout archiver").click(archiveAll)
+                ).appendTo(content);
+                $("<hr>").appendTo(content);
+            }
+
             for(var i = 0; i < len; i++) {
-                createNotif(notifs[i]).appendTo(notifList);
+                var n = createNotif(notifs[i]).appendTo(notifList);
                 if(i<len-1)
-                    $("<hr>").appendTo(notifList);
+                    $("<hr>").appendTo(notifList).attr("id", "hr-notif-" + notifs[i].id);
             }
         }
         
@@ -160,8 +178,11 @@ var backgroundLoaded = function(bgWindow) {
         notificator.setRemoveNotifCallback(function(notif) {
             var n = notifList.find("#notif-" + notif.id);
             if(n.length == 1) {
-                n.remove();
+                n.slideUp(function() {
+                    $(this).remove();
+                });
             }
+            notifList.find("#hr-notif-" + notif.id).remove();
         });
     }
     else {

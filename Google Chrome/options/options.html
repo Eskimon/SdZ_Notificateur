@@ -40,6 +40,9 @@
                             <label for="autoclosePopup"><input type="checkbox" name="autoclosePopup" id="autoclosePopup"/> Fermer automatiquement la Popup ?</label>
                             <span class="complement">La popup se fermera automatiquement lors d'un clic sur une notification</span>
                         </div>
+                        <div class="champ">
+                            <label for="archiveAllLink"><input type="checkbox" name="archiveAllLink" id="archiveAllLink"/> Afficher la ligne "Tout archiver" ?</label>
+                        </div>
                     </div>
                     <div class="champ">
                         <label for="notifNative"><input type="checkbox" name="notifNative" id="notifNative" /> Afficher les notification du bureau ?</label>
@@ -81,7 +84,11 @@
                         <label for="tweet"><input type="checkbox" name="tweet" id="tweet" /> Récupérer les tweets du compte @SiteDuZero ?</label>
                         <span class="complement">Une notification apparaitra lors d'un nouveau tweet du Site du zéro</span>
                     </div>
-                    <input type="button" id="enregistrer" value="Enregistrer" />
+
+                    <div class="form-buttons">
+                        <input type="button" id="enregistrer" value="Enregistrer" />
+                        <input type="button" id="reset" value="Reset" />
+                    </div>
                     <div class="clear"></div>
                 </div>
                 <div id="connecteComme" class="options">

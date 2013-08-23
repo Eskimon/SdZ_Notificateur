@@ -22,10 +22,12 @@ var NotificatorOptions = {
             playSon: document.getElementById("playSon"),
             tweet: document.getElementById("tweet"),
             SdZLink: document.getElementById("SdZLink"),
-            autoclosePopup: document.getElementById("autoclosePopup")
+            autoclosePopup: document.getElementById("autoclosePopup"),
+            archiveAllLink: document.getElementById("archiveAllLink")
         };
         
         document.getElementById("enregistrer").addEventListener("click", this.save.bind(this));
+        document.getElementById("reset").addEventListener("click", this.reset.bind(this));
         this.elems["updateInterval"].addEventListener("keyup", this.checkInput.bind(this));
         this.elems["openListe"].addEventListener("click", this.toggle.bind(this));
         this.elems["showDesktopNotif"].addEventListener("click", this.toggle.bind(this));
@@ -50,6 +52,17 @@ var NotificatorOptions = {
             } else {
                 this.oldValue = val;
             }
+        }
+    },
+
+    /**
+     * Reset options
+     */
+    reset: function() {
+        var c = confirm("Voulez vous r\u00E9ellement remettre \u00E0 z\u00E9ro les options ?");
+        if(c) {
+            this.notificator.resetOptions();
+            window.location.reload();
         }
     },
     

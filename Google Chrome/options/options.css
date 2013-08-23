@@ -62,6 +62,10 @@ body > .content {
     height: auto;
 }
 
+.form-buttons {
+    float: right;
+}
+
 input[type="button"] {
     border: solid 1px #CCC;
     color: #fff;
@@ -77,7 +81,6 @@ input[type="button"] {
     padding: 10px;
     font-size: 14px;
 	margin-top: 10px;
-    float: right;
 }
 
 input[type="button"]:hover {
