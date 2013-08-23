@@ -125,7 +125,7 @@ var backgroundLoaded = function(bgWindow) {
             $("<div>", { class: "noNotifs" }).text("Aucune nouvelle notifications").appendTo(content);
         } else {
             //ligne "Archiver toutes les notifications"
-            if(notificator.getOptions("showAllNotifButton")) {
+            if(notificator.getOptions("archiveAllLink")) {
                 $("<div>", { class: "archiveAll" }).append(
                     $("<a>", { href: "#" }).text("Tout archiver").click(archiveAll)
                 ).appendTo(content);
