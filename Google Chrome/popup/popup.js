@@ -41,6 +41,10 @@ var linkListener = function(notificator, event) {
                     archiver(id, parent);
             });
         }
+
+        if(notificator.getOptions("autoclosePopup")) {
+            window.close();
+        }
     });
 }
 

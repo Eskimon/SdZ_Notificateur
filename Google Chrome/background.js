@@ -47,7 +47,8 @@ Notificateur.prototype = {
         notifPriority: 0,
         mpPriority: 0,
         playSon: false,
-        SdZLink: false
+        SdZLink: false,
+        autoclosePopup: false
     },
     
     _optionsTypes: { // Je l'ai quand meme fait ^
@@ -61,7 +62,8 @@ Notificateur.prototype = {
         notifPriority: Number,
         mpPriority: Number,
         playSon: Boolean,
-        SdZLink: Boolean
+        SdZLink: Boolean,
+        autoclosePopup: Boolean
     },
     
     /**

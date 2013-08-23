@@ -22,6 +22,7 @@ var NotificatorOptions = {
             playSon: document.getElementById("playSon"),
             tweet: document.getElementById("tweet"),
             SdZLink: document.getElementById("SdZLink"),
+            autoclosePopup: document.getElementById("autoclosePopup")
         };
         
         document.getElementById("enregistrer").addEventListener("click", this.save.bind(this));
