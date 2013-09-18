@@ -408,9 +408,9 @@ Notificateur.prototype = {
             
             if(this.options.useDetailedNotifs && !notifObj.detailed && (notifObj.type == "forum")) {
                 this.fetchNotificationDetails(notifObj, function(newNotif) {
-                    $.extend(notifObj, newNotif);
-                    console.log("Detail fectched", newNotif);
-                    self.showDesktopNotif(notifObj);
+                    var notifTmp = $.extend({}, notifObj, newNotif);
+                    console.log("Detail fectched", notifTmp);
+                    self.showDesktopNotif(notifTmp);
                 });
             }
             else if(!existingNotif) {
@@ -422,13 +422,15 @@ Notificateur.prototype = {
 
         
         // Check les mp
-        notifications = $data.find("li#lastPrivateMessages a");
+        notifications = $data.find(".last-message-item .dropdown-menu .dropdown-menu-item");
 
         for(var i = 0; i < notifications.length-1; i++) { //-1 our pas avoir le lien "tout mes MP"
             var notif = $(notifications[i]),
-                notifLink = notif.attr('href'),
+                notifLink = notif.find('a[class!="delete"]').attr('href'),
                 archiveLink = notifLink,
                 texte = notif.text(); //pas de lien d'archives pour les alertes
+
+            if(notifLink == "/mp/") continue;
 
             texte = texte.replace(/\s+/g," "); //vire les tabulations et autres cochonneries
             
@@ -461,7 +463,7 @@ Notificateur.prototype = {
             notifsList.push(notifObj);
         }
         
-        
+        /*
         // Check les notifications "alertes" des modos
         notifications = $data.find("ul.alertsList li.notification");
  
@@ -494,7 +496,7 @@ Notificateur.prototype = {
                         
             notifsList.push(notifObj);
         }
-        
+        */
         
         this.notifications = notifsList;
         if(this.roadmapNotif)
