@@ -10,7 +10,8 @@
         "128": "icons/icone_128.png"
         },
     "permissions": [
-        "http://fr.openclassrooms.com/*",
+        "http://*.openclassrooms.com/*",
+        "http://*.siteduzero.com/*", // pour certains avatars
         "http://www.gravatar.com/*",
         "http://sdz-upload.s3.amazonaws.com/*",
         "tabs",

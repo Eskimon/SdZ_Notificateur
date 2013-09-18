@@ -57,12 +57,12 @@ var createNotif = function(notif) {
     switch(notif.type) {
         case("forum"): //message
             elem.addClass("forum");
-            $("<span>", { class: "delete" }).text('x').prependTo(elem);
+            $("<span>", { class: "delete" }).html('&times;').prependTo(elem);
             notifLink.attr("href", 'http://fr.openclassrooms.com/forum/sujet/' + notif["thread"] + '/' + notif["messageId"]); 
             break;
         case("badge"): //badge
             elem.addClass("badge");
-            $("<span>", { class: "delete" }).text('x').prependTo(elem); 
+            $("<span>", { class: "delete" }).html('&times;').prependTo(elem); 
             notifLink.attr("href", 'http://fr.openclassrooms.com/membres/' + notif["messageId"]);
             break;
         case("mp"): //MP
@@ -122,20 +122,17 @@ var backgroundLoaded = function(bgWindow) {
         var notifList = $("<div>", { class: "notifList" });
         
         if(len == 0 && !notificator.newRoadmap) {
-            $("<div>", { class: "noNotifs" }).text("Aucune nouvelle notifications").appendTo(content);
+            $("<div>", { class: "element other noNotifs" }).append($("<a>", {href: "#"}).text("Aucune nouvelle notifications")).appendTo(content);
         } else {
             //ligne "Archiver toutes les notifications"
             if(notificator.getOptions("archiveAllLink")) {
-                $("<div>", { class: "archiveAll" }).append(
+                $("<div>", { class: "element other archiveAll" }).append(
                     $("<a>", { href: "#" }).text("Tout archiver").click(archiveAll)
                 ).appendTo(content);
-                $("<hr>").appendTo(content);
             }
 
             for(var i = 0; i < len; i++) {
                 var n = createNotif(notifs[i]).appendTo(notifList);
-                if(i<len-1)
-                    $("<hr>").appendTo(notifList).attr("id", "hr-notif-" + notifs[i].id);
             }
         }
         
@@ -143,16 +140,14 @@ var backgroundLoaded = function(bgWindow) {
         
         //ligne "Afficher toute les notifications"
         if(notificator.getOptions("showAllNotifButton")) {
-            $("<hr>").appendTo(content);
-            $("<div>", { class: "allNotifs" }).append(
+            $("<div>", { class: "element other allNotifs" }).append(
                 $("<a>", { href: "http://fr.openclassrooms.com/notifications" }).text("Toutes mes notifications")
             ).appendTo(content);
         }
         
         //ligne "Ouvrir le SdZ"
         if(notificator.getOptions("SdZLink")) {
-            $("<hr>").appendTo(content);
-            $("<div>", { class: "allNotifs" }).append(
+            $("<div>", { class: "element other allNotifs" }).append(
                 $("<a>", { href: "http://fr.openclassrooms.com/" }).text("Aller sur OCr")
             ).appendTo(content);
         }
@@ -169,9 +164,6 @@ var backgroundLoaded = function(bgWindow) {
         
         notificator.setNewNotifCallback(function(notif) {
             $(".noNotifs").hide();
-            if(notifList.children().length > 0) {
-                $("<hr>").appendTo(notifList);
-            }
             createNotif(notif).appendTo(notifList).find("a").on("click", linkListener.bind(this, notificator));
         });
         
@@ -182,7 +174,6 @@ var backgroundLoaded = function(bgWindow) {
                     $(this).remove();
                 });
             }
-            notifList.find("#hr-notif-" + notif.id).remove();
         });
     }
     else {
