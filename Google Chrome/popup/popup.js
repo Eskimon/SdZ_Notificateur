@@ -58,24 +58,24 @@ var createNotif = function(notif) {
         case("forum"): //message
             elem.addClass("forum");
             $("<span>", { class: "delete" }).text('x').prependTo(elem);
-            notifLink.attr("href", 'http://www.siteduzero.com/forum/sujet/' + notif["thread"] + '/' + notif["messageId"]); 
+            notifLink.attr("href", 'http://fr.openclassrooms.com/forum/sujet/' + notif["thread"] + '/' + notif["messageId"]); 
             break;
         case("badge"): //badge
             elem.addClass("badge");
             $("<span>", { class: "delete" }).text('x').prependTo(elem); 
-            notifLink.attr("href", 'http://www.siteduzero.com/membres/' + notif["messageId"]);
+            notifLink.attr("href", 'http://fr.openclassrooms.com/membres/' + notif["messageId"]);
             break;
         case("mp"): //MP
             elem.addClass("mp");
-            notifLink.attr("href", 'http://www.siteduzero.com/mp/' + notif["thread"] + '/' + notif["messageId"]);
+            notifLink.attr("href", 'http://fr.openclassrooms.com/mp/' + notif["thread"] + '/' + notif["messageId"]);
             break;
         case("roadmap"): //roadmap
             elem.addClass("roadmap");
-            notifLink.attr("href", 'http://www.siteduzero.com/p/roadmap-du-site-du-zero');
+            notifLink.attr("href", 'http://fr.openclassrooms.com/p/roadmap');
             break;
         case("alerte"): //alerte
             elem.addClass("alerte");
-            notifLink.attr("href", 'http://www.siteduzero.com/forum/sujet/' + notif["thread"] + '/' + notif["messageId"]).addClass("alerte");
+            notifLink.attr("href", 'http://fr.openclassrooms.com/forum/sujet/' + notif["thread"] + '/' + notif["messageId"]).addClass("alerte");
             break;
     }
         
@@ -145,7 +145,7 @@ var backgroundLoaded = function(bgWindow) {
         if(notificator.getOptions("showAllNotifButton")) {
             $("<hr>").appendTo(content);
             $("<div>", { class: "allNotifs" }).append(
-                $("<a>", { href: "http://www.siteduzero.com/notifications" }).text("Toutes mes notifications")
+                $("<a>", { href: "http://fr.openclassrooms.com/notifications" }).text("Toutes mes notifications")
             ).appendTo(content);
         }
         
@@ -153,7 +153,7 @@ var backgroundLoaded = function(bgWindow) {
         if(notificator.getOptions("SdZLink")) {
             $("<hr>").appendTo(content);
             $("<div>", { class: "allNotifs" }).append(
-                $("<a>", { href: "http://www.siteduzero.com/" }).text("Aller au SdZ")
+                $("<a>", { href: "http://fr.openclassrooms.com/" }).text("Aller sur OCr")
             ).appendTo(content);
         }
         

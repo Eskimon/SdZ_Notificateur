@@ -1,5 +1,5 @@
 /**
- * SdZ Notificateur
+ * OpenClassrooms Notificateur
  * @author Eskimon & Sandhose
  * @licence under MIT Licence
  * @version 2.2.0
@@ -21,12 +21,12 @@ Notificateur.prototype = {
     /**
      * SdZ URL
      */
-    url: "http://www.siteduzero.com",
+    url: "http://fr.openclassrooms.com",
     
     /**
      * Roadmap URL
      */
-    roadmap: "http://www.siteduzero.com/p/roadmap-du-site-du-zero",
+    roadmap: "http://fr.openclassrooms.com/p/roadmap",
     
     /**
      * If logged in last check
@@ -159,7 +159,7 @@ Notificateur.prototype = {
          * Tab Update
          */
         tabUpdate: function(tabId, changeInfo, tab) {
-            if(tab.url !== undefined && tab.url.indexOf("siteduzero.com") != -1 && tab.url.indexOf("siteduzero.com") < 14 && changeInfo.status == "complete") {
+            if(tab.url !== undefined && tab.url.indexOf("openclassrooms.com") != -1 && tab.url.indexOf("openclassrooms.com") < 14 && changeInfo.status == "complete") {
                 if(tab.url.indexOf("/forum/sujet/") != -1 || tab.url.indexOf("/membres/") != -1) {//cas d'une notif de type badge ou forum -> il faut faire l'injection
                     if(this.alertTabId.indexOf(tabId) == -1) { //ne se déclenche pas si on arrive via une alerte de modo
                         //on garde le inject juste pour le plaisir du konami code :D
@@ -187,7 +187,7 @@ Notificateur.prototype = {
          * Tab create
          */
         tabCreate: function(tab) {
-            if(tab.url !== undefined && tab.url.indexOf("siteduzero.com") != -1 && tab.url.indexOf("siteduzero.com") < 14) {
+            if(tab.url !== undefined && tab.url.indexOf("openclassrooms.com") != -1 && tab.url.indexOf("openclassrooms.com") < 14) {
                 this.check();
             }
         },
@@ -231,7 +231,7 @@ Notificateur.prototype = {
                             this.openSdZ("/mp/" + notif.thread + "/" + notif.messageId);
                             break;
                         case("roadmap"): //roadmap
-                            this.openSdZ("/p/roadmap-du-site-du-zero");
+                            this.openSdZ("/p/roadmap");
                             break;
                         case("alerte"): //alerte
                             this.openSdZ("/forum/sujet/" + notif.thread + "/" + notif.messageId, true);
@@ -274,7 +274,7 @@ Notificateur.prototype = {
                         this.openSdZ("/mp/" + notif.thread + "/" + notif.messageId);
                         break;
                     case("roadmap"): //roadmap
-                        this.openSdZ("/p/roadmap-du-site-du-zero");
+                        this.openSdZ("/p/roadmap");
                         break;
                     case("alerte"): //alerte
                         this.openSdZ("/forum/sujet/" + notif.thread + "/" + notif.messageId, true);
@@ -374,7 +374,7 @@ Notificateur.prototype = {
         }
         
         // Check les notifications
-        var notifications = $data.find("div#scrollMe ul.list li.notification"),
+        var notifications = $data.find(".last-notification-item .dropdown-menu .dropdown-menu-item"),
             newNotifs = [], // Liste des nouvelles notifications
             oldNotifs = this.notifications, // Ancienne liste
             removedNotifs = [], // Notifs enlevées
@@ -382,13 +382,15 @@ Notificateur.prototype = {
             
         for(var i = 0; i < notifications.length; i++) {
             var notif = $(notifications[i]),
-                notifLink = notif.find("a.link").attr('href'),
+                notifLink = notif.find('a[class!="delete"]').attr('href'),
                 archiveLink = notif.find("a.delete").attr('href');
+
+            if(notifLink.indexOf("/notifications") != -1) continue; // Virer le "Toutes mes notifs"
             
             var notifObj = {
                 id: archiveLink.substr(archiveLink.lastIndexOf("/") + 1),
-                title: notif.find("li.title").text(),
-                date: notif.find("li.date").text(),
+                title: notif.find(".title").text(),
+                date: notif.find(".date").text(),
                 messageId: notifLink.substr(notifLink.lastIndexOf("/") + 1),
                 thread: notifLink.substr(13, notifLink.lastIndexOf("/") - 13),
                 type: notif.find("a.badgeSdz").text().length==0 ? "forum" : "badge" //si c'est un badge
