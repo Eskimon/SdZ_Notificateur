@@ -463,14 +463,15 @@ Notificateur.prototype = {
             notifsList.push(notifObj);
         }
         
-        /*
         // Check les notifications "alertes" des modos
-        notifications = $data.find("ul.alertsList li.notification");
+        notifications = $data.find(".last-active-item .dropdown-menu .dropdown-menu-item");
  
         for(var i = 0; i < notifications.length-1; i++) { //-1 our pas avoir le lien "toutes les alertes"
             var notif = $(notifications[i]),
-                notifLink = notif.find("a.linkAlert").attr('href'),
+                notifLink = notif.find("a").attr('href'),
                 archiveLink = notifLink; //pas de lien d'archives pour les alertes
+
+            if(notifLink == "/mp/") continue;
 
             var notifObj = {
                 id: "alerte-"+notifLink.substr(notifLink.lastIndexOf("/") + 1),
@@ -496,7 +497,7 @@ Notificateur.prototype = {
                         
             notifsList.push(notifObj);
         }
-        */
+        
         
         this.notifications = notifsList;
         if(this.roadmapNotif)
