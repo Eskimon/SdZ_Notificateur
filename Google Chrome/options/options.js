@@ -71,7 +71,7 @@ var NotificatorOptions = {
      */
     save: function() {
         this.notificator.setOptions(this.getValues(), function() {
-            console.log("Options Saved");
+            //console.log("Options Saved");
             window.close();
         });
     },
