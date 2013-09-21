@@ -11,7 +11,7 @@
         },
     "permissions": [
         "http://*.openclassrooms.com/*",
-        "http://*.siteduzero.com/*", // pour certains avatars
+        "http://*.siteduzero.com/*",
         "http://www.gravatar.com/*",
         "http://sdz-upload.s3.amazonaws.com/*",
         "tabs",
