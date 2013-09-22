@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     //checkAvatarEskimon
-    $.get("http://www.siteduzero.com/membres/eskimon-32590", function(data) {
+    $.get("http://fr.openclassrooms.com/membres/eskimon-32590", function(data) {
         data = data.replace(/src=/ig, "data-src=").replace(/href=/ig, "data-href=");
         var $data = $(data);
         $('#avatarEskimon').css('background-image', "url("+$data.find("#content_profil .memberAvatar").attr('data-src')+")");

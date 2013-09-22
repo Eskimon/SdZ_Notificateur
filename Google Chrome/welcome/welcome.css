@@ -3,20 +3,23 @@ html, body, h1, h2, h3, h4, h5, h6, p {
     padding: 0;
 }
 
+* {
+    -webkit-box-sizing: border-box;
+}
+
 body {
-    background: url('http://www.siteduzero.com/bundles/common/images/background.png');
+    background: #ECECEC; /*url('http://www.siteduzero.com/bundles/common/images/background.png');*/
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #333;
 }
 
 a {
     text-decoration: none;
-    color: #428bca;
+    color: #e95325;
 }
 
 a:hover {
     text-decoration: underline;
-    color: #2a6496;
 }
 
 .clearfix:after {
@@ -32,16 +35,9 @@ a:hover {
     margin: auto;
 }
 
-.main-content {
-    background-color: white;
-    margin-top: 80px;
-    box-shadow: 0 1px 1px rgba(0,0,0,0.08); /* La p'tite ombre qui chnage tout ^^ */
-}
-
 header {
-    height: 128px;
-    margin: 20px 0;
-    padding: 40px 20px 10px 20px;
+    height: 178px;
+    padding: 40px 0;
 }
 
 header .logo {
@@ -58,7 +54,7 @@ header h1 {
 }
 
 section {
-    margin: 30px 50px;
+    margin: 20px;
     font-size: 1.2em;
     line-height: 1.4em;
 }
@@ -80,7 +76,7 @@ section {
 .links {
     border-top: solid 1px #E3E3E3;
     border-bottom: solid 1px #E3E3E3;
-    height: 20px;
+    height: 62px;
     line-height: 20px;
     background-color: #f8f8f4;
     padding: 20px;
@@ -92,16 +88,20 @@ section {
 }
 
 .authors {
-    padding: 20px;
-    margin-top: 20px;
+    margin-top: 40px;
 }
 
 .authors .author {
-    width: 50%;
+    width: 45%;
+    margin-left: 10%;
+    padding: 6px;
+    background-color: white;
+    border-bottom: solid 2px #4D4D4D;
 }
 
 .authors .author.eskimon {
     float: left;
+    margin-left: 0;
 }
 
 .authors .author.sandhose {
@@ -123,7 +123,6 @@ section {
 
 .author .avatar img {
     padding: 2px;
-    border: 1px solid #666;
 }
 
 .author .text {
