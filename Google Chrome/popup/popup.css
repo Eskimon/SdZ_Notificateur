@@ -36,40 +36,31 @@ body {
     line-height: 18px;
 }
 
-/* Disabled par ce que c'est moche :-°
 .element {
-    border-right: solid 8px;
+    position: relative;
+    /*padding-left: 30px;*/
 }
-
+/*
 .element.forum {
-    border-right-color: green;
+    background: url('../icons/bulle.png') no-repeat 7px 16px;
 }
 
 .element.badge {
-    border-right-color: blue;
+    background: url('../icons/badge.png') no-repeat 7px 14px;
 }
 
 .element.roadmap {
-    border-right-color: yellow;
+    background: url('../icons/roadmap.png') no-repeat 7px 14px;
 }
 
 .element.alerte {
-    border-right-color: red;
+    background: url('../icons/alerte.png') no-repeat 7px 14px;
 }
 
 .element.mp {
-    border-right-color: white;
-}
-
-.element.other {
-    border-right: none;
+    background: url('../icons/mp.png') no-repeat 7px 14px;
 }
 */
-
-.element {
-    position: relative;
-}
-
 .element > a {
     margin: 0 10px;
     padding: 6px 0;

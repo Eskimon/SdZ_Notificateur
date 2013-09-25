@@ -374,19 +374,18 @@ Notificateur.prototype = {
         }
         
         // Check les notifications
-        var notifications = $data.find(".last-notification-item .dropdown-menu .dropdown-menu-item"),
+        var notifications = $data.find("li.last-notification-item li.js-item"),
             newNotifs = [], // Liste des nouvelles notifications
             oldNotifs = this.notifications, // Ancienne liste
             removedNotifs = [], // Notifs enlevées
             notifsList = []; // Nouvelle liste
-            
+        
         for(var i = 0; i < notifications.length; i++) {
-            var notif = $(notifications[i]),
-                notifLink = notif.find('a[class!="delete"]').attr('href'),
-                archiveLink = notif.find("a.delete").attr('href');
 
-            if(notifLink.indexOf("/notifications") != -1) continue; // Virer le "Toutes mes notifs"
-            
+            var notif = $(notifications[i]),
+                notifLink = notif.find('a').attr('href'),
+                archiveLink = notif.attr('data-option_delete-url');
+                
             var notifObj = {
                 id: archiveLink.substr(archiveLink.lastIndexOf("/") + 1),
                 title: notif.find(".title").text(),
@@ -422,9 +421,9 @@ Notificateur.prototype = {
 
         
         // Check les mp
-        notifications = $data.find(".last-message-item .dropdown-menu .dropdown-menu-item");
+        notifications = $data.find("li.last-message-item li.dropdown-menu-item");
 
-        for(var i = 0; i < notifications.length-1; i++) { //-1 our pas avoir le lien "tout mes MP"
+        for(var i = 0; i < notifications.length-1; i++) { //-1 pour éviter le "tout les mps
             var notif = $(notifications[i]),
                 notifLink = notif.find('a[class!="delete"]').attr('href'),
                 archiveLink = notifLink,
