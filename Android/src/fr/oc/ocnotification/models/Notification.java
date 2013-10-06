@@ -1,23 +1,18 @@
 package fr.oc.ocnotification.models;
 
 public class Notification {
+	/** Id of the notification */
 	private final int mId;
+	/** Title of the notification */
 	private final String mTitle;
+	/** Date of the notification */
 	private final String mDate;
+	/** Message id of the notification */
 	private final String mMessageId;
+	/** Thread of the notification */
 	private final String mThread;
+	/** Type of the notification */
 	private final String mType;
-	
-	/*
- var notifObj = {
-	id: archiveLink.substr(archiveLink.lastIndexOf("/") + 1),
-	title: notif.find("li.title").text(),
-	date: notif.find("li.date").text(),
-	messageId: notifLink.substr(notifLink.lastIndexOf("/") + 1),
-	thread: notifLink.substr(13, notifLink.lastIndexOf("/") - 13),
-	type: notif.find("a.badgeSdz").text().length==0 ? "forum" : "badge" //si c'est un badge
-};
-	 */
 	
 	/**
 	 * @param id

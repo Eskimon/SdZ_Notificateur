@@ -48,6 +48,13 @@ public class NotificationAdapter extends BaseAdapter {
 		return view;
 	}
 
+	/**
+	 * Add all new notifications on the adapter.
+	 * 
+	 * @param notifications
+	 *            New notification to display.
+	 * @return true if notifications is added.
+	 */
 	public boolean addAll(List<Notification> notifications) {
 		if (notifications == null || notifications.size() == 0) {
 			return false;
@@ -55,11 +62,16 @@ public class NotificationAdapter extends BaseAdapter {
 		mListNotifications.clear();
 		return mListNotifications.addAll(notifications);
 	}
-	
+
+	/**
+	 * Custom view for each notification in the list of the adapter.
+	 * 
+	 * @author AndroWiiid
+	 */
 	private class NotificationView extends LinearLayout {
 		private final TextView mTextViewTitle;
 		private final TextView mTextViewDate;
-		
+
 		public NotificationView(Context context) {
 			super(context);
 			inflate(getContext(), R.layout.notification_view, this);

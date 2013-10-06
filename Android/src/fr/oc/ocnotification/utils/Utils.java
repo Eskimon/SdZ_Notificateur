@@ -9,10 +9,17 @@ import android.util.Log;
 public class Utils {
 	private static final String TAG = "eskimon.sdznotificateur";
 
+	/**
+	 * Convert an InputStream to string.
+	 * 
+	 * @param is
+	 *            InputStream to convert
+	 * @return Convertion of the inputstream
+	 */
 	public static String convertInputStreamToString(InputStream is) {
 		final StringBuilder sb = new StringBuilder();
 		try {
-			final InputStreamReader ins = new InputStreamReader(is, "UTF-8");			
+			final InputStreamReader ins = new InputStreamReader(is, "UTF-8");
 			final BufferedReader reader = new BufferedReader(ins);
 			String line = null;
 			while ((line = reader.readLine()) != null) {

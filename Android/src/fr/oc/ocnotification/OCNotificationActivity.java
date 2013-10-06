@@ -13,35 +13,42 @@ import android.os.Bundle;
 public class OCNotificationActivity extends ListActivity {
 	private final NotificationManager mNotificationManager = new NotificationManager();
 	private NotificationAdapter mAdapterNotifications;
-	
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-        
-        // Initialize the list view component.
-        mAdapterNotifications = new NotificationAdapter(this);
-        getListView().setAdapter(mAdapterNotifications);
-    }
-    
-    @Override
-    public void onResume() {
-    	super.onResume();
-    	new NotificationAsyncTask().execute();
-    }
-    
-    private class NotificationAsyncTask extends AsyncTask<Void, Void, List<Notification>> {
-    	
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.main);
+
+		// Initialize the list view component.
+		mAdapterNotifications = new NotificationAdapter(this);
+		getListView().setAdapter(mAdapterNotifications);
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		// Launch the request.
+		new NotificationAsyncTask().execute();
+	}
+
+	/**
+	 * Since Android 3.x, we must make online request on a second thread.
+	 * 
+	 * @author AndroWiiid
+	 */
+	private class NotificationAsyncTask extends
+			AsyncTask<Void, Void, List<Notification>> {
+
 		@Override
 		protected List<Notification> doInBackground(Void... params) {
 			return mNotificationManager.downloadNotifications();
 		}
-    	
+
 		@Override
 		protected void onPostExecute(List<Notification> result) {
 			super.onPostExecute(result);
 			mAdapterNotifications.addAll(result);
 			mAdapterNotifications.notifyDataSetChanged();
 		}
-    }
+	}
 }

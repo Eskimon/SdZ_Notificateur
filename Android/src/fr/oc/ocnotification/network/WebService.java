@@ -14,6 +14,13 @@ public class WebService {
 	private HttpURLConnection mUrlConnection = null;
 	private int mResponseCode = -1;
 
+	/**
+	 * Online request on an url.
+	 * 
+	 * @param strUrl
+	 *            Url for request
+	 * @return Result of the request
+	 */
 	public InputStream connect(String strUrl) {
 		URLConnection connection = null;
 		URL url = null;
@@ -32,12 +39,20 @@ public class WebService {
 		return null;
 	}
 
+	/**
+	 * Disconnect the connection of the online request.
+	 */
 	public void disconnect() {
 		if (mUrlConnection != null) {
 			mUrlConnection.disconnect();
 		}
 	}
 
+	/**
+	 * Get response of the current request.
+	 * 
+	 * @return response code
+	 */
 	public int getResponseCode() {
 		return mResponseCode;
 	}
