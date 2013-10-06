@@ -3,5 +3,7 @@
 
     <string name="app_name">OC Notification</string>
     <string name="no_notifications">No notification available</string>
+    <string name="notif_title">%1$s reply to topic « %2$s »</string>
+    <string name="notif_date">There are %1$s</string>
 
 </resources>

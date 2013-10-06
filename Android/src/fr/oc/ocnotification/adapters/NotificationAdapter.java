@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -14,22 +13,20 @@ import fr.oc.ocnotification.R;
 import fr.oc.ocnotification.models.Notification;
 
 public class NotificationAdapter extends BaseAdapter {
-	// private final Context mContext;
+	private final Context mContext;
 	private final List<Notification> mListNotifications = new ArrayList<Notification>();
-	private final LayoutInflater mInflater;
 
 	public NotificationAdapter(Context context) {
-		// mContext = context;
-		mInflater = LayoutInflater.from(context);
+		mContext = context;
 	}
-	
+
 	@Override
 	public int getCount() {
 		return this.mListNotifications.size();
 	}
 
 	@Override
-	public Object getItem(int pos) {
+	public Notification getItem(int pos) {
 		return this.mListNotifications.get(pos);
 	}
 
@@ -40,34 +37,39 @@ public class NotificationAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		LinearLayout layoutItem;
-		//(1) : Réutilisation des layouts
+		final Notification item = getItem(position);
+		NotificationView view = null;
 		if (convertView == null) {
-			//Initialisation de notre item à partir du  layout XML "personne_layout.xml"
-		  layoutItem = (LinearLayout) mInflater.inflate(R.layout.notificationlayout, parent, false);
+			view = new NotificationView(mContext);
 		} else {
-			layoutItem = (LinearLayout) convertView;
+			view = (NotificationView) convertView;
 		}
-		  
-		//(2) : Récupération des TextView de notre layout      
-		TextView tv_Titre = (TextView)layoutItem.findViewById(R.id.tv_Titre);
-		TextView tv_Date = (TextView)layoutItem.findViewById(R.id.tv_Date);
-		      
-		//(3) : Renseignement des valeurs       
-		tv_Titre.setText(mListNotifications.get(position).getTitle());
-		tv_Date.setText(mListNotifications.get(position).getDate());
-
-		//en fonction du type, on changer la couleur de la bordure... à voir plus tard
-		
-		//On retourne l'item créé.
-		return layoutItem;
+		view.bind(item.getTitle(), item.getDate());
+		return view;
 	}
-	
+
 	public boolean addAll(List<Notification> notifications) {
 		if (notifications == null || notifications.size() == 0) {
 			return false;
 		}
 		mListNotifications.clear();
 		return mListNotifications.addAll(notifications);
+	}
+	
+	private class NotificationView extends LinearLayout {
+		private final TextView mTextViewTitle;
+		private final TextView mTextViewDate;
+		
+		public NotificationView(Context context) {
+			super(context);
+			inflate(getContext(), R.layout.notification_view, this);
+			mTextViewTitle = (TextView) findViewById(R.id.textViewTitle);
+			mTextViewDate = (TextView) findViewById(R.id.textViewDate);
+		}
+
+		public void bind(final String title, final String date) {
+			mTextViewTitle.setText(title);
+			mTextViewDate.setText(date);
+		}
 	}
 }
