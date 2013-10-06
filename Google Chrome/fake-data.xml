@@ -1,45 +1,63 @@
-<li class="menu-nav-item last-notification-item">
-    <div data-widget="itemsCounter" class="dropdown togglable dropdown-notifications  highlighted">
-        <a href="/notifications"><i class="icon-alarm"></i></a>
-        <div class="dropdown-menu">
-            <ul class="dropdown-menu-items">
-                <li class="dropdown-menu-item js-togglable-item js-item" data-option_delete-url="/notifications/archiver/1324140" data-widget="dismissibleElement">
-                    <a href="/forum/sujet/communication-serie-qt-avec-qextserialport-arduino/84728046">
-                    <strong class="title">DangerousMic a répondu au sujet « Communication Sé...</strong>
-                    <span class="date">Il y a 21 minutes</span>
-                    </a>
-                    <a class="close-button">×</a>
-                </li>
-                <li class="dropdown-menu-item js-togglable-item js-item" data-option_delete-url="/notifications/archiver/1324103" data-widget="dismissibleElement">
-                    <a href="/forum/sujet/bienvenue-sur-openclassrooms/84728023">
-                    <strong class="title">raynak a répondu au sujet « Bienvenue sur OpenClas...</strong>
-                    <span class="date">Il y a 28 minutes</span>
-                    </a>
-                    <a class="close-button">×</a>
-                </li>
-                <li class="dropdown-menu-item"><a href="/notifications">Toutes mes notifications</a></li>
-            </ul>
-        </div>
-        <span class="bubble small js-counter">2</span>
-    </div>
+<ul class="menu-nav-items to-right icons-container">
+<li class="menu-nav-item avatar-item">
+<div class="dropdown togglable with-image">
+<a href="/membres/eskimon-32590"><img alt="avatar" src="http://sdz-upload.s3.amazonaws.com/prod/users/avatars/eskimo10.png"></a>
+<div class="dropdown-menu">
+<ul class="dropdown-menu-items">
+<li class="dropdown-menu-item">
+<a href="/membres/eskimon-32590">Mon profil</a>
+</li>
+<li class="dropdown-menu-item">
+<a href="/membres/eskimon-32590/parametres">Mes paramètres</a>
+</li>
+<li class="dropdown-menu-item">
+<a href="/abonnement/">S'abonner</a>
+</li>
+<li class="dropdown-menu-item">
+<a href="http://boutique.fr.openclassrooms.com/boutique-420.html">Mes commandes</a>
+</li>
+<li class="dropdown-menu-item">
+<a href="/logout">Déconnexion</a>
+</li>
+</ul>
+</div>
+</div>
 </li>
 <li class="menu-nav-item last-message-item">
-    <div class="dropdown togglable dropdown-notifications  ">
-        <a href="/mp/"><i class="icon-letter"></i></a>
-        <div class="dropdown-menu">
-            <ul class="dropdown-menu-items">
-                <li class="dropdown-menu-item">
-                    <a href="/mp/adresse-mail-2/84728158">
-                    <strong class="title">Adresse mail</strong>
-                    <span class="username">par kristofjé</span>
-                    <span class="date">Il y a 2 minutes</span>
-                    </a>
-                </li>
-                <li class="dropdown-menu-item"><a href="/mp/">Tous mes MP</a></li>
-            </ul>
-        </div>
-        <span class="bubble small">
-        1
-        </span>
-    </div>
+<div class="dropdown togglable dropdown-notifications  ">
+<a href="/mp/"><i class="icon-letter"></i></a>
+<div class="dropdown-menu">
+<ul class="dropdown-menu-items">
+<li class="dropdown-menu-item">
+<a href="/mp/badge-et-oc-notificateur/84750024">
+<strong class="title">Badge et OC Notificateur</strong>
+<span class="username">par Eskimon</span>
+<span class="date">Il y a moins d'une minute</span>
+</a>
 </li>
+<li class="dropdown-menu-item"><a href="/mp/">Tous mes MP</a></li>
+</ul>
+</div>
+<span class="bubble small orange">
+1
+</span>
+</div>
+</li>
+<li class="menu-nav-item last-notification-item">
+<div data-widget="itemsCounter" class="dropdown togglable dropdown-notifications  highlighted">
+<a href="/notifications"><i class="icon-alarm"></i></a>
+<div class="dropdown-menu">
+<ul class="dropdown-menu-items">
+<li class="dropdown-menu-item js-togglable-item js-item" data-option_delete-url="/notifications/archiver/1362301" data-widget="dismissibleElement">
+<a href="/membres/eskimon-32590#badges">
+<strong class="title">Vous avez gagné le badge Bienfaiteur</strong>
+<span class="date">Il y a une minute</span>
+</a>
+<a class="close-button">×</a></li>
+<li class="dropdown-menu-item"><a href="/notifications">Toutes mes notifications</a></li>
+</ul>
+</div>
+<span class="bubble small js-counter">1</span>
+</div>
+</li>
+</ul>

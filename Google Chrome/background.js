@@ -392,7 +392,7 @@ Notificateur.prototype = {
                 date: notif.find(".date").text(),
                 messageId: notifLink.substr(notifLink.lastIndexOf("/") + 1),
                 thread: notifLink.substr(13, notifLink.lastIndexOf("/") - 13),
-                type: notif.find("a.badgeSdz").text().length==0 ? "forum" : "badge" //si c'est un badge
+                type: notifLink.indexOf("#badges") == -1 ? "forum" : "badge" //si c'est un badge
             };
 
             var existingNotif = this.getNotification(notifObj.id);
