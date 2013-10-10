@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="hello">Hello World, SdZNotificateurActivity!</string>
-    <string name="app_name">SdZ Notificateur</string>
+    <string name="app_name">OC Notification</string>
+    <string name="no_notifications">No notification available</string>
+    <string name="notif_title">%1$s reply to topic « %2$s »</string>
+    <string name="notif_date">There are %1$s</string>
 
 </resources>
