@@ -2,14 +2,21 @@ package fr.oc.ocnotification;
 
 import java.util.List;
 
+import android.app.ListActivity;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import fr.oc.ocnotification.adapters.NotificationAdapter;
 import fr.oc.ocnotification.models.Notification;
 import fr.oc.ocnotification.network.NotificationManager;
 
-import android.app.ListActivity;
-import android.os.AsyncTask;
-import android.os.Bundle;
-
+/**
+ * @author AndroWiiid
+ */
 public class OCNotificationActivity extends ListActivity {
 	private final NotificationManager mNotificationManager = new NotificationManager();
 	private NotificationAdapter mAdapterNotifications;
@@ -19,9 +26,22 @@ public class OCNotificationActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		// Initialize the list view component.
+		// Initialize components of the list.
 		mAdapterNotifications = new NotificationAdapter(this);
 		getListView().setAdapter(mAdapterNotifications);
+		// When we click on a item, we launch the browser.
+		getListView().setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> adapter, View view, int pos,
+					long arg3) {
+				final Notification notification = mAdapterNotifications
+						.getItem(pos);
+				final Intent i = new Intent(Intent.ACTION_VIEW);
+				i.setData(Uri.parse("http://fr.openclassrooms.com"
+						+ notification.getUrl()));
+				startActivity(i);
+			}
+		});
 	}
 
 	@Override
@@ -32,7 +52,7 @@ public class OCNotificationActivity extends ListActivity {
 	}
 
 	/**
-	 * Since Android 3.x, we must make online request on a second thread.
+	 * Download all notifications like alerts, notifications and mp soon.
 	 * 
 	 * @author AndroWiiid
 	 */
@@ -41,7 +61,8 @@ public class OCNotificationActivity extends ListActivity {
 
 		@Override
 		protected List<Notification> doInBackground(Void... params) {
-			return mNotificationManager.downloadNotifications();
+			return mNotificationManager
+					.downloadNotifications(OCNotificationActivity.this);
 		}
 
 		@Override
