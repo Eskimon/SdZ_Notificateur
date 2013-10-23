@@ -8,7 +8,6 @@ import android.view.Window;
  * @author AndroWiiid
  */
 public class LoginActivity extends FragmentActivity {
-
 	@Override
 	public void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
