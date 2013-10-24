@@ -12,6 +12,9 @@ import android.widget.TextView;
 import fr.oc.ocnotification.R;
 import fr.oc.ocnotification.models.Notification;
 
+/**
+ * @author AndroWiiid
+ */
 public class NotificationAdapter extends BaseAdapter {
 	private final Context mContext;
 	private final List<Notification> mListNotifications = new ArrayList<Notification>();

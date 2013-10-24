@@ -1,77 +1,44 @@
 package fr.oc.ocnotification.models;
 
+/**
+ * @author AndroWiiid
+ */
 public class Notification {
-	/** Id of the notification */
-	private final int mId;
-	/** Title of the notification */
-	private final String mTitle;
-	/** Date of the notification */
-	private final String mDate;
-	/** Message id of the notification */
-	private final String mMessageId;
-	/** Thread of the notification */
-	private final String mThread;
-	/** Type of the notification */
-	private final String mType;
-	
+
+	private final String url;
+	private final String title;
+	private final String date;
+
 	/**
-	 * @param id
+	 * @param url
 	 * @param title
 	 * @param date
-	 * @param messageId
-	 * @param thread
-	 * @param type
 	 */
-	public Notification(int id, String title, String date,
-			String messageId, String thread, String type) {
+	public Notification(String url, String title, String date) {
 		super();
-		this.mId = id;
-		this.mTitle = title;
-		this.mDate = date;
-		this.mMessageId = messageId;
-		this.mThread = thread;
-		this.mType = type;
+		this.url = url;
+		this.title = title;
+		this.date = date;
 	}
 
 	/**
-	 * @return the mId
+	 * @return the url
 	 */
-	public int getId() {
-		return mId;
+	public String getUrl() {
+		return url;
 	}
 
 	/**
-	 * @return the mTitle
+	 * @return the title
 	 */
 	public String getTitle() {
-		return mTitle;
+		return title;
 	}
 
 	/**
-	 * @return the mDate
+	 * @return the date
 	 */
 	public String getDate() {
-		return mDate;
-	}
-
-	/**
-	 * @return the mMessageId
-	 */
-	public String getMessageId() {
-		return mMessageId;
-	}
-
-	/**
-	 * @return the mThread
-	 */
-	public String getThread() {
-		return mThread;
-	}
-
-	/**
-	 * @return the mType
-	 */
-	public String getType() {
-		return mType;
+		return date;
 	}
 }
