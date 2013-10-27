@@ -77,7 +77,7 @@ public class NotificationAdapter extends BaseAdapter {
 
 		public NotificationView(Context context) {
 			super(context);
-			inflate(getContext(), R.layout.notification_view, this);
+			inflate(getContext(), R.layout.view_notification, this);
 			mTextViewTitle = (TextView) findViewById(R.id.textViewTitle);
 			mTextViewDate = (TextView) findViewById(R.id.textViewDate);
 		}

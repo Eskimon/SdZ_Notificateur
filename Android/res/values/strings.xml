@@ -16,5 +16,12 @@
     <!-- List notifications -->
     <string name="notif_title">%1$s reply to topic « %2$s »</string>
     <string name="notif_date">There are %1$s</string>
+    
+    <!-- Navigations -->
+    <string-array name="navigation_notifications">
+        <item>PMs</item>
+        <item>Notifications</item>
+        <item>Alerts</item>
+    </string-array>
 
 </resources>

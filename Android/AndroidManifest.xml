@@ -25,7 +25,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".OCNotificationActivity"
+            android:name=".NotificationsActivity"
             android:label="@string/app_name" />
     </application>
 

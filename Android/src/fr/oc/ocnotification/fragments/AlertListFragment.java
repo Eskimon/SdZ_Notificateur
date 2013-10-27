@@ -1,47 +1,42 @@
-package fr.oc.ocnotification;
+package fr.oc.ocnotification.fragments;
 
 import java.util.List;
 
-import android.app.ListActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.ListFragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import fr.oc.ocnotification.R;
 import fr.oc.ocnotification.adapters.NotificationAdapter;
 import fr.oc.ocnotification.models.Notification;
 import fr.oc.ocnotification.network.NotificationManager;
 
-/**
- * @author AndroWiiid
- */
-public class OCNotificationActivity extends ListActivity {
+public class AlertListFragment extends ListFragment implements OnItemClickListener {
+	private static final String URL = "http://fr.openclassrooms.com";
 	private final NotificationManager mNotificationManager = new NotificationManager();
 	private NotificationAdapter mAdapterNotifications;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.fragment_list, container, false);
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
 
 		// Initialize components of the list.
-		mAdapterNotifications = new NotificationAdapter(this);
+		mAdapterNotifications = new NotificationAdapter(getActivity());
 		getListView().setAdapter(mAdapterNotifications);
 		// When we click on a item, we launch the browser.
-		getListView().setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> adapter, View view, int pos,
-					long arg3) {
-				final Notification notification = mAdapterNotifications
-						.getItem(pos);
-				final Intent i = new Intent(Intent.ACTION_VIEW);
-				i.setData(Uri.parse("http://fr.openclassrooms.com"
-						+ notification.getUrl()));
-				startActivity(i);
-			}
-		});
+		getListView().setOnItemClickListener(this);
 	}
 
 	@Override
@@ -49,6 +44,15 @@ public class OCNotificationActivity extends ListActivity {
 		super.onResume();
 		// Launch the request.
 		new NotificationAsyncTask().execute();
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> adapter, View view, int pos,
+			long arg3) {
+		final Notification notification = mAdapterNotifications.getItem(pos);
+		final Intent i = new Intent(Intent.ACTION_VIEW);
+		i.setData(Uri.parse(URL + notification.getUrl()));
+		startActivity(i);
 	}
 
 	/**
@@ -61,8 +65,7 @@ public class OCNotificationActivity extends ListActivity {
 
 		@Override
 		protected List<Notification> doInBackground(Void... params) {
-			return mNotificationManager
-					.downloadNotifications(OCNotificationActivity.this);
+			return mNotificationManager.downloadNotifications(getActivity());
 		}
 
 		@Override

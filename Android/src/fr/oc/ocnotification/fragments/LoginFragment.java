@@ -18,7 +18,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import fr.oc.ocnotification.OCNotificationActivity;
+import fr.oc.ocnotification.NotificationsActivity;
 import fr.oc.ocnotification.R;
 import fr.oc.ocnotification.network.SessionStore;
 
@@ -131,7 +131,7 @@ public class LoginFragment extends Fragment {
 			SessionStore.saveCookies(results, getActivity());
 			mButtonSignIn.setEnabled(true);
 			final Intent i = new Intent(getActivity(),
-					OCNotificationActivity.class);
+					NotificationsActivity.class);
 			startActivity(i);
 		}
 	}
