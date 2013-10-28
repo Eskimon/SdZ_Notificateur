@@ -48,7 +48,7 @@ public class LoginFragment extends SherlockFragment {
 		});
 		return view;
 	}
-	
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -107,8 +107,9 @@ public class LoginFragment extends SherlockFragment {
 				login = Jsoup
 						.connect("http://fr.openclassrooms.com/login_check")
 						.cookie("PHPSESSID", "")
-						.data("_username", username, "_password", password)
-						.method(Method.POST).execute();
+						.data("_username", username, "_password", password,
+								"_remember_me", "on").method(Method.POST)
+						.execute();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
