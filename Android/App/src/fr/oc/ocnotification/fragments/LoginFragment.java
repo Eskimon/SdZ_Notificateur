@@ -20,7 +20,7 @@ import android.widget.EditText;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
-import fr.oc.ocnotification.OCNotificationActivity;
+import fr.oc.ocnotification.NotificationActivity;
 import fr.oc.ocnotification.R;
 import fr.oc.ocnotification.network.SessionStore;
 
@@ -133,7 +133,7 @@ public class LoginFragment extends SherlockFragment {
 			SessionStore.saveCookies(results, getActivity());
 			mButtonSignIn.setEnabled(true);
 			final Intent i = new Intent(getActivity(),
-					OCNotificationActivity.class);
+					NotificationActivity.class);
 			startActivity(i);
 		}
 	}
