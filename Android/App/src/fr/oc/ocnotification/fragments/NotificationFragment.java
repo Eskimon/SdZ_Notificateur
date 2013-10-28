@@ -23,7 +23,7 @@ public class NotificationFragment extends SherlockListFragment {
 	private final NotificationManager mNotificationManager = new NotificationManager();
 	private NotificationAdapter mAdapterNotifications;
 
-	public static NotificationFragment newFragment() {
+	public static NotificationFragment newInstance() {
 		return new NotificationFragment();
 	}
 
