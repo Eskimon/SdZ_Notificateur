@@ -136,6 +136,7 @@ public class LoginFragment extends SherlockFragment {
 			final Intent i = new Intent(getActivity(),
 					NotificationActivity.class);
 			startActivity(i);
+			getActivity().finish();
 		}
 	}
 
