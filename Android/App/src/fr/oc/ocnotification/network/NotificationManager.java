@@ -10,10 +10,10 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import android.content.Context;
+import fr.oc.ocnotification.fragments.NotificationFragment;
 import fr.oc.ocnotification.models.Notification;
 
 public class NotificationManager {
-	private final static String URL = "http://fr.openclassrooms.com/";
 
 	/**
 	 * Download all notification on OpenClassrooms website.
@@ -26,8 +26,8 @@ public class NotificationManager {
 		final List<Notification> res = new ArrayList<Notification>();
 		Document doc = null;
 		try {
-			doc = Jsoup.connect(URL).cookies(SessionStore.getCookies(context))
-					.get();
+			doc = Jsoup.connect(NotificationFragment.URL)
+					.cookies(SessionStore.getCookies(context)).get();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -45,6 +45,18 @@ public class NotificationManager {
 			final Notification alert = new Notification(url, title, date);
 			res.add(alert);
 		}
+		return res == null ? new ArrayList<Notification>() : res;
+	}
+
+	public List<Notification> downloadAlerts(final Context context) {
+		final List<Notification> res = new ArrayList<Notification>();
+		Document doc = null;
+		try {
+			doc = Jsoup.connect(NotificationFragment.URL)
+					.cookies(SessionStore.getCookies(context)).get();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		// All alerts.
 		final Elements alerts = doc
 				.select("li.menu-nav-item.last-active-item li.dropdown-menu-item");
@@ -54,6 +66,28 @@ public class NotificationManager {
 			final String title = alert.getElementsByTag("strong").first()
 					.text();
 			final String date = alert.getElementsByTag("span").first().text();
+			res.add(new Notification(url, title, date));
+		}
+		return res == null ? new ArrayList<Notification>() : res;
+	}
+
+	public List<Notification> downloadPMs(final Context context) {
+		final List<Notification> res = new ArrayList<Notification>();
+		Document doc = null;
+		try {
+			doc = Jsoup.connect(NotificationFragment.URL)
+					.cookies(SessionStore.getCookies(context)).get();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		// All pms.
+		final Elements pms = doc
+				.select("li.menu-nav-item.last-message-item li.dropdown-menu-item");
+		for (int i = 0; i < pms.size() - 1; i++) {
+			Element pm = pms.get(i);
+			final String url = pm.getElementsByTag("a").first().attr("href");
+			final String title = pm.getElementsByTag("strong").first().text();
+			final String date = pm.getElementsByTag("span").first().text();
 			res.add(new Notification(url, title, date));
 		}
 		return res == null ? new ArrayList<Notification>() : res;

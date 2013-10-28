@@ -33,18 +33,21 @@ public class NotificationActivity extends SherlockFragmentActivity {
 
 		mActionBar = getSupportActionBar();
 		mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		
+
 		// Create first Tab
-        Tab tab = mActionBar.newTab().setText("Notifications").setTabListener(mTabListener);
-        mActionBar.addTab(tab);
- 
-        // Create second Tab
-        tab = mActionBar.newTab().setText("MPs").setTabListener(mTabListener);
-        mActionBar.addTab(tab);
- 
-        // Create third Tab
-        tab = mActionBar.newTab().setText("Alerts").setTabListener(mTabListener);
-        mActionBar.addTab(tab);
+		Tab tab = mActionBar.newTab().setText(R.string.title_notif)
+				.setTabListener(mTabListener);
+		mActionBar.addTab(tab);
+
+		// Create second Tab
+		tab = mActionBar.newTab().setText(R.string.title_pm)
+				.setTabListener(mTabListener);
+		mActionBar.addTab(tab);
+
+		// Create third Tab
+		tab = mActionBar.newTab().setText(R.string.title_alert)
+				.setTabListener(mTabListener);
+		mActionBar.addTab(tab);
 	}
 
 	private final SimpleOnPageChangeListener mViewPagerOnPageChangeListener = new SimpleOnPageChangeListener() {
@@ -53,18 +56,18 @@ public class NotificationActivity extends SherlockFragmentActivity {
 			mActionBar.setSelectedNavigationItem(position);
 		}
 	};
-	
+
 	private final TabListener mTabListener = new TabListener() {
-		
+
 		@Override
 		public void onTabUnselected(Tab tab, FragmentTransaction ft) {
 		}
-		
+
 		@Override
 		public void onTabSelected(Tab tab, FragmentTransaction ft) {
 			mViewPager.setCurrentItem(tab.getPosition());
 		}
-		
+
 		@Override
 		public void onTabReselected(Tab tab, FragmentTransaction ft) {
 		}

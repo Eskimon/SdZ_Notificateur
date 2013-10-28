@@ -16,15 +16,23 @@ import com.actionbarsherlock.app.SherlockListFragment;
 
 import fr.oc.ocnotification.R;
 import fr.oc.ocnotification.adapters.NotificationAdapter;
+import fr.oc.ocnotification.adapters.NotificationPagerAdapter;
 import fr.oc.ocnotification.models.Notification;
 import fr.oc.ocnotification.network.NotificationManager;
 
 public class NotificationFragment extends SherlockListFragment {
+	public final static String URL = "http://fr.openclassrooms.com";
+	private final static String KEY_POS = "KEY_POS";
 	private final NotificationManager mNotificationManager = new NotificationManager();
 	private NotificationAdapter mAdapterNotifications;
+	private int mPos = 0;
 
-	public static NotificationFragment newInstance() {
-		return new NotificationFragment();
+	public static NotificationFragment newInstance(final int pos) {
+		NotificationFragment fragment = new NotificationFragment();
+		Bundle args = new Bundle();
+		args.putInt(KEY_POS, pos);
+		fragment.setArguments(args);
+		return fragment;
 	}
 
 	@Override
@@ -37,6 +45,8 @@ public class NotificationFragment extends SherlockListFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+		// Arguments.
+		mPos = getArguments().getInt(KEY_POS);
 		// Initialize components of the list.
 		mAdapterNotifications = new NotificationAdapter(getActivity());
 		getListView().setAdapter(mAdapterNotifications);
@@ -48,7 +58,7 @@ public class NotificationFragment extends SherlockListFragment {
 	public void onResume() {
 		super.onResume();
 		// Launch the request.
-		new NotificationAsyncTask().execute();
+		new NotificationAsyncTask().execute(mPos);
 	}
 
 	private final OnItemClickListener mOnItemClickListener = new OnItemClickListener() {
@@ -59,8 +69,7 @@ public class NotificationFragment extends SherlockListFragment {
 			final Notification notification = mAdapterNotifications
 					.getItem(pos);
 			final Intent i = new Intent(Intent.ACTION_VIEW);
-			i.setData(Uri.parse("http://fr.openclassrooms.com"
-					+ notification.getUrl()));
+			i.setData(Uri.parse(URL + notification.getUrl()));
 			startActivity(i);
 		}
 	};
@@ -71,17 +80,29 @@ public class NotificationFragment extends SherlockListFragment {
 	 * @author AndroWiiid
 	 */
 	private class NotificationAsyncTask extends
-			AsyncTask<Void, Void, List<Notification>> {
+			AsyncTask<Integer, Void, List<Notification>> {
 
 		@Override
-		protected List<Notification> doInBackground(Void... params) {
-			return mNotificationManager
-					.downloadNotifications(getActivity());
+		protected List<Notification> doInBackground(Integer... params) {
+			final int pos = params[0];
+			switch (pos) {
+			case NotificationPagerAdapter.NOTIFICATIONS:
+				return mNotificationManager
+						.downloadNotifications(getActivity());
+			case NotificationPagerAdapter.PMS:
+				return mNotificationManager.downloadPMs(getActivity());
+			case NotificationPagerAdapter.ALERTS:
+				return mNotificationManager.downloadAlerts(getActivity());
+			}
+			return null;
 		}
 
 		@Override
 		protected void onPostExecute(List<Notification> result) {
 			super.onPostExecute(result);
+			if (result == null || result.isEmpty()) {
+				return;
+			}
 			mAdapterNotifications.addAll(result);
 			mAdapterNotifications.notifyDataSetChanged();
 		}

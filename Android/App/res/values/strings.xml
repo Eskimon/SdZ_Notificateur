@@ -2,19 +2,22 @@
 <resources>
 
     <string name="app_name">OC Notification</string>
-    <string name="no_notifications">No notification available</string>
-    
+    <string name="no_notifications">No item available</string>
+
     <!-- Login -->
     <string name="edit_username">Username</string>
     <string name="edit_password">Password</string>
     <string name="btn_log_in">Log in</string>
     <string name="image_presentation">Zozor</string>
-    
+
     <!-- Errors -->
     <string name="error_no_value">You must indicate a value</string>
-    
+
     <!-- List notifications -->
     <string name="notif_title">%1$s reply to topic « %2$s »</string>
     <string name="notif_date">There are %1$s</string>
+    <string name="title_notif">Notifications</string>
+    <string name="title_pm">PMs</string>
+    <string name="title_alert">Alerts</string>
 
 </resources>
